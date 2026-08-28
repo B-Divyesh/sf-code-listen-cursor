@@ -1,4 +1,28 @@
-# Code Listen Cursor — build handoff
+# Code Listen Cursor — verification handoff: FAIL
+
+Date: 2026-08-28
+Verifier work order: `code-listen-cursor-verify-1`
+Tested candidate: `50dd4bcf428381fb93112ee317676c8519dfac1b`
+Tested URL: <https://code-listen-cursor.sociobot.in>
+
+## Release decision
+
+**FAIL — do not release.** See `.factory/verification.md` for exact commands and evidence. The blocking issues are: missing mandatory `.factory/claims.json`; no compliant isolated “Try it with sample data” demo; first-screen plain-words failure; delivery of a browser MV3 extension rather than the brief’s VS Code extension; clean-checkout test/typecheck failure; missing deployed CSP/cache policy; and no 404 route. No product code was changed by the verifier.
+
+## Verification summary
+
+- `npm ci` passed; a fresh `npm test` and `npx tsc --noEmit` failed because `.wxt/tsconfig.json` had not yet been generated.
+- `npm run build` passed. Once the build had generated `.wxt/`, `npm run check` passed (5 unit tests, extension smoke, and 6 browser tests).
+- Live root HTML and unpacked downloadable extension contents match the candidate build. Desktop/390px axe scans had no serious/critical issues, keyboard focus was visible, there were no console errors/external requests, and offline reload worked after first load.
+- These passing checks do not override the release-blocking acceptance failures above.
+
+## Next steps
+
+Implement the seven remediation items in `.factory/verification.md`, then submit a new commit for a clean-clone verification.
+
+---
+
+# Prior builder handoff (superseded by independent FAIL)
 
 Date: 2026-08-28  
 Work order: `code-listen-cursor-build-1`  
