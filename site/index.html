@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Listen to selected code as intelligible structure. A private, local-first browser extension for developers with reading fatigue, dyslexia, low vision, or auditory workflows." />
+    <meta name="theme-color" content="#F3EFDF" />
+    <title>Code Listen Cursor — hear the structure in your code</title>
+    <link rel="icon" href="/leaf-cursor.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="site-header">
+      <a class="wordmark" href="/" aria-label="Code Listen Cursor home">
+        <img src="/leaf-cursor.svg" width="36" height="36" alt="" />
+        <span>Code Listen Cursor</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#field-station">Try it</a>
+        <a href="#how-it-works">How it works</a>
+        <a class="nav-download" href="/downloads/code-listen-cursor-chrome.zip" download>Download</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span aria-hidden="true">Specimen 01 · </span>Local code reader</p>
+          <h1 id="hero-title">Hear the structure.<br /><em>Keep your place.</em></h1>
+          <p class="lede">Listen to a selection or the current line as intelligible code—not a tangle of punctuation. Tune the words, follow your cursor, and keep every character on your device.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="/downloads/code-listen-cursor-chrome.zip" download>Download for Chrome</a>
+            <a class="button button-secondary" href="#field-station">Try the field station</a>
+          </div>
+          <p class="microcopy">Free and open source · Chrome / Edge · No account</p>
+        </div>
+        <figure class="hero-figure">
+          <picture>
+            <source type="image/webp" srcset="/hero-field-guide-640.webp 640w, /hero-field-guide.webp 1280w" sizes="(max-width: 900px) calc(100vw - 48px), 58vw" />
+            <img src="/hero-field-guide.jpg" srcset="/hero-field-guide-640.jpg 640w, /hero-field-guide.jpg 1280w" sizes="(max-width: 900px) calc(100vw - 48px), 58vw" width="1280" height="854" fetchpriority="high" decoding="async" alt="An open botanical field notebook where a fern’s branching fronds resemble indented lines of code beside a green reading cursor." />
+          </picture>
+          <figcaption><span>Fig. A</span> Indentation becomes a branch you can hear.</figcaption>
+        </figure>
+      </section>
+
+      <section class="field-station" id="field-station" aria-labelledby="station-title">
+        <div class="section-intro">
+          <p class="eyebrow">Field station · live specimen</p>
+          <h2 id="station-title">Listen before you install</h2>
+          <p>Select any code below—or place the cursor on a line—then listen. Speech uses your browser’s system voice.</p>
+        </div>
+        <div class="station-layout">
+          <div class="specimen-sheet">
+            <label for="code-sample">Editable code sample</label>
+            <textarea id="code-sample" spellcheck="false" rows="10">const describePlant = async (fern) => {
+  if (fern?.fronds >= 3) {
+    return `healthy_${fern.name}`;
+  }
+  return null;
+};</textarea>
+            <div class="station-actions">
+              <button class="button button-primary" id="demo-listen" type="button">Listen to code</button>
+              <button class="button button-secondary" id="demo-stop" type="button">Stop</button>
+            </div>
+          </div>
+          <aside class="observation" aria-labelledby="observation-title">
+            <div class="observation-heading">
+              <span class="cursor-mark" aria-hidden="true"></span>
+              <div><p class="eyebrow">Spoken observation</p><h3 id="observation-title">Ready to listen</h3></div>
+            </div>
+            <p id="demo-status" class="status-copy" role="status" aria-live="polite">Select code or leave the cursor on a line.</p>
+            <output id="speech-preview" class="speech-preview" aria-label="Words that will be spoken">Your spoken code appears here.</output>
+            <div class="demo-settings">
+              <label for="demo-punctuation">Punctuation</label>
+              <select id="demo-punctuation">
+                <option value="essential">Essential structure</option>
+                <option value="detailed">Detailed</option>
+                <option value="literal">Every symbol</option>
+              </select>
+              <label for="demo-rate">Reading rate <output id="demo-rate-value">0.9×</output></label>
+              <input id="demo-rate" type="range" min="0.5" max="1.5" step="0.1" value="0.9" />
+              <label class="checkbox-label"><input id="demo-indent" type="checkbox" checked /> Speak indentation</label>
+            </div>
+            <form id="demo-pronunciation" class="word-pair">
+              <p>Personal pronunciation</p>
+              <label for="demo-written">Code word</label>
+              <input id="demo-written" value="fern" required />
+              <label for="demo-spoken">Speak as</label>
+              <input id="demo-spoken" value="furn" required />
+              <button type="submit">Use pronunciation</button>
+            </form>
+          </aside>
+        </div>
+        <p id="offline-note" class="offline-note" hidden><strong>Offline:</strong> The demo still works with a voice installed on your device. If speech is silent, reconnect once or choose a local system voice.</p>
+      </section>
+
+      <section class="anatomy" id="how-it-works" aria-labelledby="anatomy-title">
+        <div class="section-intro">
+          <p class="eyebrow">Anatomy of a listening cursor</p>
+          <h2 id="anatomy-title">Control at the scale of a line</h2>
+        </div>
+        <ol class="feature-list">
+          <li><span class="feature-number">01</span><div><h3>Selection or current line</h3><p>Select the exact code you need. With no selection, the cursor’s line is the specimen.</p><kbd>Alt + Shift + S</kbd></div></li>
+          <li><span class="feature-number">02</span><div><h3>Structure-aware speech</h3><p>Braces, operators, indentation, camel case, and snake case become language you can distinguish.</p><span class="code-label">!== → strictly not equals</span></div></li>
+          <li><span class="feature-number">03</span><div><h3>Follow and repeat</h3><p>Move through a file hands-free or replay the last observation without losing your position.</p><kbd>Alt + Shift + F / R</kbd></div></li>
+          <li><span class="feature-number">04</span><div><h3>Your own vocabulary</h3><p>Teach project names and abbreviations once. The pronunciation map stays in extension storage.</p><span class="code-label">kubectl → cube control</span></div></li>
+        </ol>
+      </section>
+
+      <section class="privacy-band" aria-labelledby="privacy-title">
+        <div class="privacy-seal" aria-hidden="true"><span>100%</span><small>local</small></div>
+        <div><p class="eyebrow">A closed specimen case</p><h2 id="privacy-title">Your source does not leave the page.</h2><p>No account, analytics, server, or code upload. Speech is requested through the browser’s voice interface; Code Listen Cursor prefers voices marked as local by the browser.</p></div>
+        <a href="/privacy/">Read the privacy note</a>
+      </section>
+
+      <section class="install" aria-labelledby="install-title">
+        <p class="eyebrow">Installation note</p>
+        <h2 id="install-title">Add it in under a minute</h2>
+        <ol>
+          <li>Download and unzip the extension.</li>
+          <li>Open <code>chrome://extensions</code> or <code>edge://extensions</code>.</li>
+          <li>Enable developer mode, choose “Load unpacked,” and select the unzipped folder.</li>
+        </ol>
+        <a class="button button-primary" href="/downloads/code-listen-cursor-chrome.zip" download>Download extension ZIP</a>
+        <p>Keyboard shortcuts can be changed in your browser’s extension shortcut settings.</p>
+      </section>
+    </main>
+
+    <footer>
+      <div><img src="/leaf-cursor.svg" width="30" height="30" alt="" /><span>Code Listen Cursor</span></div>
+      <p>Free, open, and grown for auditory coding workflows.</p>
+      <nav aria-label="Footer navigation"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-code-listen-cursor">Source</a></nav>
+      <p class="generated-note">Field-guide artwork was generated specifically for this project with Azure AI Foundry and reviewed before use.</p>
+    </footer>
+    <script type="module" src="/main.ts"></script>
+  </body>
+</html>

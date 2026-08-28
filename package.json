@@ -1,0 +1,30 @@
+{
+  "name": "code-listen-cursor",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Hear selected code as structure-aware speech without sending source off-device.",
+  "scripts": {
+    "dev": "wxt",
+    "dev:site": "vite --config vite.site.config.ts",
+    "build:extension": "wxt build",
+    "package:extension": "node scripts/package-extension.mjs",
+    "build:site": "npm run build:extension && npm run package:extension && vite build --config vite.site.config.ts",
+    "build": "npm run build:site",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:extension": "node tests/extension-smoke.mjs",
+    "check": "tsc --noEmit && npm test && npm run build && npm run test:extension && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.10.2",
+    "@types/chrome": "0.0.292",
+    "@types/node": "22.13.10",
+    "playwright": "1.58.2",
+    "playwright-core": "1.58.2",
+    "typescript": "5.8.2",
+    "vite": "6.4.3",
+    "vitest": "3.2.7",
+    "wxt": "0.21.4"
+  }
+}

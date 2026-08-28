@@ -1,0 +1,30 @@
+{
+  "slug": "code-listen-cursor",
+  "title": "Code Listen Cursor",
+  "territory": "utilities",
+  "user": "A developer with reading fatigue, dyslexia, low vision, or an auditory workflow who needs an editor selection read aloud as intelligible code while maintaining cursor-level control.",
+  "evidence": [
+    {
+      "url": "https://github.com/warpdotdev/warp/issues/6888",
+      "date": "2025-07-23",
+      "quote_or_summary": "A current feature request asks for right-click text-to-speech for selected terminal text or a summary, directly naming a developer reading need."
+    },
+    {
+      "url": "https://github.com/openai/codex/issues/14630",
+      "date": "2026-03-13",
+      "quote_or_summary": "A 57-reaction request asks for voice transcription in a TUI, confirming current demand for voice-first interaction in terminal-based coding workflows."
+    }
+  ],
+  "recurrence": "Code-specific text-to-speech and adjustable editor presentation are separate signs that source code needs individual reading controls.",
+  "current_workaround": "Use generic OS text-to-speech that pronounces punctuation poorly, copy code into another app, or only enlarge the entire editor.",
+  "incumbents_and_gap": "VS Code accessibility features, NVDA, VoiceOver, and Read Aloud extensions exist; a small tool that follows the active selection and gives user-tunable code pronunciation/structure without changing the editor is missing.",
+  "smallest_useful_product": "A VS Code extension that reads selected code or the current line using language-aware punctuation rules, exposes cursor-follow and repeat shortcuts, and supports a personal pronunciation map. Non-goals: code generation, cloud voice cloning, IDE replacement, or code upload.",
+  "success_measure": "In a 20-snippet usability test, users correctly identify the requested symbol/indentation relationship from audio in at least 16 snippets.",
+  "artifact_class": "browser-extension",
+  "monetization": "free",
+  "constraints": "Use OS/local voices where possible; no source leaves the editor; test output with screen-reader users and do not interfere with native assistive shortcuts.",
+  "est_build_effort": "S",
+  "why_distinct": "It solves listening to the current code structure and cursor context, not generic document narration.",
+  "confidence": 3,
+  "state": "RESEARCHED"
+}

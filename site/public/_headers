@@ -1,0 +1,21 @@
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/hero-field-guide.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/hero-field-guide-*
+  Cache-Control: public, max-age=31536000, immutable
+
+/hero-field-guide.jpg
+  Cache-Control: public, max-age=31536000, immutable
+
+/leaf-cursor.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/downloads/*
+  Cache-Control: public, max-age=86400
+  Content-Disposition: attachment
+
+/sw.js
+  Cache-Control: no-cache

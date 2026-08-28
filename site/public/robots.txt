@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://code-listen-cursor.sociobot.in/sitemap.xml

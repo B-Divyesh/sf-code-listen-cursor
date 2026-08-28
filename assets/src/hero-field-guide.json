@@ -1,0 +1,8 @@
+{
+  "generator": "Azure AI Foundry factory-image via /opt/fleet/lib/gen-image.sh",
+  "date": "2026-08-28",
+  "size": "1536x1024",
+  "quality": "high",
+  "prompt": "Use case: stylized-concept. Asset type: wide landing-page hero illustration. An open vintage botanical field notebook documenting a branching fern whose fronds subtly resemble indented lines of source code; one slim dark-green reading cursor traces a single frond; small blank specimen tabs and ruled annotations with absolutely no legible writing. Fibrous cream paper, graphite, faded botanical ink, pressed leaf, linen binding. Soft north-window daylight, overhead three-quarter view, editorial still life, shallow physical layering with crisp specimen detail. Warm paper, carbon ink, moss, fern, restrained rust registration marks. Landscape composition, subject weighted right with calm paper negative space on the left. No people, no hands, no screens, no logos, no brands, no readable text, no letters, no watermark, no neon, no gradients, no glossy 3D, no generic technology symbols.",
+  "review": "Accepted: coherent palette and composition; no legible generated text, brands, people, misleading UI, or visible seams."
+}

@@ -57,7 +57,7 @@ At 390px, navigation copy collapses to the two essential anchors, the hero becom
 
 ## Asset plan and provenance
 
-- `site/public/hero-field-guide.webp`: original generated editorial illustration, used as the explanatory hero specimen. It will ship at no more than 300 KB with explicit dimensions and a PNG source retained under `assets/src/`.
+- `site/public/hero-field-guide.webp` plus a 640px responsive derivative and JPEG fallbacks: original generated editorial illustration, used as the explanatory hero specimen. The browser selects the 38 KB mobile WebP or 148 KB desktop WebP; explicit dimensions prevent layout shift. The PNG source is retained under `assets/src/`.
 - Extension icons and interface glyphs are original hand-authored SVGs based on a leaf vein / text cursor motif. They are MIT-licensed with the repository.
 - No stock imagery, brand marks, or third-party icon library.
 

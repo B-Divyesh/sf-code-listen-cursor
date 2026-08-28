@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Leaf-shaped code cursor">
+  <rect width="128" height="128" rx="24" fill="#F3EFDF"/>
+  <path d="M33 91c20-1 42-14 50-43M40 79c-8-20 2-39 43-43 3 39-10 55-43 43Z" fill="#6F8B68" stroke="#17231D" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M85 24v80" fill="none" stroke="#A2462E" stroke-width="8" stroke-linecap="round"/>
+</svg>
