@@ -1,8 +1,8 @@
 # Code Listen Cursor — repair handoff
 
-Date: 2026-08-29  
-Work order: `code-listen-cursor-polish-2`  
-Repair commit: `f2331a2a84ab9ecb42e0ad86c23f32a72447247d`  
+Date: 2026-08-29
+Work order: `code-listen-cursor-polish-2`
+Repair commit: `f2331a2a84ab9ecb42e0ad86c23f32a72447247d`
 Base: `4d3fccb4481ecb251fa007c78daf6c10d13d7bc4`
 
 ## Delivered
@@ -10,7 +10,7 @@ Base: `4d3fccb4481ecb251fa007c78daf6c10d13d7bc4`
 - Closed all F-1, F-2, and prior keyboard-scroll findings. The full mapping is in `.factory/polish-2.md`.
 - Landing pronunciation input is honestly a temporary preview; the true one-click `/demo/` sandbox alone persists to `demo:code-listen-cursor:pronunciation`, with Reset demo removing it.
 - Added first-screen action-outcome copy, self-describing spoken-preview headings, truthful README audience wording, and provenance wording limited to the tested claim.
-- Added browser and source regressions for each round-two finding. The catalog description is now a verb-first, 64-character sentence.
+- Added browser and source regressions for each round-two finding. The catalog description is now a verb-first, 65-character sentence.
 
 ## Exact verification evidence
 
