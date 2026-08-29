@@ -40,11 +40,20 @@ All passed. `npm run check` completed:
 
 The build output for static deployment is `dist/site/`. It contains `/demo/`, `/privacy/`, `/terms/`, `404.html`, service worker, `staticwebapp.config.json`, the MV3 ZIP, and the VSIX.
 
+## Deployment evidence
+
+Commit `2ddf250` was pushed to `origin/main` and `dist/site/` was deployed to the production Static Web App. The custom domain <https://code-listen-cursor.sociobot.in> served the new deployment at 2026-08-29 14:29 UTC:
+
+- `/demo/` returned 200 with the deployed demo document (4,193 bytes).
+- `/no-such-route` returned the designed 404 document with HTTP **404** (1,184 bytes).
+- `/downloads/code-listen-cursor-chrome.zip` returned 200, `Content-Disposition: attachment`, and `Cache-Control: public, max-age=86400`.
+- `/sw.js` returned `Cache-Control: no-cache`.
+- Every checked response included the deployed Content-Security-Policy and `frame-ancestors 'none'` response directive.
+
 ## Known external evidence gap
 
 The researched brief requires a consented 20-snippet study with screen-reader/auditory-workflow participants and a 16/20 comprehension result. A disposable no-human repair container cannot recruit or impersonate participants, so this has not been fabricated. `.factory/usability-study.md` documents the honest boundary and the existing deterministic coverage. Do not make the 16/20 human-comprehension claim until that study is conducted and recorded.
 
 ## Next steps
 
-1. Push/deploy this commit, then verify live CSP/cache/404 headers and live artifact identity.
-2. Conduct the consented participant study and record its method and result before treating the brief success measure as proven.
+1. Conduct the consented participant study and record its method and result before treating the brief success measure as proven.
