@@ -25,6 +25,14 @@ test('@claim:no-code-upload keeps the sample interaction on the product origin',
 test('@claim:offline-reload reloads the sample after first visit with no network', async ({ page, context }) => {
   await page.goto('/demo/');
   await page.waitForFunction(() => navigator.serviceWorker?.controller !== null, undefined, { timeout: 15_000 });
+  await page.evaluate(async () => {
+    const stale = await caches.open('code-listen-cursor-v3');
+    await stale.put('/stale-shell', new Response('stale'));
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    await Promise.all(registrations.map((registration) => registration.unregister()));
+  });
+  await page.reload();
+  await page.waitForFunction(() => navigator.serviceWorker?.controller !== null, undefined, { timeout: 15_000 });
   expect(await page.evaluate(async () => {
     const registration = await navigator.serviceWorker.ready;
     await registration.update();
@@ -32,7 +40,7 @@ test('@claim:offline-reload reloads the sample after first visit with no network
       active: registration.active?.state,
       caches: await caches.keys()
     };
-  })).toEqual(expect.objectContaining({ active: 'activated', caches: expect.arrayContaining(['code-listen-cursor-v3']) }));
+  })).toEqual({ active: 'activated', caches: ['code-listen-cursor-v4'] });
   await page.reload();
   await context.setOffline(true);
   await page.reload();

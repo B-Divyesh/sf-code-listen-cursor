@@ -54,6 +54,7 @@ npm run check        # typecheck and all gates
 - `tests/` — parser tests and Playwright accessibility/responsive checks
 - `.factory/design.md` — botanical field-guide visual thesis and asset provenance
 - `.factory/claims.json` — tested public claims and their exact commands
+- `.factory/acceptance.md` — sandbox-verifiable release acceptance contract
 - `.factory/demo.md` — demo route, sample data, and isolated storage details
 - `.factory/handoff.md` — verification results and known gaps
 

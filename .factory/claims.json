@@ -22,10 +22,10 @@
   },
   {
     "id": "structure-aware-speech",
-    "claim": "The reader turns braces, operators, indentation, camel case, and snake case into distinct speech.",
+    "claim": "Every shipped structural-cue fixture produces its expected spoken symbol or indentation label.",
     "where": "landing how-it-works section, extension descriptions, README",
     "test": "npm test -- --testNamePattern @claim:structure-aware-speech",
-    "sandbox": "shared reader fixture containing nested indentation, braces, a multi-character operator, camel case, and snake case"
+    "sandbox": "run every shipped JavaScript, TypeScript, Python, Rust, and shell fixture; assert every expected spoken cue appears in generated output"
   },
   {
     "id": "local-voice",

@@ -7,7 +7,7 @@ import { preferredLocalVoice } from '../core/voice';
 import { languageForEditor, readingSettings, storedSettings } from '../vscode-extension/settings';
 
 describe('codeToSpeech', () => {
-  it('@claim:structure-aware-speech speaks braces, operators, indentation, camel case, and snake case distinctly', () => {
+  it('speaks braces, operators, indentation, camel case, and snake case explicitly', () => {
     const result = codeToSpeech('  if (user_name !== runTask) {\n    runTask();\n  }', mergeSettings());
     expect(result).toContain('line 1, indent 1 level, if open paren user name strictly not equals run Task close paren open brace');
     expect(result).toContain('line 2, indent 2 levels, run Task open paren close paren');
@@ -72,9 +72,9 @@ describe('VS Code reading settings', () => {
   });
 });
 
-describe('20-snippet research preflight', () => {
-  it('@research-proxy:20-snippet produces every intended structural cue before participant testing', () => {
-    const fixtures = JSON.parse(readFileSync(resolve('tests/fixtures/comprehension-snippets.json'), 'utf8')) as {
+describe('shipped structural-cue fixtures', () => {
+  it('@claim:structure-aware-speech produces every expected spoken symbol and indentation cue', () => {
+    const fixtures = JSON.parse(readFileSync(resolve('tests/fixtures/structural-cues.json'), 'utf8')) as {
       id: number;
       language: 'javascript' | 'typescript' | 'python' | 'rust' | 'shell';
       code: string;

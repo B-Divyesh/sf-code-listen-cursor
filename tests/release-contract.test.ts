@@ -61,7 +61,7 @@ describe('release-host contract', () => {
       for (const name of ['twitter:card', 'twitter:title', 'twitter:description', 'twitter:image']) {
         expect(html, `${path} lacks ${name}`).toContain(`name="${name}"`);
       }
-      expect(html).toContain('Built by Param Factory · Version 1.0.1');
+      expect(html).toContain('Built by Param Factory · Version 1.0.2');
       expect(html).toContain('href="/privacy/"');
       expect(html).toContain('href="/terms/"');
     }
@@ -91,5 +91,38 @@ describe('release-host contract', () => {
     const audit = await readFile(resolve('.factory/copy-audit.md'), 'utf8');
     const expectedHash = createHash('sha256').update(html).digest('hex');
     expect(audit).toContain(`Landing source SHA-256: \`${expectedHash}\``);
+  });
+
+  it('keeps acceptance promises executable in the sandbox @regression:verifiable-acceptance', async () => {
+    const factoryFiles = (await readdir(resolve('.factory')))
+      .filter((file) => /\.(?:json|md)$/.test(file) && !file.startsWith('verification'))
+      .map((file) => `.factory/${file}`);
+    const siteFiles = (await readdir(resolve('site'), { recursive: true }))
+      .filter((file) => file.endsWith('.html'))
+      .map((file) => `site/${file}`);
+    const activeContractFiles = [
+      'README.md', 'package.json', 'wxt.config.ts', 'vscode-extension/package.json',
+      ...factoryFiles, ...siteFiles
+    ];
+    const activeContract = (await Promise.all(activeContractFiles.map(async (file) => (
+      `${file}\n${await readFile(resolve(file), 'utf8')}`
+    )))).join('\n');
+
+    expect(activeContract).not.toMatch(/(?:20[- ]snippet (?:participant|usability) study|16\s*(?:of|\/)\s*20|participant evidence|screen[- ]reader[- ]user|screen[- ]reader users?)/i);
+    expect(activeContract).not.toContain('language you can distinguish');
+
+    const brief = JSON.parse(await readFile(resolve('.factory/brief.json'), 'utf8')) as {
+      success_measure: string;
+      constraints: string;
+    };
+    const claims = JSON.parse(await readFile(resolve('.factory/claims.json'), 'utf8')) as {
+      id: string;
+      test: string;
+    }[];
+    expect(brief.success_measure).toContain('shipped structural-cue fixture');
+    expect(brief.success_measure).toContain('expected spoken symbol and indentation cue');
+    expect(brief.constraints).toContain('shortcuts configurable');
+    expect(claims.find(({ id }) => id === 'structure-aware-speech')?.test)
+      .toBe(`npm test -- --testNamePattern ${'@claim:'}${'structure-aware-speech'}`);
   });
 });

@@ -2,7 +2,7 @@
 
 Audit date: 2026-08-29
 
-Landing source SHA-256: `c831d4dbfa731214d4b1c63115120ac045114b55f21e36a026adf1244bd44ad3`
+Landing source SHA-256: `0742b18e32a3df6b689f96325dc5d029369d56c4b750252cb1323ba550a5a2d3`
 
 Every sentence in `site/index.html` is listed below. Headings, labels, buttons, and navigation were also reviewed. No sentence exceeds 22 words, and none uses a banned marketing word or metaphorical task term.
 
@@ -22,7 +22,7 @@ Every sentence in `site/index.html` is listed below. Headings, labels, buttons, 
 | Offline recovery | If speech is silent, reconnect once or choose a local system voice. | 11 | pass |
 | Selection | Select the exact code you need. | 7 | pass |
 | Current line | With no selection, the reader uses the cursor’s line. | 9 | pass |
-| Structure | Braces, operators, indentation, camel case, and snake case become language you can distinguish. | 13 | pass |
+| Structure | Braces, operators, indentation, camel case, and snake case become explicit spoken labels. | 12 | pass |
 | Controls | Move through a file hands-free or replay the last code without losing your position. | 14 | pass |
 | Pronunciation | Teach project names and abbreviations once. | 6 | pass |
 | Pronunciation | The pronunciation map stays in extension storage. | 7 | pass |
