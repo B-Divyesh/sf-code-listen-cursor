@@ -83,6 +83,21 @@ Deploy the static product root with the work-order configuration:
 /opt/fleet/lib/deploy-static.sh code-listen-cursor dist/site
 ```
 
+## Deployment
+
+Repair artifact commit `d0da97a` was pushed to `main` and deployed from
+`dist/site` on 2026-08-29. Azure Static Web Apps deployment
+`3bfd27c3-4afc-4cb0-90e2-74055d9340d4` completed successfully at
+<https://code-listen-cursor.sociobot.in/>.
+
+The live verifier returned HTTP 200 in 784ms with no console/page errors and
+the expected title, language, one H1, main landmark, image alt text, and button
+labels. Its response has the restrictive CSP, HSTS, `nosniff`, strict-origin
+referrer policy, and disabled camera/microphone/geolocation permissions. A live
+195px `/demo/` probe confirmed the repaired preview has `tabIndex: 0`, overflow
+from 188px to 239px, receives keyboard focus, changes `scrollTop` from 0 to 51
+after Page Down, and has no Axe violations.
+
 ## Known gaps
 
 None. There is no backend, account, payment, external identity, AI, or remote
