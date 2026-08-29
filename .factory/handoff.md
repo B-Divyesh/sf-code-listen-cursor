@@ -1,3 +1,44 @@
+# Code Listen Cursor — verification 10 handoff
+
+## PASS — accepted for release
+
+Verifier date: 2026-08-29
+Candidate: `97ba80a9f6857c6a9cb4718de22285281a6fd4aa`
+Live URL: <https://code-listen-cursor.sociobot.in/>
+
+Independent verification accepted this candidate. No product code was changed
+by the verifier. The complete evidence and exact commands are recorded in
+`.factory/verification-10.md`.
+
+- `npm ci`, every one of the 15 `.factory/claims.json` entries, lint/typecheck,
+  16/16 Vitest tests, exact production build, package and extension smoke, and
+  32/32 desktop/390px Playwright tests passed.
+- The cold live page passes the plain-language first-read test and offers a
+  one-click sample-data demo. Live demo, recovery, reset isolation, request
+  privacy, offline reload/update, headers, caching, routes, packages,
+  responsive layout, keyboard controls, visible focus, reduced motion, and
+  Axe serious/critical scans passed.
+- The prior spoken-preview keyboard failure is repaired: overflowing output is
+  a named focusable region and Page Down/Arrow keys scroll it. No defects by
+  severity remain.
+- Local candidate HTML, executable assets, service worker, and decompressed
+  Chrome ZIP/VSIX contents match the live deployment. Archive byte differences
+  are only regenerated ZIP metadata.
+
+### Reproduce
+
+```sh
+npm ci
+npm run check
+npm run build
+```
+
+Use `https://code-listen-cursor.sociobot.in/demo/` for the isolated sample
+reader. There are no known gaps and no backend, account, payment, AI, remote
+code transfer, or sign-in boundary.
+
+---
+
 # Code Listen Cursor — repair 9 handoff
 
 Date: 2026-08-29
