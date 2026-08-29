@@ -80,10 +80,11 @@ function renderPronunciation(): void {
 function loadVoices(): void {
   const select = get<HTMLSelectElement>('voice');
   const voices = speechSynthesis.getVoices().filter((voice) => voice.localService);
-  select.replaceChildren(new Option('Automatic local voice', ''), ...voices.map((voice) => (
+  select.replaceChildren(new Option(voices.length ? 'Automatic local voice' : 'No local voice available', ''), ...voices.map((voice) => (
     new Option(`${voice.name} (${voice.lang})`, voice.voiceURI)
   )));
-  select.value = settings.voiceURI;
+  select.value = voices.some((voice) => voice.voiceURI === settings.voiceURI) ? settings.voiceURI : '';
+  select.disabled = voices.length === 0;
 }
 
 async function init(): Promise<void> {

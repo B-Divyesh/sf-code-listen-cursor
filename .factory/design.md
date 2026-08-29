@@ -28,7 +28,7 @@ Carbon on Paper is approximately 13.5:1. Pulp on Moss is approximately 7.5:1. Ru
 
 - **Field notes:** Georgia, Cambria, `Times New Roman`, serif. The warm, highly differentiated letterforms suit longer explanatory passages and require no network font.
 - **Specimen labels and code:** `ui-monospace`, SFMono-Regular, Consolas, `Liberation Mono`, monospace. It connects controls directly to code and keeps punctuation unambiguous.
-- Scale: 13px label, 16px body, 20px section title, 32px display, clamp(44px–72px) hero. Body leading is 1.55 and readable measure is capped at 68 characters.
+- Scale: 16px label and control copy, 16px desktop body, 17px mobile body, 20px section title, 32px display, clamp(38px–76px) hero. Body leading is 1.55 and readable measure is capped at 68 characters.
 
 No font files or third-party font services are loaded. The system pairing makes the extension fast and familiar while retaining a deliberate editorial voice.
 
@@ -54,7 +54,7 @@ UI transitions last 180–240ms and animate opacity or transform only. The liste
 
 ## Responsive intent
 
-At 390px, navigation copy collapses to the two essential anchors, the hero becomes one column, specimen metadata is hidden, and controls stack at full width. The field-station demo remains fully operable by touch and keyboard. The generated hero image moves below the introductory copy and is cropped by its own composition rather than shrinking text into illegibility.
+At 390px, navigation copy collapses to the two essential anchors, the hero becomes one column, specimen metadata is hidden, and controls stack at full width. At the 195 CSS px proxy for 200% zoom, the header stacks and long installation text wraps. The field-station demo remains fully operable by touch and keyboard. The generated hero image moves below the introductory copy and is cropped by its own composition rather than shrinking text into illegibility.
 
 ## Asset plan and provenance
 

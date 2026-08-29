@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
+import { chromium } from 'playwright';
 
 const coveredClaims = ['@claim:vscode-reader-controls', '@claim:vscode-package-privacy'];
 const packagePath = resolve('dist/site/downloads/code-listen-cursor-vscode.vsix');
@@ -114,6 +115,73 @@ try {
   assert.match(fakeVscode.__state.html, /Reading settings/);
   assert.match(fakeVscode.__state.html, /Personal pronunciation/);
   assert.match(fakeVscode.__state.html, /Content-Security-Policy/);
+  assert.match(fakeVscode.__state.html, /Only voices marked local by your system are used/);
+
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const exerciseVoicePolicy = async (voices) => {
+      const page = await browser.newPage();
+      await page.addInitScript((availableVoices) => {
+        window.__constructed = [];
+        window.__spoken = [];
+        window.__posted = [];
+        window.acquireVsCodeApi = () => ({ postMessage(message) { window.__posted.push(message); } });
+        window.SpeechSynthesisUtterance = class {
+          constructor(text) {
+            this.text = text;
+            this.voice = null;
+            window.__constructed.push(text);
+          }
+        };
+        Object.defineProperty(window, 'speechSynthesis', {
+          configurable: true,
+          value: {
+            addEventListener() {},
+            cancel() {},
+            getVoices: () => availableVoices,
+            speak(utterance) {
+              window.__spoken.push({ text: utterance.text, localService: utterance.voice?.localService });
+              utterance.onstart?.();
+            }
+          }
+        });
+      }, voices);
+      const documentUrl = `data:text/html;base64,${Buffer.from(fakeVscode.__state.html).toString('base64')}`;
+      await page.goto(documentUrl);
+      await page.evaluate(() => {
+        window.dispatchEvent(new MessageEvent('message', {
+          data: {
+            type: 'speak',
+            text: 'private Source gets secret',
+            settings: { rate: 0.9, pitch: 1, voiceURI: '' }
+          }
+        }));
+      });
+      const result = await page.evaluate(() => ({
+        constructed: window.__constructed,
+        spoken: window.__spoken,
+        status: document.querySelector('#status')?.textContent
+      }));
+      await page.close();
+      return result;
+    };
+
+    const blocked = await exerciseVoicePolicy([
+      { default: true, lang: 'en-US', localService: false, name: 'Network only', voiceURI: 'network-only' }
+    ]);
+    assert.deepEqual(blocked.constructed, [], 'VS Code passed source to a non-local utterance.');
+    assert.deepEqual(blocked.spoken, [], 'VS Code started a non-local speech voice.');
+    assert.match(blocked.status, /No local speech voice/);
+
+    const local = await exerciseVoicePolicy([
+      { default: true, lang: 'en-US', localService: true, name: 'Local test', voiceURI: 'local-test' }
+    ]);
+    assert.deepEqual(local.constructed, ['private Source gets secret']);
+    assert.deepEqual(local.spoken, [{ text: 'private Source gets secret', localService: true }]);
+    assert.equal(local.status, 'Listening to code.');
+  } finally {
+    await browser.close();
+  }
   assert.equal(networkCalls, 0);
   globalThis.fetch = originalFetch;
 

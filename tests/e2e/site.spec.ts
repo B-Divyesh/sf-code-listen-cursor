@@ -95,6 +95,51 @@ test('@regression:touch-targets every visible interactive target is at least 44p
   }
 });
 
+test('@regression:zoom-reflow keeps every route and navigation inside 195 CSS px', async ({ page }) => {
+  await page.setViewportSize({ width: 195, height: 844 });
+  for (const path of ['/', '/demo/', '/privacy/', '/terms/', '/404.html']) {
+    await page.goto(path);
+    const layout = await page.evaluate(() => {
+      const targets = [...document.querySelectorAll<HTMLElement>('a,button,input,select,summary,textarea')]
+        .filter((element) => element.getClientRects().length > 0)
+        .map((element) => {
+          const box = element.getBoundingClientRect();
+          return { label: element.textContent?.trim() || element.getAttribute('aria-label') || element.id, width: box.width, height: box.height };
+        })
+        .filter((box) => box.width < 44 || box.height < 44);
+      return {
+        innerWidth,
+        scrollWidth: document.documentElement.scrollWidth,
+        smallTargets: targets
+      };
+    });
+    expect(layout.scrollWidth, `${path} overflows at the 390px/200% reflow proxy`).toBeLessThanOrEqual(layout.innerWidth);
+    expect(layout.smallTargets, `${path} has an undersized target at 200% reflow`).toEqual([]);
+    const privacy = page.locator('header nav[aria-label="Primary navigation"] a[href="/privacy/"]');
+    await expect(privacy, `${path} must retain its Privacy navigation link`).toHaveCount(1);
+    await expect(privacy, `${path} must keep Privacy inside the viewport`).toBeInViewport();
+  }
+});
+
+test('@regression:low-vision-type keeps visible site copy at 16px or larger', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const path of ['/', '/demo/', '/privacy/', '/terms/', '/404.html']) {
+    await page.goto(path);
+    const tooSmall = await page.locator('body').evaluate((body) => (
+      [...body.querySelectorAll<HTMLElement>('*')]
+        .filter((element) => element.getClientRects().length > 0)
+        .filter((element) => [...element.childNodes].some((node) => node.nodeType === Node.TEXT_NODE && node.textContent?.trim()))
+        .map((element) => ({
+          element: `${element.tagName.toLowerCase()}${element.id ? `#${element.id}` : ''}${element.className ? `.${String(element.className).replaceAll(' ', '.')}` : ''}`,
+          size: Number.parseFloat(getComputedStyle(element).fontSize),
+          text: element.textContent?.trim().slice(0, 60)
+        }))
+        .filter(({ size }) => size < 16)
+    ));
+    expect(tooSmall, `${path} contains text below 16px`).toEqual([]);
+  }
+});
+
 test('@regression:focus-contrast focus rings clear 3:1 on paper and dark reader surfaces', async ({ page }) => {
   await page.goto('/');
   const contrast = await page.evaluate(() => {

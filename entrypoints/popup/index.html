@@ -51,9 +51,12 @@
           </select>
 
           <label for="voice">System voice</label>
-          <select id="voice">
+          <select id="voice" aria-describedby="voice-note">
             <option value="">Automatic local voice</option>
           </select>
+          <p class="voice-note" id="voice-note">
+            Only voices marked local by your system are used.
+          </p>
 
           <label for="rate"
             >Reading rate <output id="rate-value">0.9×</output></label

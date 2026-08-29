@@ -22,7 +22,7 @@
   "success_measure": "Every shipped structural-cue fixture produces its expected spoken symbol and indentation cue in an independent sandbox run.",
   "artifact_class": "browser-extension",
   "monetization": "free",
-  "constraints": "Prefer OS/local voices; keep source out of product network requests and storage; keep controls keyboard-operable and shortcuts configurable.",
+  "constraints": "Use only speech voices marked local by the browser or editor unless a person explicitly chooses otherwise; keep source out of product network requests and storage; keep controls keyboard-operable and shortcuts configurable.",
   "est_build_effort": "S",
   "why_distinct": "It solves listening to the current code structure and cursor context, not generic document narration.",
   "confidence": 3,

@@ -40,7 +40,7 @@ function showStatus(message: string, kind: 'listening' | 'notice' | 'error' = 'n
   box.setAttribute('role', kind === 'error' ? 'alert' : 'status');
   box.textContent = `${kind === 'listening' ? '▶ ' : kind === 'error' ? '! ' : '• '}${message}`;
   const style = document.createElement('style');
-  style.textContent = `div{position:fixed;z-index:2147483647;right:20px;bottom:20px;max-width:min(380px,calc(100vw - 40px));padding:12px 16px;border:1px solid #17231d;border-left:5px solid ${kind === 'error' ? '#a2462e' : '#315b43'};border-radius:5px;background:#fcfaf1;color:#17231d;box-shadow:4px 4px 0 rgb(23 35 29 / .2);font:600 14px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace}`;
+  style.textContent = `div{position:fixed;z-index:2147483647;right:20px;bottom:20px;max-width:min(380px,calc(100vw - 40px));padding:12px 16px;border:1px solid #17231d;border-left:5px solid ${kind === 'error' ? '#a2462e' : '#315b43'};border-radius:5px;background:#fcfaf1;color:#17231d;box-shadow:4px 4px 0 rgb(23 35 29 / .2);font:600 16px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace}`;
   root.append(style, box);
   document.documentElement.append(host);
   toast = host;
@@ -75,12 +75,18 @@ async function listen(source = sourceAtCursor()): Promise<CursorState> {
   const effectiveSettings = settings.language === 'auto'
     ? { ...settings, language: detectLanguage(location.pathname, trimmed) }
     : settings;
+  lastSource = trimmed;
+  const voice = preferredLocalVoice(window.speechSynthesis.getVoices(), settings.voiceURI);
+  if (!voice) {
+    window.speechSynthesis.cancel();
+    const message = 'No local speech voice is available. Install or enable a local system voice, then try again.';
+    showStatus(message, 'error');
+    return { ok: false, state: 'error', message, follow };
+  }
   const utterance = new SpeechSynthesisUtterance(codeToSpeech(trimmed, effectiveSettings));
   utterance.rate = settings.rate;
   utterance.pitch = settings.pitch;
-  const voices = window.speechSynthesis.getVoices();
-  utterance.voice = voices.find((voice) => voice.voiceURI === settings.voiceURI)
-    ?? preferredLocalVoice(voices);
+  utterance.voice = voice;
   utterance.onstart = () => { speaking = true; showStatus('Listening to code', 'listening'); };
   utterance.onend = () => { speaking = false; };
   utterance.onerror = (event) => {
@@ -91,7 +97,6 @@ async function listen(source = sourceAtCursor()): Promise<CursorState> {
   };
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utterance);
-  lastSource = trimmed;
   return { ok: true, state: 'speaking', message: 'Listening to code', follow, sample: trimmed.slice(0, 80) };
 }
 

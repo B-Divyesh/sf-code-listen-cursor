@@ -35,7 +35,7 @@ h1 {
 }
 .kicker {
   font:
-    700 11px/1.2 ui-monospace,
+    700 16px/1.2 ui-monospace,
     monospace;
   letter-spacing: 0.13em;
   text-transform: uppercase;
@@ -49,7 +49,7 @@ h1 {
   border-left: 4px solid #315b43;
   background: #e6e0c9;
   font:
-    600 13px/1.45 ui-monospace,
+    600 16px/1.45 ui-monospace,
     monospace;
 }
 .status[data-state="error"] {
@@ -97,7 +97,7 @@ button.primary {
 }
 kbd {
   font:
-    10px ui-monospace,
+    16px ui-monospace,
     monospace;
   opacity: 0.75;
   margin-left: 3px;
@@ -112,7 +112,7 @@ summary {
   display: flex;
   align-items: center;
   font:
-    700 13px ui-monospace,
+    700 16px ui-monospace,
     monospace;
   cursor: pointer;
 }
@@ -125,7 +125,7 @@ summary {
 }
 .settings label,
 .pronunciation-form label {
-  font-size: 14px;
+  font-size: 16px;
 }
 .settings select,
 .pronunciation-form input {
@@ -167,20 +167,26 @@ summary {
   border-bottom: 1px dotted #b9b39e;
   padding: 6px 0;
   font:
-    12px ui-monospace,
+    16px ui-monospace,
     monospace;
 }
 .pronunciation-list button {
   min-width: 44px;
   min-height: 44px;
   padding: 6px 8px;
-  font-size: 11px;
+  font-size: 16px;
 }
 .privacy {
   margin: 16px 0 0;
   color: #4e584f;
-  font-size: 13px;
+  font-size: 16px;
   font-style: italic;
+}
+.voice-note {
+  grid-column: 1/-1;
+  margin: -2px 0 4px;
+  color: #4e584f;
+  font-size: 16px;
 }
 button:focus-visible,
 input:focus-visible,

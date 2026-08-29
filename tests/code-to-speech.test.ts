@@ -44,10 +44,12 @@ describe('currentLine', () => {
 });
 
 describe('voice selection', () => {
-  it('@claim:local-voice prefers an English voice marked local', () => {
-    const local = { localService: true, lang: 'en-GB', id: 'local' };
-    const selected = preferredLocalVoice([{ localService: false, lang: 'en-US', id: 'network' }, local]);
-    expect(selected).toBe(local);
+  it('@regression:local-voice-policy returns only voices marked local', () => {
+    const local = { localService: true, lang: 'en-GB', voiceURI: 'local', id: 'local' };
+    const network = { localService: false, lang: 'en-US', voiceURI: 'network', id: 'network' };
+    expect(preferredLocalVoice([network, local])).toBe(local);
+    expect(preferredLocalVoice([network])).toBeNull();
+    expect(preferredLocalVoice([network, local], 'network')).toBe(local);
   });
 });
 

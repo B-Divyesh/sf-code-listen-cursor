@@ -62,10 +62,18 @@ function listen(): void {
   }
   const text = spokenText();
   preview.value = text;
+  const voice = preferredLocalVoice(speechSynthesis.getVoices());
+  if (!voice) {
+    speechSynthesis.cancel();
+    title.textContent = 'Local voice needed';
+    status.textContent = 'Install or enable a voice marked local on this device, then try again. The spoken preview is still available.';
+    status.dataset.error = 'true';
+    document.querySelector('.observation')?.classList.remove('is-listening');
+    return;
+  }
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.rate = Number(rate.value);
-  const voices = speechSynthesis.getVoices();
-  utterance.voice = preferredLocalVoice(voices);
+  utterance.voice = voice;
   utterance.onstart = () => {
     title.textContent = 'Listening now';
     status.textContent = 'Speech is playing through your system voice.';

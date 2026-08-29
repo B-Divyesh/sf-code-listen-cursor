@@ -2,7 +2,7 @@
 
 Code Listen Cursor reads selected code or the current line aloud for developers who work better by listening. It supports reading fatigue, dyslexia, low vision, and auditory coding workflows.
 
-It includes cursor follow, repeat, punctuation levels, reading rate, indentation controls, a local-voice preference, and a pronunciation map. Installed-package tests verify the browser and VS Code flows against isolated local data.
+It includes cursor follow, repeat, punctuation levels, reading rate, indentation controls, local-only speech, and a pronunciation map. Installed-package tests verify the browser and VS Code flows against isolated local data.
 
 Live site: <https://code-listen-cursor.sociobot.in>
 
@@ -37,10 +37,10 @@ npm run dev          # WXT extension development server
 npm run dev:site     # landing site at localhost
 npm test             # unit tests
 npm run build        # extension + ZIP + static site
-npm run test:extension # load the unpacked extension and invoke speech in Chromium
+npm run test:extension # load the unpacked extension and verify its no-local-voice recovery in Chromium
 npm run test:installed # install the packaged ZIP and verify local settings/no remote listening requests
 npm run test:vscode-installed # exercise commands and local storage from the packaged VSIX
-npm run test:e2e     # desktop and 390 px browser/a11y checks
+npm run test:e2e     # desktop, 390 px, 200% reflow, keyboard, privacy, and a11y checks
 npm run check        # typecheck and all gates
 ```
 
@@ -60,7 +60,7 @@ npm run check        # typecheck and all gates
 
 ## Privacy and support
 
-See the site’s [privacy note](site/privacy/index.html). The reader prefers voices that the browser marks as local. Installed voice behavior is controlled by the browser and operating system. Please report bugs without including private source code.
+See the site’s [privacy note](site/privacy/index.html). The reader uses only voices that the browser or editor marks as local. If none is available, it keeps the spoken preview and does not start speech. Please report bugs without including private source code.
 
 ## License
 

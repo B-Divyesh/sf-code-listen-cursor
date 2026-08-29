@@ -61,7 +61,7 @@ describe('release-host contract', () => {
       for (const name of ['twitter:card', 'twitter:title', 'twitter:description', 'twitter:image']) {
         expect(html, `${path} lacks ${name}`).toContain(`name="${name}"`);
       }
-      expect(html).toContain('Built by Param Factory · Version 1.0.2');
+      expect(html).toContain('Built by Param Factory · Version 1.0.3');
       expect(html).toContain('href="/privacy/"');
       expect(html).toContain('href="/terms/"');
     }

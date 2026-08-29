@@ -91,13 +91,13 @@ try {
   await popup.waitForFunction(() => document.querySelector('#pronunciation-list')?.textContent?.includes('cube control'));
 
   await popup.getByRole('button', { name: /Listen now/ }).click();
-  await waitForStatus('Listening to code');
-  assert.equal(await status.innerText(), 'Listening to code');
+  await waitForStatus('No local speech voice is available. Install or enable a local system voice, then try again.');
+  assert.match(await status.innerText(), /No local speech voice/);
   await popup.locator('#stop').click();
   await waitForStatus('Speech stopped');
   await popup.getByRole('button', { name: /Repeat/ }).click();
-  await waitForStatus('Listening to code');
-  assert.equal(await status.innerText(), 'Listening to code');
+  await waitForStatus('No local speech voice is available. Install or enable a local system voice, then try again.');
+  assert.match(await status.innerText(), /No local speech voice/);
 
   const send = (type) => worker.evaluate(
     async ({ type, tabId }) => chrome.tabs.sendMessage(tabId, { type }),
@@ -117,7 +117,7 @@ try {
     element.setSelectionRange(secondLine, secondLine);
   });
   await popup.getByRole('button', { name: /Listen now/ }).click();
-  await waitForStatus('Listening to code');
+  await waitForStatus('No local speech voice is available. Install or enable a local system voice, then try again.');
   state = await send('GET_STATE');
   assert.equal(state.sample, '  return privateSource;');
 

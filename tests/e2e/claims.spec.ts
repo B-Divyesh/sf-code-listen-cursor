@@ -22,11 +22,55 @@ test('@claim:no-code-upload keeps the sample interaction on the product origin',
   expect(requests.every((url) => new URL(url).origin === 'http://127.0.0.1:4173')).toBeTruthy();
 });
 
+test('@claim:local-voice never gives source to an automatic non-local voice', async ({ page }) => {
+  await page.addInitScript(() => {
+    const calls: { text: string; voice: SpeechSynthesisVoice | null }[] = [];
+    class MockUtterance {
+      text: string;
+      voice: SpeechSynthesisVoice | null = null;
+      rate = 1;
+
+      constructor(text: string) {
+        this.text = text;
+        calls.push({ text, voice: this.voice });
+      }
+    }
+    const networkVoice = {
+      default: true,
+      lang: 'en-US',
+      localService: false,
+      name: 'Network only',
+      voiceURI: 'network-only'
+    } as SpeechSynthesisVoice;
+    Object.defineProperty(window, 'SpeechSynthesisUtterance', { configurable: true, value: MockUtterance });
+    Object.defineProperty(window, 'speechSynthesis', {
+      configurable: true,
+      value: {
+        cancel() {},
+        getVoices: () => [networkVoice],
+        speak(utterance: SpeechSynthesisUtterance) {
+          calls.push({ text: utterance.text, voice: utterance.voice });
+        },
+        addEventListener() {}
+      }
+    });
+    Object.defineProperty(window, '__speechCalls', { value: calls });
+  });
+  await page.goto('/demo/');
+  const preview = page.getByLabel('Words that will be spoken');
+  await expect(preview).toContainText('const describe Plant');
+  await page.getByRole('button', { name: 'Listen to code' }).click();
+  await expect(page.getByRole('heading', { name: 'Local voice needed' })).toBeVisible();
+  await expect(page.locator('#demo-status')).toContainText('voice marked local');
+  expect(await page.evaluate(() => (window as typeof window & { __speechCalls: unknown[] }).__speechCalls)).toEqual([]);
+  await expect(preview).toContainText('const describe Plant');
+});
+
 test('@claim:offline-reload reloads the sample after first visit with no network', async ({ page, context }) => {
   await page.goto('/demo/');
   await page.waitForFunction(() => navigator.serviceWorker?.controller !== null, undefined, { timeout: 15_000 });
   await page.evaluate(async () => {
-    const stale = await caches.open('code-listen-cursor-v3');
+    const stale = await caches.open('code-listen-cursor-v4');
     await stale.put('/stale-shell', new Response('stale'));
     const registrations = await navigator.serviceWorker.getRegistrations();
     await Promise.all(registrations.map((registration) => registration.unregister()));
@@ -40,7 +84,7 @@ test('@claim:offline-reload reloads the sample after first visit with no network
       active: registration.active?.state,
       caches: await caches.keys()
     };
-  })).toEqual({ active: 'activated', caches: ['code-listen-cursor-v4'] });
+  })).toEqual({ active: 'activated', caches: ['code-listen-cursor-v5'] });
   await page.reload();
   await context.setOffline(true);
   await page.reload();

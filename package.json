@@ -1,6 +1,6 @@
 {
   "name": "code-listen-cursor",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "type": "module",
   "description": "Hear selected code as structure-aware speech without sending source off-device.",

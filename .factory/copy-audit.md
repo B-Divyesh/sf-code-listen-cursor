@@ -2,7 +2,7 @@
 
 Audit date: 2026-08-29
 
-Landing source SHA-256: `0742b18e32a3df6b689f96325dc5d029369d56c4b750252cb1323ba550a5a2d3`
+Landing source SHA-256: `d0c9841993ebc382b22dc4c1582c2149ab2eedccb11bcde043b822ca558e516a`
 
 Every sentence in `site/index.html` is listed below. Headings, labels, buttons, and navigation were also reviewed. No sentence exceeds 22 words, and none uses a banned marketing word or metaphorical task term.
 
@@ -15,7 +15,7 @@ Every sentence in `site/index.html` is listed below. Headings, labels, buttons, 
 | Fact | No account. | 2 | pass |
 | Figure | An illustration of branching code structure. | 7 | pass |
 | Preview instruction | Select code below, or place the cursor on a line, then listen. | 11 | pass |
-| Preview instruction | The browser chooses a local voice first. | 7 | pass |
+| Preview instruction | The reader uses only a voice your browser marks as local. | 11 | pass |
 | Preview status | Select code or leave the cursor on a line. | 9 | pass |
 | Preview output | Your spoken code appears here. | 5 | pass |
 | Offline state | The demo still works with a voice installed on your device. | 11 | pass |
@@ -28,7 +28,7 @@ Every sentence in `site/index.html` is listed below. Headings, labels, buttons, 
 | Pronunciation | The pronunciation map stays in extension storage. | 7 | pass |
 | Privacy heading | See how each version handles source. | 6 | pass |
 | Privacy | The reader does not send code to a Code Listen Cursor service. | 11 | pass |
-| Voice | It asks the browser to speak and prefers voices marked local. | 10 | pass |
+| Voice | It speaks only through voices your browser marks as local. | 10 | pass |
 | Install | Download and unzip the extension. | 5 | pass |
 | Install | Open `chrome://extensions` or `edge://extensions`. | 4 | pass |
 | Install | Enable developer mode, choose “Load unpacked,” and select the unzipped folder. | 11 | pass |

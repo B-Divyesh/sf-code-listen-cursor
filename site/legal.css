@@ -50,13 +50,13 @@ header > a {
   min-height: 44px;
   gap: 10px;
   color: var(--carbon);
-  font: 700 14px var(--mono);
+  font: 700 16px var(--mono);
   text-decoration: none;
 }
 nav {
   display: flex;
   gap: 20px;
-  font: 700 13px var(--mono);
+  font: 700 16px var(--mono);
 }
 nav a,
 main a {
@@ -87,14 +87,14 @@ h2 {
 }
 .eyebrow {
   color: var(--moss);
-  font: 700 12px var(--mono);
+  font: 700 16px var(--mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 footer {
   border-top: 1px solid var(--hairline);
   border-bottom: 0;
-  font-size: 14px;
+  font-size: 16px;
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 20px;
@@ -103,13 +103,13 @@ footer > div {
   display: flex;
   align-items: center;
   gap: 9px;
-  font: 700 13px var(--mono);
+  font: 700 16px var(--mono);
 }
 .build-note {
   grid-column: 1/-1;
   margin: 0;
   color: #596057;
-  font: 12px var(--mono);
+  font: 16px var(--mono);
 }
 a:focus-visible {
   outline: 3px solid var(--focus);
@@ -138,5 +138,29 @@ a:focus-visible {
   }
   footer .product-line {
     display: none;
+  }
+}
+@media (max-width: 320px) {
+  header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 16px;
+  }
+  header nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(44px, 1fr));
+    gap: 8px;
+  }
+  main {
+    margin-top: 40px;
+    padding-inline: 16px;
+  }
+  h1 {
+    font-size: 40px;
+    overflow-wrap: break-word;
+  }
+  footer {
+    padding-inline: 16px;
   }
 }

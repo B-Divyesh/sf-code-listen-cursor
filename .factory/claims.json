@@ -29,10 +29,10 @@
   },
   {
     "id": "local-voice",
-    "claim": "The reader prefers an English voice marked local by the browser.",
-    "where": "reader preview, privacy page, README",
-    "test": "npm test -- --testNamePattern @claim:local-voice",
-    "sandbox": "voice fixture with a network English voice and a local English voice; assert the local voice is selected"
+    "claim": "The reader gives source only to a voice marked local; without one, the spoken preview remains and speech is blocked.",
+    "where": "reader preview, privacy page, browser and VS Code packages, README",
+    "test": "npm run test:e2e -- --grep @claim:local-voice",
+    "sandbox": "fresh demo with only a non-local English voice; assert no utterance is constructed or spoken, the preview remains, and local-voice recovery is shown"
   },
   {
     "id": "offline-reload",

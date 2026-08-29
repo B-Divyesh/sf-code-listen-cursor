@@ -36,8 +36,10 @@ try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     return chrome.tabs.sendMessage(tab.id, { type: 'LISTEN' });
   });
-  if (!result.ok || result.state !== 'speaking') throw new Error(`Listen failed: ${JSON.stringify(result)}`);
-  console.log(`Extension smoke passed (${extensionId}).`);
+  if (result.ok || result.state !== 'error' || !result.message.includes('No local speech voice')) {
+    throw new Error(`No-local-voice recovery failed: ${JSON.stringify(result)}`);
+  }
+  console.log(`Extension smoke and no-local-voice recovery passed (${extensionId}).`);
 } finally {
   await context.close();
   server.close();
