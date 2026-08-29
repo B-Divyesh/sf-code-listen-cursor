@@ -10,6 +10,8 @@ test('landing page has its core content and no serious accessibility violations'
   await expect(page.locator('main')).toBeVisible();
   await expect(page.locator('h1')).toHaveCount(1);
   await expect(page.getByRole('heading', { name: 'Listen to code without losing your place' })).toBeVisible();
+  await page.keyboard.press('Tab');
+  await expect(page.locator(':focus')).toHaveAttribute('href', '#main');
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
   expect(errors).toEqual([]);
@@ -26,7 +28,15 @@ test('@regression:landing-privacy-navigation keeps Privacy in the desktop and mo
   expect(bounds?.height).toBeGreaterThanOrEqual(44);
   await privacy.click();
   await expect(page).toHaveURL(/\/privacy\/$/);
-  await expect(page.getByRole('heading', { level: 1, name: 'Privacy' })).toBeVisible();
+  const privacyHeading = page.getByRole('heading', { level: 1, name: 'Privacy' });
+  await expect(privacyHeading).toBeVisible();
+  await expect(privacyHeading).toBeFocused();
+  await expect(page.locator('#route-announcement')).toHaveText('Opened Privacy');
+  await page.goBack();
+  await expect(page).toHaveURL(/\/$/);
+  const homeHeading = page.getByRole('heading', { level: 1, name: 'Listen to code without losing your place' });
+  await expect(homeHeading).toBeFocused();
+  await expect(page.locator('#route-announcement')).toHaveText('Opened Listen to code without losing your place');
 });
 
 test('@claim:demo-reader reads a selection or current line with chosen pronunciation', async ({ page }) => {
@@ -37,7 +47,7 @@ test('@claim:demo-reader reads a selection or current line with chosen pronuncia
   await editor.press('ArrowRight');
   await page.getByLabel('Code word').fill('kubectl');
   await page.getByLabel('Speak as').fill('cube control');
-  await page.getByRole('button', { name: 'Use pronunciation' }).click();
+  await page.getByRole('button', { name: 'Save sample pronunciation' }).click();
   await expect(page.getByLabel('Words that will be spoken')).toContainText('cube control');
   await editor.evaluate((element: HTMLTextAreaElement) => element.setSelectionRange(20, 20));
   await editor.press('ArrowLeft');
@@ -47,12 +57,10 @@ test('@claim:demo-reader reads a selection or current line with chosen pronuncia
 test('demo route, query entry, keyboard path, and mobile-safe controls work', async ({ page }) => {
   await page.goto('/?demo=1');
   await expect(page).toHaveURL(/\/demo\/$/);
-  await expect(page.getByRole('heading', { name: 'Listen to sample code' })).toBeVisible();
-  await page.keyboard.press('Tab');
-  await expect(page.locator(':focus')).toHaveAttribute('href', '#main');
-  await page.keyboard.press('Enter');
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Tab');
+  const demoHeading = page.getByRole('heading', { name: 'Listen to sample code' });
+  await expect(demoHeading).toBeVisible();
+  await expect(demoHeading).toBeFocused();
+  await expect(page.locator('#route-announcement')).toHaveText('Opened Listen to sample code');
   await page.getByLabel('Editable sample code').focus();
   await page.keyboard.press('Control+A');
   await page.keyboard.type('const leaf = 1;');

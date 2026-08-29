@@ -45,6 +45,7 @@
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
+    <p id="route-announcement" class="route-announcement" aria-live="polite" aria-atomic="true"></p>
     <header class="site-header">
       <a class="wordmark" href="/" aria-label="Code Listen Cursor home">
         <img src="/leaf-cursor.svg" width="36" height="36" alt="" />
@@ -208,7 +209,7 @@ const describePlant = async (fern) => {
               <input id="demo-written" value="fern" required />
               <label for="demo-spoken">Speak as</label>
               <input id="demo-spoken" value="furn" required />
-              <button type="submit">Use pronunciation</button>
+              <button type="submit">Save sample pronunciation</button>
             </form>
           </section>
         </div>
@@ -226,7 +227,7 @@ const describePlant = async (fern) => {
       >
         <div class="section-intro">
           <p class="eyebrow">How code reading works</p>
-          <h2 id="anatomy-title">Control at the scale of a line</h2>
+          <h2 id="anatomy-title">How the code reader works</h2>
         </div>
         <ol class="feature-list">
           <li>
@@ -265,7 +266,7 @@ const describePlant = async (fern) => {
           <li>
             <span class="feature-number">04</span>
             <div>
-              <h3>Your own vocabulary</h3>
+              <h3>Set pronunciations for project words</h3>
               <p>
                 Teach project names and abbreviations once. The pronunciation
                 map stays in extension storage.
@@ -282,7 +283,7 @@ const describePlant = async (fern) => {
         </div>
         <div>
           <p class="eyebrow">Privacy</p>
-          <h2 id="privacy-title">See how each version handles source.</h2>
+          <h2 id="privacy-title">Code stays on your device</h2>
           <p>
             The reader does not send code to a Code Listen Cursor service. It
             speaks only through voices your browser marks as local.
@@ -344,5 +345,6 @@ const describePlant = async (fern) => {
       </p>
     </footer>
     <script type="module" src="/main.ts"></script>
+    <script type="module" src="/route-focus.ts"></script>
   </body>
 </html>

@@ -2,7 +2,7 @@
 
 Audit date: 2026-08-29
 
-Landing source SHA-256: `d0c9841993ebc382b22dc4c1582c2149ab2eedccb11bcde043b822ca558e516a`
+Landing source SHA-256: `fd9324de7837e944844f59d9b00aeeb49149dbb7e758e1b05c2b2346571e86b8`
 
 Every sentence in `site/index.html` is listed below. Headings, labels, buttons, and navigation were also reviewed. No sentence exceeds 22 words, and none uses a banned marketing word or metaphorical task term.
 
@@ -26,7 +26,10 @@ Every sentence in `site/index.html` is listed below. Headings, labels, buttons, 
 | Controls | Move through a file hands-free or replay the last code without losing your position. | 14 | pass |
 | Pronunciation | Teach project names and abbreviations once. | 6 | pass |
 | Pronunciation | The pronunciation map stays in extension storage. | 7 | pass |
-| Privacy heading | See how each version handles source. | 6 | pass |
+| How it works heading | How the code reader works | 5 | pass |
+| Pronunciation heading | Set pronunciations for project words | 5 | pass |
+| Save action | Save sample pronunciation | 3 | pass |
+| Privacy heading | Code stays on your device | 5 | pass |
 | Privacy | The reader does not send code to a Code Listen Cursor service. | 11 | pass |
 | Voice | It speaks only through voices your browser marks as local. | 10 | pass |
 | Install | Download and unzip the extension. | 5 | pass |

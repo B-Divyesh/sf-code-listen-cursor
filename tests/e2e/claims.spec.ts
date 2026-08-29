@@ -5,7 +5,7 @@ test('@claim:demo-sandbox starts isolated sample data and reset removes its name
   await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
   await page.getByLabel('Code word').fill('fern');
   await page.getByLabel('Speak as').fill('frond');
-  await page.getByRole('button', { name: 'Use pronunciation' }).click();
+  await page.getByRole('button', { name: 'Save sample pronunciation' }).click();
   await expect(page.getByLabel('Words that will be spoken')).toContainText('frond');
   expect(await page.evaluate(() => localStorage.getItem('demo:code-listen-cursor:pronunciation'))).toContain('frond');
   await page.getByRole('button', { name: 'Reset demo' }).click();

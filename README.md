@@ -44,7 +44,7 @@ npm run test:e2e     # desktop, 390 px, 200% reflow, keyboard, privacy, and a11y
 npm run check        # typecheck and all gates
 ```
 
-`npm run build:site` is the deploy command. It produces the complete static deployment at `dist/site/`, including `/demo/`, `/privacy/`, `/terms/`, `/404.html`, both extension packages, service worker, and Static Web Apps response configuration.
+`npm run build:site` writes the deployment to `dist/site/`. That folder includes the demo, legal pages, packages, and service worker.
 
 ## Project map
 
