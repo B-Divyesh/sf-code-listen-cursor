@@ -1,3 +1,116 @@
+# Code Listen Cursor — repair 5 handoff
+
+Date: 2026-08-29
+Work order: `code-listen-cursor-repair-5`
+Repository verifier commit: `dcd928c58ea06043d4a4d25a7d602b58a7142912`
+Verified candidate: `22b79dd5127e80e9df8b966e2fd7610ebf56eb16`
+Product repair commit: `8c9e6dab2dd834f5c00c2983dabd882ab82bc303`
+
+## Status: code repair deployed; release still needs consented human evidence
+
+The landing-header finding from independent verification 5 is repaired,
+covered, pushed, and deployed. The researched human acceptance finding cannot
+be truthfully completed by an unattended container: no consented participant
+or screen-reader-user result was supplied or collected. The brief and the
+Pending result in `.factory/usability-study.md` remain unchanged. This handoff
+does not substitute automated or synthetic output for that human evidence.
+
+## Repaired finding
+
+- Added Privacy to the landing page's primary header navigation.
+- Corrected the mobile selector's specificity. At 390 px, the header now keeps
+  Demo and Privacy visible while hiding How it works and Download.
+- Added `@regression:landing-privacy-navigation`. It runs in the desktop and
+  390 px Playwright projects and verifies visibility, the `/privacy/` target, a
+  minimum 44×44 px target, navigation, and the destination H1.
+- Updated the landing copy-audit hash. No researched brief, public claim, demo
+  isolation, extension behavior, or visual direction changed.
+
+## Clean local verification
+
+`npm ci` installed 184 packages with 0 vulnerabilities. `npm run check` passed
+on 2026-08-29 and ran:
+
+- TypeScript typecheck and JavaScript syntax lint.
+- 14 Vitest unit, research-preflight, claim-ledger, and host-contract tests.
+- WXT MV3 production build, Chrome ZIP, native VS Code VSIX, package structure,
+  unpacked extension smoke, installed ZIP consumer flow, and packaged VSIX
+  integration.
+- All installed browser controls/settings, local-storage boundaries, private
+  source handling, network privacy, and configurable shortcut behavior.
+- All VS Code controls/settings, local extension state, and network privacy.
+- 24 Playwright cases across 1440 px desktop and 390×844 mobile, including all
+  declared browser claims, keyboard entry, touch targets, focus contrast,
+  offline update/reload, route structure, and zero Axe violations.
+
+The exact 20-snippet structural-cue preflight also passed with:
+
+```sh
+npm test -- --testNamePattern @research-proxy:20-snippet
+```
+
+It is explicitly a parser regression, not human comprehension evidence.
+
+Production output stayed within budget: site JS 7,412 B (3.10 kB gzip), site
+CSS 11,570 B (3.39 kB gzip), mobile hero WebP 38,244 B, and browser extension
+29.73 kB. A Lighthouse 12.8.2 production audit scored 100 Performance, 100
+Accessibility, 100 Best Practices, and 100 SEO. The live audit measured LCP
+1.1 s, CLS 0, and total blocking time 30 ms.
+
+## Deployment and live verification
+
+The repair commit was pushed to `origin/main`. The verified static output was
+deployed with:
+
+```sh
+bash /opt/fleet/lib/deploy-static.sh code-listen-cursor dist/site
+```
+
+Azure Static Web Apps deployment
+`f104ecc1-4460-4ad8-8eca-4c64f6fcc5fd` succeeded. It reused
+`sf-code-listen-cursor` in Central US and returned HTTPS 200 at
+<https://code-listen-cursor.sociobot.in/>.
+
+Post-deploy `verify-url.sh` recorded a 782 ms load, no page or console errors,
+the expected title and `lang=en`, one H1, one main landmark, no missing image
+alternatives, and no unlabeled buttons. Independent live Chromium checks at
+1440×900 and 390×844 covered `/`, `/demo/`, `/privacy/`, `/terms/`, and
+`/404.html`: every route had one H1/main, no horizontal overflow, and zero Axe
+violations. The Privacy header link remained visible and at least 44×44 px in
+both viewports; the first Tab on the demo reached the skip link.
+
+A live edit/listen flow made four requests, all to the product origin. Service
+worker `sw.js` was activated, `registration.update()` completed, cache
+`code-listen-cursor-v3` existed, and the demo reloaded with HTTP 200 while
+offline. Reduced motion computed 0.00001 s animation/transition durations.
+
+The live response includes HSTS, `nosniff`, strict-origin referrer policy,
+restrictive permissions policy, and response-header CSP with
+`connect-src 'self'` and `frame-ancestors 'none'`. Hashed assets are immutable,
+`sw.js` is `no-cache`, downloads are attachments, and an unknown route returns
+HTTP 404. All nine discovered product, package, and source links returned 200.
+
+SHA-256 matched between live and `dist/site` for all 13 checked files: five
+HTML routes, service worker, hero and social artwork, both hashed CSS files,
+hashed JS, Chrome ZIP, and VSIX. Package hashes were:
+
+- Chrome ZIP: `78a8e2878aa5c41cb03bc7ec54cf3a1c263b2302f8096c4e83629a6a41608ad0`
+- VSIX: `c98ed70cc0318a194339ffdc2dee26b059cd038c206490f4162cb74ba637929b`
+
+The artifact remains a WXT TypeScript MV3 browser extension plus native VS
+Code adapter, with a static site deployed from `dist/site/`. API/auth,
+rate-limit, payment, and AI-gateway checks are not applicable because the
+product has no backend, account, payment, or model call.
+
+## Required external completion
+
+Run the consented protocol in `.factory/usability-study.md` against the package
+hash above with at least one screen-reader/auditory-workflow participant.
+Record only the non-identifying fields in that file. Release requires at least
+16 correct answers out of 20 and no screen-reader blocker.
+
+---
+
 # Code Listen Cursor — independent verification 5 status
 
 ## Status: **FAIL — do not release**
