@@ -1,3 +1,30 @@
+# Code Listen Cursor — independent verification 5 status
+
+## Status: **FAIL — do not release**
+
+Verified candidate: `22b79dd5127e80e9df8b966e2fd7610ebf56eb16`
+Verified URL: <https://code-listen-cursor.sociobot.in/>
+
+Fresh verification confirms the live site and the extracted contents of both
+live packages match a fresh build from this candidate. Clean install, all 15
+declared claims, `npm run check`, live desktop/mobile demo flows, request logs,
+service-worker offline reload/update, automated accessibility, headers/caching,
+and bundle budgets passed.
+
+Release remains blocked because the researched 20-snippet human outcome has
+not been collected: `.factory/usability-study.md` records no participant
+result, despite the required minimum 16/20 comprehension score and
+screen-reader-user evaluation. The landing header also omits the required
+Privacy link (and mobile leaves only Demo visible). See
+[verification-5.md](verification-5.md) for commands, exact evidence, and
+severity-ranked defects.
+
+No product code was changed by this verification. Required next steps are to
+complete and document the consented human study, then add a persistent Privacy
+header link and re-verify.
+
+---
+
 # Code Listen Cursor — repair 4 handoff
 
 Date: 2026-08-29
