@@ -8,7 +8,9 @@ Verifier report: `.factory/verification-6.md`
 
 ## Status
 
-The release blocker is repaired and every local release gate passes. Deployment and live verification evidence will be appended after the repair commit is pushed.
+**PASS — release blocker repaired, pushed, deployed, and verified live.**
+
+Repair commit `3da344518965921325db5d6de876d5f3b5235f71` is on `origin/main`. The work-order static deployment succeeded at <https://code-listen-cursor.sociobot.in/>.
 
 ## Reproduction and root cause
 
@@ -62,10 +64,26 @@ Fresh screenshots of the landing page at 1440×900 and 390×844, plus the 390×8
 
 ## Response and service applicability
 
-The release-contract and package checks verify response-header CSP, `frame-ancestors 'none'`, same-origin connections, immutable hashed assets, `no-cache` for `sw.js`, attachment headers for downloads, and a status-preserving 404 rewrite. Live header and identity checks are pending deployment.
+The release-contract and package checks verify response-header CSP, `frame-ancestors 'none'`, same-origin connections, immutable hashed assets, `no-cache` for `sw.js`, attachment headers for downloads, and a status-preserving 404 rewrite.
 
 The product has no backend, account, payment, AI request, tenant boundary, or dynamic response endpoint. Rate-limit, retry, auth, payment, and gateway checks are therefore not applicable.
 
 ## Deployment
 
-Pending the repair commit and static deployment. This section will be replaced with the deployment identifier and live evidence before final handoff.
+The repair was deployed with:
+
+```sh
+bash /opt/fleet/lib/deploy-static.sh code-listen-cursor dist/site
+```
+
+Azure Static Web Apps deployment `6fdf300c-b128-4330-b8d0-f2bb10397eb4` succeeded. It reused `sf-code-listen-cursor` in Central US, and the custom domain returned HTTPS 200.
+
+`verify-url.sh` measured a 787 ms load with no console or page errors. It found title `Code Listen Cursor — listen to selected code`, `lang=en`, one H1, one main landmark, no missing image alternatives, and no unlabeled buttons.
+
+Independent live Chromium checks covered `/`, `/demo/`, `/privacy/`, `/terms/`, and `/404.html` at 1440×900 and 390×844. All 10 route/viewport combinations had one H1 and main landmark, no horizontal overflow, no target below 44×44 px, zero Axe violations, and no console or page errors. The first Tab focused the skip link with a 3 px `rgb(181, 84, 53)` outline. Reduced motion computed no animation and a 0.00001 s transition.
+
+The live landing page contains “become explicit spoken labels.” and Version 1.0.2. The retired listener-outcome sentence is absent. A demo edit and pronunciation update produced `const frond gets 3`, wrote only `demo:code-listen-cursor:pronunciation`, and contacted only the product origin. The active worker is the custom-domain `/sw.js`; it removed seeded cache `code-listen-cursor-v3`, retained only `code-listen-cursor-v4`, and reloaded `/demo/` with HTTP 200 offline.
+
+The live response includes HSTS, `nosniff`, strict-origin referrer policy, restrictive permissions policy, and response-header CSP with `connect-src 'self'` and `frame-ancestors 'none'`. Hashed assets are immutable, `sw.js` is `no-cache`, downloads are attachments, and an unknown route returns HTTP 404. All nine discovered product, package, source, and issue links returned 200.
+
+All 20 deployable files matched `dist/site` byte-for-byte after deployment. This includes every HTML route, service worker, hashed JS/CSS, artwork, metadata file, Chrome ZIP, and VSIX. The live package hashes are the SHA-256 values recorded above. No known release gap remains.
