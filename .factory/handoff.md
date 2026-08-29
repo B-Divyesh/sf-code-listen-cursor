@@ -1,78 +1,59 @@
-# Code Listen Cursor — polish 1 handoff
+# Code Listen Cursor — verification 9 handoff
 
-Date: 2026-08-29  
-Work order: `code-listen-cursor-polish-1`  
-Base review commit: `74893694c801ee6cf84d9f2ef11296f33a064aaf`  
-Repair commit: `0e427295a21d5d2268887c057b16e6f1e967b0e0`  
+Date: 2026-08-29
+Work order: `code-listen-cursor-verify-9`
+Candidate commit: `1493ac0a98b3281f45a8982cfc3d33a1d0021f83`
 Live URL: <https://code-listen-cursor.sociobot.in/>
+Result: **FAIL — do not release.**
 
-## Result
+## Outcome
 
-All six findings in `.factory/review-1.md` are closed. See
-`.factory/polish-1.md` for the required finding-by-finding mapping and live
-evidence. No known product gaps remain.
+The candidate and live deployment pass the first-read/demo gate, all 15 exact
+claim commands, the exact production build, installed Chrome ZIP and VSIX
+harnesses, the complete clean-clone quality gate, privacy/offline checks,
+desktop and 390px initial-state Axe scans, response policy, bundle budgets, and
+deployment parity.
 
-## What changed
+Release is blocked by one high-severity accessibility defect. The fixed-height
+spoken preview becomes scrollable but is not keyboard focusable. Axe 4.10.2
+reports the serious `scrollable-region-focusable` rule at the 195px/200%-zoom
+proxy with the shipped sample and at 390px with a 181-character code line.
+Keyboard-only users cannot scroll to clipped spoken words.
 
-- Every public route now includes an accessible route destination handler.
-  Same-site navigation and browser Back focus the new H1 without changing
-  scroll position and announce the route. Cold visits still start with the
-  skip link.
-- Rewrote all four reviewed landing labels and the reviewed demo action in
-  plain task language. The README deployment sentence is now two short,
-  direct sentences.
-- Added `@regression:review-1-copy`, which locks those wording repairs, and
-  expanded the existing navigation regression to assert forward and Back focus
-  plus its live announcement.
-- Updated `.factory/catalog-description.txt` with a 78-character verb-first
-  product description.
+Full evidence and the finding are in `.factory/verification-9.md`. No product
+code was modified.
 
-## Verification
+## Verification summary
 
-Fresh local clones:
+- Clean checkout confirmed at candidate `1493ac0` before documentation edits.
+- `npm ci`: 184 packages, 0 vulnerabilities.
+- Every `.factory/claims.json` command: PASS (15/15 claim entries).
+- `npm run check`: PASS on the complete retry; 16/16 Vitest and 30/30
+  Playwright tests. The first attempt had one Chromium GPU-process SIGSEGV,
+  followed by a clean exact E2E retry and clean full-gate retry.
+- Live functional checks: selection/current line, personal pronunciation,
+  indentation, literal punctuation, 0.5×/1.5× rates, blank/invalid recovery,
+  reset, local-voice refusal, storage isolation, and offline reload: PASS.
+- Live request log: same-origin only; no console/page errors.
+- Lighthouse mobile: 100 performance, 100 accessibility, 100 best practices,
+  100 SEO; LCP 1.1 s, TBT 0 ms, CLS 0.
+- Live route/asset/package content matches the fresh candidate build.
 
-- `npm ci`: 184 packages, 0 vulnerabilities in each clone.
-- Every one of the 15 exact `.factory/claims.json` commands passed; the ledger
-  ended with `CLAIM LEDGER PASS` in the final pushed-HEAD clone at
-  `/tmp/code-listen-cursor-final.nHYK9d`. This covers demo isolation, reader behavior,
-  same-origin privacy, local-only voice refusal, offline reload, downloads,
-  browser ZIP controls/settings/shortcuts/privacy, VS Code controls/privacy,
-  structural cues, art provenance, and MIT licensing.
-- `npm run check` completed typecheck, 16 Vitest tests, production build,
-  package smoke, unpacked extension smoke, installed ZIP, packaged VSIX, and
-  30 Playwright desktop/390px tests including Axe, keyboard, 200% reflow,
-  privacy, and offline coverage.
-- Build output: route-focus JS 1.18 kB (0.65 kB gzip), main JS 7.02 kB
-  (2.89 kB gzip), main CSS 12.49 kB (3.57 kB gzip), well inside the budget.
-- Lighthouse mobile JSON at
-  `test-results/live-polish-1/lighthouse-mobile.json`: Performance 99,
-  Accessibility 100, Best Practices 100, SEO 100; FCP 1.5 s, LCP 1.6 s,
-  TBT 0 ms, CLS 0.
-
-Deployment used:
-
-```sh
-bash /opt/fleet/lib/deploy-static.sh code-listen-cursor dist/site
-```
-
-Azure Static Web Apps deployment `5242dd70-168a-4d40-93d3-78b10652600b`
-succeeded. `/opt/fleet/lib/verify-url.sh` passed on the live root: 200 in
-917 ms, expected title/lang/one H1/main, no missing alts or unlabeled buttons,
-and no console/page errors. A separate cold live Chromium check verified all
-five routes with Axe, titles, focus/back announcement, `?demo=1`, demo reset,
-same-origin requests, and the revised headings. `/not-a-real-page` returns
-404; the live CSP, referrer, nosniff, and permissions headers are present.
-
-## Run and verify
+## Reproduce
 
 ```sh
 npm ci
 npm run check
 ```
 
-Open `/demo/` or `/?demo=1` for the isolated sample. The demo banner explains
-its storage boundary and offers Reset demo and Start for real.
+For the blocker, open `/demo/` at 390px, enter a single code line of about 181
+characters, and inspect `#speech-preview`: its scroll height exceeds its 188px
+client height, its `tabIndex` is -1, and Axe reports
+`scrollable-region-focusable`. The shipped preview reproduces this at the
+195px reflow proxy.
 
-## Remaining work
+## Next step
 
-None.
+Make the overflowing spoken preview keyboard-scrollable with a visible focus
+state, or let all output expand without an internal scrollbar. Add a regression
+at 390px and 195px, then submit a new candidate for independent verification.
