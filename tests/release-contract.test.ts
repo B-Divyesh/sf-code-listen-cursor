@@ -93,6 +93,24 @@ describe('release-host contract', () => {
     expect(audit).toContain(`Landing source SHA-256: \`${expectedHash}\``);
   });
 
+  it('keeps every adversarial-review wording repair in the shipped pages @regression:review-1-copy', async () => {
+    const [landing, demo, readme] = await Promise.all([
+      readFile(resolve('site/index.html'), 'utf8'),
+      readFile(resolve('site/demo/index.html'), 'utf8'),
+      readFile(resolve('README.md'), 'utf8')
+    ]);
+    for (const copy of [
+      'How the code reader works',
+      'Set pronunciations for project words',
+      'Code stays on your device',
+      'Save sample pronunciation'
+    ]) expect(landing).toContain(copy);
+    expect(demo).toContain('Save sample pronunciation');
+    expect(readme).toContain('`npm run build:site` writes the deployment to `dist/site/`.');
+    expect(readme).toContain('That folder includes the demo, legal pages, packages, and service worker.');
+    expect(readme).not.toContain('It produces the complete static deployment');
+  });
+
   it('keeps acceptance promises executable in the sandbox @regression:verifiable-acceptance', async () => {
     const factoryFiles = (await readdir(resolve('.factory')))
       .filter((file) => /\.(?:json|md)$/.test(file) && !file.startsWith('verification'))
