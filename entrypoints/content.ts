@@ -2,6 +2,7 @@ import { browser } from 'wxt/browser';
 import { codeToSpeech, currentLine, detectLanguage } from '../core/code-to-speech';
 import type { CursorCommand, CursorState } from '../core/messages';
 import { mergeSettings, type ListenSettings } from '../core/settings';
+import { preferredLocalVoice } from '../core/voice';
 
 let lastSource = '';
 let follow = false;
@@ -79,9 +80,7 @@ async function listen(source = sourceAtCursor()): Promise<CursorState> {
   utterance.pitch = settings.pitch;
   const voices = window.speechSynthesis.getVoices();
   utterance.voice = voices.find((voice) => voice.voiceURI === settings.voiceURI)
-    ?? voices.find((voice) => voice.localService && voice.lang.startsWith('en'))
-    ?? voices.find((voice) => voice.lang.startsWith('en'))
-    ?? null;
+    ?? preferredLocalVoice(voices);
   utterance.onstart = () => { speaking = true; showStatus('Listening to code', 'listening'); };
   utterance.onend = () => { speaking = false; };
   utterance.onerror = (event) => {

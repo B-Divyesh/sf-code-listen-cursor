@@ -1,19 +1,23 @@
 # Code Listen Cursor
 
-Code Listen Cursor is a free, local-first Chrome/Edge extension for developers who work better by listening: people with reading fatigue, dyslexia, low vision, or an auditory workflow. It reads selected code—or the cursor’s current line—with useful names for indentation, braces, operators, camel case, and snake case.
+Code Listen Cursor reads selected code or the current line aloud for developers who work better by listening. It supports reading fatigue, dyslexia, low vision, and auditory coding workflows.
 
-The extension includes cursor-follow and repeat shortcuts, three punctuation levels, reading-rate and indentation controls, local voice preference, and a personal pronunciation map. Source text is handled on the page and is never sent to a Code Listen Cursor server.
+It includes cursor follow, repeat, punctuation levels, reading rate, indentation controls, a local-voice preference, and a pronunciation map. The reader does not send source code to a Code Listen Cursor service.
 
 Live site: <https://code-listen-cursor.sociobot.in>
 
-## Install the packaged extension
+## Try the demo
 
-1. Run `npm install && npm run build`, or download the ZIP from the live site.
+Open <https://code-listen-cursor.sociobot.in/demo/> or run the site locally and open `/demo/`. The demo has sample code, a persistent sandbox banner, and reset controls. It stores only a demo-prefixed pronunciation setting; see [.factory/demo.md](.factory/demo.md).
+
+## Install the packaged extensions
+
+1. Run `npm ci && npm run build`, or download a package from the live site.
 2. Unzip `dist/site/downloads/code-listen-cursor-chrome.zip`.
 3. Open `chrome://extensions` or `edge://extensions`.
 4. Enable **Developer mode**, choose **Load unpacked**, and select the unzipped directory.
 
-The unpacked build is also available directly at `dist/extension/chrome-mv3`.
+The unpacked browser build is at `dist/extension/chrome-mv3`. `dist/site/downloads/code-listen-cursor-vscode.vsix` is the native VS Code package; install it with **Extensions: Install from VSIX**. The VS Code adapter reads the active selection/current line using a local webview voice and provides the same listen, repeat, follow, and stop commands.
 
 ## Use it
 
@@ -29,7 +33,7 @@ Browser extension shortcuts are configurable. If a shortcut overlaps with assist
 Requirements: Node.js 20+ and npm.
 
 ```sh
-npm install
+npm ci
 npm run dev          # WXT extension development server
 npm run dev:site     # landing site at localhost
 npm test             # unit tests
@@ -39,7 +43,7 @@ npm run test:e2e     # desktop and 390 px browser/a11y checks
 npm run check        # typecheck and all gates
 ```
 
-`npm run build:site` is the deploy command. It produces the complete static deployment at `dist/site/`, including `index.html`, `/privacy/`, `/terms/`, and the browser-extension ZIP.
+`npm run build:site` is the deploy command. It produces the complete static deployment at `dist/site/`, including `/demo/`, `/privacy/`, `/terms/`, `/404.html`, both extension packages, service worker, and Static Web Apps response configuration.
 
 ## Project map
 
@@ -48,11 +52,13 @@ npm run check        # typecheck and all gates
 - `site/` — static landing site, live speech station, privacy, and terms
 - `tests/` — parser tests and Playwright accessibility/responsive checks
 - `.factory/design.md` — botanical field-guide visual thesis and asset provenance
+- `.factory/claims.json` — tested public claims and their exact commands
+- `.factory/demo.md` — demo route, sample data, and isolated storage details
 - `.factory/handoff.md` — verification results and known gaps
 
 ## Privacy and support
 
-See the site’s [privacy note](site/privacy/index.html). The extension prefers voices that the browser marks as local. Installed voice behavior is ultimately controlled by the browser/operating system. Please report bugs without including private source code.
+See the site’s [privacy note](site/privacy/index.html). The reader prefers voices that the browser marks as local. Installed voice behavior is controlled by the browser and operating system. Please report bugs without including private source code.
 
 ## License
 

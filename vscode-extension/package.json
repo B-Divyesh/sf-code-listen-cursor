@@ -1,0 +1,31 @@
+{
+  "name": "code-listen-cursor",
+  "displayName": "Code Listen Cursor",
+  "description": "Read selected code or the current line with structure-aware local speech.",
+  "version": "1.0.0",
+  "publisher": "param-factory",
+  "engines": { "vscode": "^1.103.0" },
+  "categories": ["Accessibility", "Other"],
+  "main": "./extension/extension.js",
+  "extensionKind": ["ui"],
+  "activationEvents": [
+    "onCommand:codeListenCursor.listen",
+    "onCommand:codeListenCursor.repeat",
+    "onCommand:codeListenCursor.toggleFollow",
+    "onCommand:codeListenCursor.stop"
+  ],
+  "contributes": {
+    "commands": [
+      { "command": "codeListenCursor.listen", "title": "Code Listen Cursor: Listen to Selection or Current Line" },
+      { "command": "codeListenCursor.repeat", "title": "Code Listen Cursor: Repeat" },
+      { "command": "codeListenCursor.toggleFollow", "title": "Code Listen Cursor: Toggle Cursor Follow" },
+      { "command": "codeListenCursor.stop", "title": "Code Listen Cursor: Stop" }
+    ],
+    "keybindings": [
+      { "command": "codeListenCursor.listen", "key": "alt+shift+s", "when": "editorTextFocus" },
+      { "command": "codeListenCursor.repeat", "key": "alt+shift+r", "when": "editorTextFocus" },
+      { "command": "codeListenCursor.toggleFollow", "key": "alt+shift+f", "when": "editorTextFocus" },
+      { "command": "codeListenCursor.stop", "key": "alt+shift+x" }
+    ]
+  }
+}

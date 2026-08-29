@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "lib": ["ES2022", "DOM"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "rootDir": "..",
+    "outDir": "../.output/vscode",
+    "declaration": false
+  },
+  "include": ["./**/*.ts", "../core/code-to-speech.ts", "../core/settings.ts"]
+}

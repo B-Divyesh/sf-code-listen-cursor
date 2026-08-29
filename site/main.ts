@@ -1,6 +1,15 @@
 import { codeToSpeech, currentLine } from '../core/code-to-speech';
 import { mergeSettings } from '../core/settings';
+import { preferredLocalVoice } from '../core/voice';
 import './style.css';
+import './demo.css';
+
+if (location.pathname === '/' && new URLSearchParams(location.search).has('demo')) {
+  location.replace('/demo/');
+}
+
+const isDemo = location.pathname.startsWith('/demo');
+const demoStorageKey = 'demo:code-listen-cursor:pronunciation';
 
 const get = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
 const sample = get<HTMLTextAreaElement>('code-sample');
@@ -9,6 +18,15 @@ const status = get<HTMLParagraphElement>('demo-status');
 const title = get<HTMLHeadingElement>('observation-title');
 const rate = get<HTMLInputElement>('demo-rate');
 const map: Record<string, string> = {};
+const originalSample = sample.value;
+
+if (isDemo) {
+  try {
+    Object.assign(map, JSON.parse(localStorage.getItem(demoStorageKey) ?? '{}') as Record<string, string>);
+  } catch {
+    localStorage.removeItem(demoStorageKey);
+  }
+}
 
 function source(): string {
   if (sample.selectionStart !== sample.selectionEnd) return sample.value.slice(sample.selectionStart, sample.selectionEnd);
@@ -47,9 +65,7 @@ function listen(): void {
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.rate = Number(rate.value);
   const voices = speechSynthesis.getVoices();
-  utterance.voice = voices.find((voice) => voice.localService && voice.lang.startsWith('en'))
-    ?? voices.find((voice) => voice.lang.startsWith('en'))
-    ?? null;
+  utterance.voice = preferredLocalVoice(voices);
   utterance.onstart = () => {
     title.textContent = 'Listening now';
     status.textContent = 'Speech is playing through your system voice.';
@@ -89,6 +105,7 @@ get<HTMLFormElement>('demo-pronunciation').addEventListener('submit', (event) =>
   const spoken = get<HTMLInputElement>('demo-spoken').value.trim();
   if (!written || !spoken) return;
   map[written] = spoken;
+  if (isDemo) localStorage.setItem(demoStorageKey, JSON.stringify(map));
   updatePreview();
   status.textContent = `${written} will now be spoken as ${spoken}.`;
   title.textContent = 'Pronunciation recorded';
@@ -102,7 +119,24 @@ window.addEventListener('offline', updateOnlineState);
 updateOnlineState();
 updatePreview();
 
-if ('serviceWorker' in navigator && location.protocol === 'https:') {
+if (isDemo) {
+  get<HTMLButtonElement>('reset-demo').addEventListener('click', () => {
+    sample.value = originalSample;
+    for (const key of Object.keys(map)) delete map[key];
+    localStorage.removeItem(demoStorageKey);
+    get<HTMLInputElement>('demo-written').value = 'fern';
+    get<HTMLInputElement>('demo-spoken').value = 'furn';
+    get<HTMLSelectElement>('demo-punctuation').value = 'essential';
+    get<HTMLInputElement>('demo-indent').checked = true;
+    rate.value = '0.9';
+    get<HTMLOutputElement>('demo-rate-value').value = '0.9×';
+    title.textContent = 'Demo reset';
+    status.textContent = 'The original sample code is ready. Nothing was saved outside this demo.';
+    updatePreview();
+  });
+}
+
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
   window.addEventListener('load', () => {
     void navigator.serviceWorker.register('/sw.js');
   });

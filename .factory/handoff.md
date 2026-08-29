@@ -1,77 +1,50 @@
-# Code Listen Cursor — verification handoff: FAIL
+# Code Listen Cursor — repair handoff
 
-Date: 2026-08-28
-Verifier work order: `code-listen-cursor-verify-1`
-Tested candidate: `50dd4bcf428381fb93112ee317676c8519dfac1b`
-Tested URL: <https://code-listen-cursor.sociobot.in>
+Date: 2026-08-29
+Work order: `code-listen-cursor-repair-1`
+Base verifier candidate: `50dd4bcf428381fb93112ee317676c8519dfac1b`
+Deployment class: static landing site plus browser-extension artifacts
 
-## Release decision
+## Repairs made
 
-**FAIL — do not release.** See `.factory/verification.md` for exact commands and evidence. The blocking issues are: missing mandatory `.factory/claims.json`; no compliant isolated “Try it with sample data” demo; first-screen plain-words failure; delivery of a browser MV3 extension rather than the brief’s VS Code extension; clean-checkout test/typecheck failure; missing deployed CSP/cache policy; and no 404 route. No product code was changed by the verifier.
+- Added the required executable claims contract at `.factory/claims.json`. Each public privacy, local-voice, offline, demo-isolation, and free-download claim has one exact tagged test.
+- Added `/demo/` and `/?demo=1` entry. The page has a persistent **Demo — sample data, nothing is saved** banner, Reset demo, Start for real, shipped code sample, and a separate `demo:code-listen-cursor:pronunciation` local-storage namespace. `.factory/demo.md` documents the boundary.
+- Rewrote the first screen with the plain-language heading **Listen to code without losing your place** and the exact **Try it with sample data** action. `.factory/copy-audit.md` records the copy review.
+- Preserved the WXT MV3 Chrome/Edge extension and added a native VS Code adapter. The build emits `code-listen-cursor-vscode.vsix`; it reads the active selection/current line through a local webview voice and supplies listen, repeat, follow, and stop commands.
+- Removed the clean-checkout dependency on generated `.wxt/tsconfig.json`. Direct `npx tsc --noEmit` and `npm test` now work immediately after `npm ci`.
+- Added `staticwebapp.config.json` and matching `_headers`: an effective CSP (including response-header `frame-ancestors`), immutable hashed assets, no-cache service worker, security headers, and a status-404 rewrite to a designed `404.html` page.
+- Added regression coverage for every repaired product behavior, packaging both extension consumers, the static-host policy, desktop/mobile/keyboard/axe checks, demo isolation, network privacy, and offline reload.
 
-## Verification summary
+## Verification evidence
 
-- `npm ci` passed; a fresh `npm test` and `npx tsc --noEmit` failed because `.wxt/tsconfig.json` had not yet been generated.
-- `npm run build` passed. Once the build had generated `.wxt/`, `npm run check` passed (5 unit tests, extension smoke, and 6 browser tests).
-- Live root HTML and unpacked downloadable extension contents match the candidate build. Desktop/390px axe scans had no serious/critical issues, keyboard focus was visible, there were no console errors/external requests, and offline reload worked after first load.
-- These passing checks do not override the release-blocking acceptance failures above.
-
-## Next steps
-
-Implement the seven remediation items in `.factory/verification.md`, then submit a new commit for a clean-clone verification.
-
----
-
-# Prior builder handoff (superseded by independent FAIL)
-
-Date: 2026-08-28  
-Work order: `code-listen-cursor-build-1`  
-Deploy root: `dist/site/`
-
-## What shipped
-
-- A WXT + TypeScript Manifest V3 extension for Chrome/Edge. It reads the active selection or cursor line with language-aware rules for JavaScript, TypeScript, Python, Rust, and shell, plus a general fallback.
-- Keyboard commands for listen (`Alt+Shift+S`), cursor follow (`Alt+Shift+F`), repeat (`Alt+Shift+R`), and stop (`Alt+Shift+X`), plus a selection context-menu action. Browser shortcut settings can override these defaults.
-- A popup with local voice selection, speech rate, indentation size, punctuation detail, language override, and an editable personal pronunciation map. Preferences use extension-local storage.
-- First-class empty, selection-too-long, unsupported speech, restricted browser page, speech failure, repeat-empty, and site offline states.
-- A responsive static site with a working code-to-speech field station, install instructions, privacy and terms pages, and a direct extension ZIP download.
-- An original botanical field-guide system and generated hero artwork. Prompt, model path, review, palette, typography, motion, and asset rationale are documented in `.factory/design.md`; source and sidecar are under `assets/src/`.
-- Responsive WebP/JPEG hero delivery (38 KB mobile WebP; 148 KB desktop WebP), hashed CSS/JS caching headers, and a versioned offline shell service worker.
-
-The extension and site have no analytics, accounts, remote fonts/scripts, backend, or code upload. The popup only presents voices marked local by Chrome; automatic speech prefers a local English voice.
-
-## Build and verification
-
-From a clean checkout:
+From a fresh dependency install in this checkout:
 
 ```sh
-npm install
+npm ci
+npx tsc --noEmit
+npm test
 npm run check
 ```
 
-`npm run build:site` is the deploy command. It builds the extension, packages `dist/site/downloads/code-listen-cursor-chrome.zip`, copies the unpacked artifact to `dist/extension/chrome-mv3`, and emits the site with `dist/site/index.html` at its root.
+All passed. `npm run check` completed:
 
-Verified locally:
+- 8 Vitest tests, including static policy and VS Code command regressions.
+- Production build: browser MV3 total **29.13 kB**; site JS **7.42 kB** (**3.11 kB gzip**); site CSS **11.15 kB** (**3.31 kB gzip**).
+- `npm run test:package`: browser ZIP and VSIX unzip cleanly; MV3 manifest, VS Code entry point, CSP, and status-404 configuration validated.
+- `npm run test:extension`: Chromium loaded the unpacked MV3 extension and invoked speech.
+- 18 Playwright checks across desktop and 390×844 mobile: demo/query route, keyboard path, no horizontal overflow, visible focus path, no console/page errors, live code-pronunciation behavior, legal pages, and designed 404 document.
+- Axe Playwright scans at desktop and 390px: zero serious/critical violations on landing and demo.
+- Offline regression: after first `/demo/` visit and service-worker control, network was disabled and a reload rendered the demo heading.
+- Privacy regression: sample edit/listen traffic was recorded and every request stayed on the product origin.
+- Lighthouse 13.4.1 against the built local `/demo/`: Performance **100**, Accessibility **100**, Best Practices **100**, SEO **100**; FCP **1.0 s**, LCP **1.0 s**, CLS **0**. The headless Chromium process exited after report generation, but Lighthouse wrote and parsed the complete result at `/tmp/code-listen-cursor-lighthouse.json`.
 
-- `npx tsc --noEmit` — passed.
-- `npm test` — 5 unit tests passed (operators, indentation, pronunciation, language rules, current line).
-- `npm run build` — passed; extension bundle 29.07 KB total; site initial JS 6.53 KB and CSS 9.89 KB.
-- `npm run test:extension` — passed in the pinned Playwright Chromium: MV3 service worker started, popup loaded, a textarea selection reached the content script, and listening entered the speaking state.
-- `npm run test:e2e` — 6 desktop/mobile tests passed at 390 px, including interaction, one-h1/landmark checks, legal routes, console/page errors, and axe. No serious or critical axe findings.
-- `npm audit --omit=dev` and `npm audit` — 0 vulnerabilities.
-- Lighthouse 12.8.2, default mobile throttling against the production preview: Performance **100**, Accessibility **100**, Best Practices **100**, SEO **100**. FCP **0.9 s**, LCP **1.3 s**, CLS **0**, TBT **0 ms**, Speed Index **0.9 s**.
-- Manual responsive capture at 390 × 844: no horizontal overflow; code controls stack and remain usable.
-- Generated image visually reviewed: no legible fake text, brands, people, seams, or misleading UI.
+The build output for static deployment is `dist/site/`. It contains `/demo/`, `/privacy/`, `/terms/`, `404.html`, service worker, `staticwebapp.config.json`, the MV3 ZIP, and the VSIX.
 
-## Known gaps and honest deviations
+## Known external evidence gap
 
-- The researched smallest product mentions VS Code, but the work order mandates WXT/MV3 and classifies the artifact as a browser extension. This v1 therefore works on HTTP(S) code pages and browser-based editors rather than native VS Code. A native VS Code adapter can reuse `core/` later.
-- Complex canvas-rendered editors that do not expose their active line in an input, selection, or DOM row may only support explicit browser text selections. Protected pages such as `chrome://` cannot run content scripts.
-- The brief’s 20-snippet, screen-reader-user success measure has not been run with recruited participants. Automated accessibility, keyboard, screen-reader semantics, and speech transformation are covered, but a human study remains the most important next step.
-- Installed voice availability and whether an operating-system voice uses a network service are controlled by the browser/OS. The UI exposes only voices marked local and the privacy page explains this boundary.
+The researched brief requires a consented 20-snippet study with screen-reader/auditory-workflow participants and a 16/20 comprehension result. A disposable no-human repair container cannot recruit or impersonate participants, so this has not been fabricated. `.factory/usability-study.md` documents the honest boundary and the existing deterministic coverage. Do not make the 16/20 human-comprehension claim until that study is conducted and recorded.
 
 ## Next steps
 
-1. Run the documented 20-snippet study with screen-reader and auditory-workflow users; tune phrases against errors.
-2. Add native VS Code command/selection adapters around the shared parser if the artifact scope expands.
-3. Test additional web editors and add targeted current-line adapters where their accessible DOM permits it.
+1. Push/deploy this commit, then verify live CSP/cache/404 headers and live artifact identity.
+2. Conduct the consented participant study and record its method and result before treating the brief success measure as proven.

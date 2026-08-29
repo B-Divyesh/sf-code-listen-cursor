@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { codeToSpeech, currentLine, detectLanguage } from '../core/code-to-speech';
 import { mergeSettings } from '../core/settings';
+import { preferredLocalVoice } from '../core/voice';
 
 describe('codeToSpeech', () => {
   it('speaks structure and indentation', () => {
@@ -35,5 +36,13 @@ describe('codeToSpeech', () => {
 describe('currentLine', () => {
   it('returns the line at a cursor boundary', () => {
     expect(currentLine('one\ntwo\nthree', 6)).toBe('two');
+  });
+});
+
+describe('voice selection', () => {
+  it('@claim:local-voice prefers an English voice marked local', () => {
+    const local = { localService: true, lang: 'en-GB', id: 'local' };
+    const selected = preferredLocalVoice([{ localService: false, lang: 'en-US', id: 'network' }, local]);
+    expect(selected).toBe(local);
   });
 });

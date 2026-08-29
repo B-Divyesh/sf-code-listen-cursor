@@ -1,5 +1,5 @@
-const CACHE = 'code-listen-cursor-v1';
-const SHELL = ['/', '/privacy/', '/terms/', '/hero-field-guide.webp', '/leaf-cursor.svg'];
+const CACHE = 'code-listen-cursor-v2';
+const SHELL = ['/', '/demo/', '/privacy/', '/terms/', '/hero-field-guide.webp', '/leaf-cursor.svg'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)));

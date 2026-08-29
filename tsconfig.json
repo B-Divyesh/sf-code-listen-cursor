@@ -1,5 +1,4 @@
 {
-  "extends": "./.wxt/tsconfig.json",
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
@@ -11,5 +10,5 @@
     "skipLibCheck": true,
     "allowImportingTsExtensions": true
   },
-  "include": [".wxt/wxt.d.ts", "core", "entrypoints", "site", "tests", "scripts", "*.ts"]
+  "include": ["core", "entrypoints", "site", "tests", "scripts", "types", "*.ts"]
 }

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Try Code Listen Cursor with isolated sample code." />
+    <meta name="theme-color" content="#F3EFDF" />
+    <link rel="canonical" href="https://code-listen-cursor.sociobot.in/demo/" />
+    <title>Demo — Code Listen Cursor</title>
+    <link rel="icon" href="/leaf-cursor.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/demo.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="site-header">
+      <a class="wordmark" href="/" aria-label="Code Listen Cursor home"><img src="/leaf-cursor.svg" width="36" height="36" alt="" /><span>Code Listen Cursor</span></a>
+      <nav aria-label="Primary navigation"><a href="/">Home</a><a href="/privacy/">Privacy</a></nav>
+    </header>
+    <aside class="demo-banner" aria-label="Demo controls"><strong>Demo — sample data, nothing is saved</strong><span>Use the sample code freely.</span><button id="reset-demo" type="button">Reset demo</button><a href="/">Start for real</a></aside>
+    <main id="main">
+      <section class="demo-intro" aria-labelledby="demo-title"><p class="eyebrow">Sample workspace</p><h1 id="demo-title">Listen to sample code</h1><p>Choose a line or selection. The preview shows the words the reader will speak.</p></section>
+      <section class="field-station demo-station" aria-labelledby="station-title">
+        <div class="section-intro"><p class="eyebrow">Sample code</p><h2 id="station-title">Try the code reader</h2><p>This sample stays separate from your real browser extension settings.</p></div>
+        <div class="station-layout">
+          <div class="specimen-sheet"><label for="code-sample">Editable sample code</label><textarea id="code-sample" spellcheck="false" rows="10">const describePlant = async (fern) => {
+  if (fern?.fronds >= 3) {
+    return `healthy_${fern.name}`;
+  }
+  return null;
+};</textarea><div class="station-actions"><button class="button button-primary" id="demo-listen" type="button">Listen to code</button><button class="button button-secondary" id="demo-stop" type="button">Stop</button></div></div>
+          <aside class="observation" aria-labelledby="observation-title"><div class="observation-heading"><span class="cursor-mark" aria-hidden="true"></span><div><p class="eyebrow">Spoken preview</p><h3 id="observation-title">Ready to listen</h3></div></div><p id="demo-status" class="status-copy" role="status" aria-live="polite">Select code or leave the cursor on a line.</p><output id="speech-preview" class="speech-preview" aria-label="Words that will be spoken"></output><div class="demo-settings"><label for="demo-punctuation">Punctuation</label><select id="demo-punctuation"><option value="essential">Essential structure</option><option value="detailed">Detailed</option><option value="literal">Every symbol</option></select><label for="demo-rate">Reading rate <output id="demo-rate-value">0.9×</output></label><input id="demo-rate" type="range" min="0.5" max="1.5" step="0.1" value="0.9" /><label class="checkbox-label"><input id="demo-indent" type="checkbox" checked />Speak indentation</label></div><form id="demo-pronunciation" class="word-pair"><p>Sample pronunciation</p><label for="demo-written">Code word</label><input id="demo-written" value="fern" required /><label for="demo-spoken">Speak as</label><input id="demo-spoken" value="furn" required /><button type="submit">Use pronunciation</button></form></aside>
+        </div>
+        <p id="offline-note" class="offline-note" hidden><strong>Offline:</strong> The demo is available after its first visit. Speech needs a voice installed on your device.</p>
+      </section>
+    </main>
+    <footer><div><img src="/leaf-cursor.svg" width="30" height="30" alt="" /><span>Code Listen Cursor</span></div><p>Sample code is not saved.</p><nav aria-label="Footer navigation"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav></footer>
+    <script type="module" src="/main.ts"></script>
+  </body>
+</html>
