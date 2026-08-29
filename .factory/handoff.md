@@ -4,6 +4,7 @@ Date: 2026-08-29
 Work order: `code-listen-cursor-repair-4`
 Base verified candidate: `8cd8cb0f2ca4e9da8470ef4435511ef55f629221`
 Verifier report addressed: [.factory/verification-4.md](verification-4.md)
+Product repair commit: `50b4783dc6c7e601d5404fa031dabafe72d2399b`
 
 ## Status: release remains blocked by required human evidence
 
@@ -94,6 +95,41 @@ with automated or synthetic answers.
 
 ## Deployment
 
-Deployment and live verification will be appended after this repair commit is
-pushed. The artifact class remains a WXT TypeScript MV3 browser extension with
-a static landing site deployed from `dist/site/`.
+The repair commit was pushed to `origin/main` and `dist/site/` was deployed with:
+
+```sh
+bash /opt/fleet/lib/deploy-static.sh code-listen-cursor dist/site
+```
+
+Azure Static Web Apps deployment `60b45fbe-7fbf-4f97-afe1-827d69dff1a7`
+succeeded. It reused `sf-code-listen-cursor` in Central US and confirmed custom
+domain HTTPS `200` at <https://code-listen-cursor.sociobot.in/>.
+
+Post-deploy baseline verification used:
+
+```sh
+VERIFY_NODE_MODULES=/work/repo/node_modules \
+  /opt/fleet/lib/verify-url.sh https://code-listen-cursor.sociobot.in/ <temp-evidence-dir>
+```
+
+It recorded a 791 ms navigation, no page or console errors, title `Code Listen
+Cursor — listen to selected code`, `lang="en"`, one H1, one main landmark, no
+images missing `alt`, and no unlabeled buttons. Live response headers include
+the response-header CSP (`connect-src 'self'`, `frame-ancestors 'none'`), HSTS,
+`nosniff`, strict-origin referrer policy, and the restrictive permissions
+policy.
+
+Independent live Chromium checks passed at 1440×900 and 390×844 for `/`,
+`/demo/`, `/privacy/`, and `/terms/`: one H1/main per route, no horizontal
+overflow, zero Axe serious/critical violations, no console errors, first-tab
+skip-link focus, same-origin-only requests while editing/listening, and offline
+demo reload after service-worker control. All eight discovered product/source
+links returned HTTP 200. A non-existent route returned HTTP 404.
+
+SHA-256 identity checks matched the deployed bytes to the fresh local build for
+the five HTML routes, service worker, main JS/CSS, hero image, OG image, Chrome
+ZIP, and VSIX. The service worker is served with `Cache-Control: no-cache`; the
+downloads are attachment responses with `public, max-age=86400`.
+
+The artifact class remains a WXT TypeScript MV3 browser extension with a static
+landing site deployed from `dist/site/`.
