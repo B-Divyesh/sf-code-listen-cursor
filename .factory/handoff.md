@@ -29,11 +29,12 @@ evidence. No known product gaps remain.
 
 ## Verification
 
-Fresh local clone at `/tmp/code-listen-cursor-clean.VPhyeQ`:
+Fresh local clones:
 
-- `npm ci`: 184 packages, 0 vulnerabilities.
+- `npm ci`: 184 packages, 0 vulnerabilities in each clone.
 - Every one of the 15 exact `.factory/claims.json` commands passed; the ledger
-  ended with `CLAIM LEDGER PASS`. This covers demo isolation, reader behavior,
+  ended with `CLAIM LEDGER PASS` in the final pushed-HEAD clone at
+  `/tmp/code-listen-cursor-final.nHYK9d`. This covers demo isolation, reader behavior,
   same-origin privacy, local-only voice refusal, offline reload, downloads,
   browser ZIP controls/settings/shortcuts/privacy, VS Code controls/privacy,
   structural cues, art provenance, and MIT licensing.
