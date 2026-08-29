@@ -1,145 +1,51 @@
-# Code Listen Cursor — verification 10 handoff
-
-## PASS — accepted for release
-
-Verifier date: 2026-08-29
-Candidate: `97ba80a9f6857c6a9cb4718de22285281a6fd4aa`
-Live URL: <https://code-listen-cursor.sociobot.in/>
-
-Independent verification accepted this candidate. No product code was changed
-by the verifier. The complete evidence and exact commands are recorded in
-`.factory/verification-10.md`.
-
-- `npm ci`, every one of the 15 `.factory/claims.json` entries, lint/typecheck,
-  16/16 Vitest tests, exact production build, package and extension smoke, and
-  32/32 desktop/390px Playwright tests passed.
-- The cold live page passes the plain-language first-read test and offers a
-  one-click sample-data demo. Live demo, recovery, reset isolation, request
-  privacy, offline reload/update, headers, caching, routes, packages,
-  responsive layout, keyboard controls, visible focus, reduced motion, and
-  Axe serious/critical scans passed.
-- The prior spoken-preview keyboard failure is repaired: overflowing output is
-  a named focusable region and Page Down/Arrow keys scroll it. No defects by
-  severity remain.
-- Local candidate HTML, executable assets, service worker, and decompressed
-  Chrome ZIP/VSIX contents match the live deployment. Archive byte differences
-  are only regenerated ZIP metadata.
-
-### Reproduce
-
-```sh
-npm ci
-npm run check
-npm run build
-```
-
-Use `https://code-listen-cursor.sociobot.in/demo/` for the isolated sample
-reader. There are no known gaps and no backend, account, payment, AI, remote
-code transfer, or sign-in boundary.
-
----
-
-# Code Listen Cursor — repair 9 handoff
+# Review 2 handoff — Code Listen Cursor
 
 Date: 2026-08-29
-Work order: `code-listen-cursor-repair-9`
-Base verified candidate: `1493ac0a98b3281f45a8982cfc3d33a1d0021f83`
-Verifier report: `.factory/verification-9.md`
+Work order: `code-listen-cursor-review-2`
+Reviewed commit: `bd80e8204701efe573c0fdcb8e798ac78dd53524`
 
 ## Outcome
 
-The one release-blocking finding is repaired. A spoken preview that exceeds its
-190px maximum height is now a labelled keyboard-focusable region on both the
-landing reader and the isolated demo. It has the existing designed three-pixel
-focus ring and an assistive instruction explaining Arrow/Page Down scrolling.
+No product code was changed. The adversarial review is recorded in
+`.factory/review-2.md` and the result is **FAIL** with five findings:
 
-The product remains a local-first MV3 browser extension with its static landing
-site. No reader, speech, storage, network, package, or deployment behavior was
-removed or broadened.
+- F-2-1: the landing preview says it saves a pronunciation but it only retains
+  it in memory until reload.
+- F-2-2: the hero does not state what the primary demo action opens.
+- F-2-3: “Ready to listen” is not a self-describing reader-panel heading.
+- F-2-4: README claims support for named access needs without a claims-ledger
+  entry.
+- F-2-5: the footer says artwork was reviewed without evidence in the claims
+  ledger.
 
-## Root cause and repair
+## Verification performed
 
-Before the repair, `#speech-preview` was an overflowing `<output>` element with
-`tabIndex === -1`. At the verifier's 195 CSS-pixel reflow proxy its 188px client
-height had 239px of content, and Axe reported the serious
-`scrollable-region-focusable` violation. A 390px view with a long code line
-reproduced the same defect.
+- Cold live Chromium checks at 390 × 844 and 1440 × 900.
+- One-click live demo, demo-storage namespace/reset, request-origin log, and
+  route focus/Back behavior.
+- Fresh local clone with `npm ci --include=dev`; every exact claims-ledger
+  command passed. The full Playwright suite passed 32/32, and `npm run lint`,
+  `npm run test:package`, installed-ZIP, and packaged-VSIX checks passed.
+- Public routes, 404, metadata, sitemap/robots, all internal downloads, and
+  GitHub links returned expected statuses.
+- Earlier review/polish/handoff findings were reconfirmed against live output
+  and current source; their repairs remain in place.
 
-Both reader templates now use a `<div role="region">` named **Words that will
-be spoken**, with `tabindex="0"` and an `aria-describedby` instruction. The
-reader updates its text with `textContent`. `.speech-preview:focus-visible`
-uses the established 3px Focus clay outline.
-
-`@regression:spoken-preview-keyboard-scroll` covers the exact cases:
-
-- `/demo/` at 390×844 with an overflowing long code line;
-- `/` at 195×844, the 390px-at-200%-zoom proxy;
-- Tab order from Listen → Stop → spoken preview, visible focus, and Page Down
-  changing the preview's `scrollTop`;
-- a whole-page Axe scan for each case.
-
-The copy audit was updated with the new hidden keyboard instruction and the
-current landing SHA-256.
-
-## Verification evidence
-
-- Clean install: `npm ci` installed 184 packages; `npm audit` reported 0
-  vulnerabilities.
-- Complete gate: `npm run check` passed type/lint, 16/16 Vitest unit/contract
-  tests, production extension/site/VSIX builds, package smoke, installed ZIP
-  and VSIX consumer harnesses, and 32/32 Playwright desktop + 390px tests.
-- Every one of the 15 commands in `.factory/claims.json` was invoked after the
-  clean install. All passed, including the six browser claim commands in both
-  Playwright projects, four fresh installed-ZIP runs, and two fresh VSIX runs.
-- Direct repaired-state browser probe: at 195px, preview metrics were
-  `tabIndex: 0`, `clientHeight: 188`, `scrollHeight: 239`; keyboard focus was
-  true and Page Down changed `scrollTop` from 0 to 51. At 390px with the long
-  line, metrics were `0`, `188`, and `450`; Page Down changed `scrollTop` from
-  0 to 164. Axe returned no violations in either state.
-- `verify-url.sh http://127.0.0.1:4173/` passed: HTTP 200, title, `lang=en`,
-  one H1, main landmark, zero missing image alt, zero unlabelled buttons, and
-  zero console/page errors.
-- Response policy and package checks passed through `npm run test:package`:
-  browser/VSIX packages, CSP/caching policy, and designed 404 are valid.
-- Privacy and offline/update checks passed through the exact no-code-upload,
-  local-voice, installed-package-privacy, and offline-reload claims. The
-  offline claim starts in a separate browser context, replaces a seeded v4
-  cache with v5, then reloads `/demo/` while offline.
-- Lighthouse mobile (local production output): Performance 100, Accessibility
-  100, Best Practices 100, SEO 100; FCP 0.9s, LCP 1.4s, TBT 0ms, CLS 0.
-- Current production build: landing JS 7.03kB raw / 2.89kB gzip, CSS 12.71kB
-  raw / 3.59kB gzip, mobile hero 38.2kB, and extension 30.27kB unpacked.
-
-## Run and deploy
+## Reproduce
 
 ```sh
-npm ci
-npm run check
-npm run build:site
+npm ci --include=dev
+npm run test:e2e
+npm run test:installed
+npm run test:vscode-installed
+npm run lint
+npm run test:package
 ```
 
-Deploy the static product root with the work-order configuration:
+Use <https://code-listen-cursor.sociobot.in/demo/> for the isolated sample
+workspace.
 
-```sh
-/opt/fleet/lib/deploy-static.sh code-listen-cursor dist/site
-```
+## Next steps
 
-## Deployment
-
-Repair artifact commit `d0da97a` was pushed to `main` and deployed from
-`dist/site` on 2026-08-29. Azure Static Web Apps deployment
-`3bfd27c3-4afc-4cb0-90e2-74055d9340d4` completed successfully at
-<https://code-listen-cursor.sociobot.in/>.
-
-The live verifier returned HTTP 200 in 784ms with no console/page errors and
-the expected title, language, one H1, main landmark, image alt text, and button
-labels. Its response has the restrictive CSP, HSTS, `nosniff`, strict-origin
-referrer policy, and disabled camera/microphone/geolocation permissions. A live
-195px `/demo/` probe confirmed the repaired preview has `tabIndex: 0`, overflow
-from 188px to 239px, receives keyboard focus, changes `scrollTop` from 0 to 51
-after Page Down, and has no Axe violations.
-
-## Known gaps
-
-None. There is no backend, account, payment, external identity, AI, or remote
-data boundary for this free, local-first extension.
+Implement the five concrete fixes in `.factory/review-2.md`, add their
+regression coverage, then repeat the full claims ledger from a clean clone.
