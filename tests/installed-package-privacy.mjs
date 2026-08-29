@@ -9,6 +9,7 @@ import { chromium } from 'playwright';
 const coveredClaims = [
   '@claim:browser-reader-controls',
   '@claim:browser-reader-settings',
+  '@claim:browser-shortcut-configuration',
   '@claim:installed-package-privacy'
 ];
 const packagePath = resolve('dist/site/downloads/code-listen-cursor-chrome.zip');
@@ -138,6 +139,38 @@ try {
   state = await send('GET_STATE');
   assert.equal(state.ok, true);
   assert.equal(state.sample, 'const privateSource = kubectl?.config;');
+
+  const shortcuts = await context.newPage();
+  await shortcuts.goto('chrome://extensions/shortcuts');
+  const listenShortcut = shortcuts.locator(
+    'input[aria-label="Shortcut Listen to selected code or the current line for Code Listen Cursor"]'
+  );
+  const editListenShortcut = shortcuts.locator(
+    'cr-icon-button[aria-label="Edit shortcut Listen to selected code or the current line for Code Listen Cursor"]'
+  );
+  await listenShortcut.waitFor({ state: 'visible' });
+  assert.equal(await listenShortcut.inputValue(), 'Alt + Shift + S', 'The packaged Listen command has no configurable default shortcut.');
+  await editListenShortcut.click();
+  await shortcuts.keyboard.press('Alt+Shift+L');
+  await listenShortcut.waitFor({ state: 'visible' });
+  assert.equal(await listenShortcut.inputValue(), 'Alt + Shift + L', 'Chromium shortcut settings did not accept a replacement Listen shortcut.');
+  const shortcutAfter = await worker.evaluate(async () => {
+    const commands = await chrome.commands.getAll();
+    return commands.find((command) => command.name === 'listen-code')?.shortcut;
+  });
+  assert.equal(shortcutAfter, 'Alt+Shift+L', 'The browser did not save the replacement Listen shortcut.');
+  await page.bringToFront();
+  await editor.focus();
+  await page.keyboard.press('Alt+Shift+L');
+  await page.waitForTimeout(150);
+  state = await send('GET_STATE');
+  assert.equal(state.ok, true);
+  assert.equal(state.sample, 'const privateSource = kubectl?.config;', 'The configured shortcut did not invoke Listen.');
+  await shortcuts.bringToFront();
+  await editListenShortcut.click();
+  await shortcuts.keyboard.press('Alt+Shift+S');
+  assert.equal(await listenShortcut.inputValue(), 'Alt + Shift + S', 'The test did not restore the default Listen shortcut.');
+  await shortcuts.close();
 
   const stored = await worker.evaluate(() => chrome.storage.local.get(null));
   assert.deepEqual(

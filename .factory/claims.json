@@ -63,6 +63,13 @@
     "sandbox": "change each setting through the installed popup and inspect only extension-local storage"
   },
   {
+    "id": "browser-shortcut-configuration",
+    "claim": "Browser extension shortcuts are configurable in the browser's extension shortcut settings.",
+    "where": "landing installation note and README",
+    "test": "npm run test:installed",
+    "sandbox": "install the distributable ZIP in a fresh Chromium profile, change Listen to code from Alt+Shift+S to Alt+Shift+L on Chromium's extension shortcut settings page, invoke the new shortcut, then restore it"
+  },
+  {
     "id": "installed-package-privacy",
     "claim": "The installed browser package stores reading settings locally, does not store source, and makes no remote request while listening.",
     "where": "privacy page and README",
