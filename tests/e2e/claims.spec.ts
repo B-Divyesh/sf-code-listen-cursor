@@ -60,7 +60,7 @@ test('@claim:local-voice never gives source to an automatic non-local voice', as
   const preview = page.getByLabel('Words that will be spoken');
   await expect(preview).toContainText('const describe Plant');
   await page.getByRole('button', { name: 'Listen to code' }).click();
-  await expect(page.getByRole('heading', { name: 'Local voice needed' })).toBeVisible();
+  await expect(page.locator('#demo-status')).toContainText('Local voice needed');
   await expect(page.locator('#demo-status')).toContainText('voice marked local');
   expect(await page.evaluate(() => (window as typeof window & { __speechCalls: unknown[] }).__speechCalls)).toEqual([]);
   await expect(preview).toContainText('const describe Plant');

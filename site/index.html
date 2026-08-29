@@ -74,9 +74,12 @@
             current line as spoken structure.
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="/demo/"
-              >Try it with sample data</a
-            >
+            <div class="demo-action">
+              <a class="button button-primary" href="/demo/"
+                >Try it with sample data</a
+              >
+              <p>Opens an editable reader with sample code and spoken output.</p>
+            </div>
             <a class="button button-secondary" href="#field-station"
               >Preview the reader</a
             >
@@ -163,7 +166,7 @@ const describePlant = async (fern) => {
               <span class="cursor-mark" aria-hidden="true"></span>
               <div>
                 <p class="eyebrow">Spoken preview</p>
-                <h3 id="observation-title">Ready to listen</h3>
+                <h3 id="observation-title">Spoken preview</h3>
               </div>
             </div>
             <p
@@ -172,7 +175,7 @@ const describePlant = async (fern) => {
               role="status"
               aria-live="polite"
             >
-              Select code or leave the cursor on a line.
+              Ready to listen. Select code or leave the cursor on a line.
             </p>
             <div
               id="speech-preview"
@@ -217,7 +220,8 @@ const describePlant = async (fern) => {
               <input id="demo-written" value="fern" required />
               <label for="demo-spoken">Speak as</label>
               <input id="demo-spoken" value="furn" required />
-              <button type="submit">Save sample pronunciation</button>
+              <button type="submit">Preview sample pronunciation</button>
+              <p id="landing-pronunciation-note">Preview changes are not saved.</p>
             </form>
           </section>
         </div>
@@ -348,8 +352,7 @@ const describePlant = async (fern) => {
       </nav>
       <p class="build-note">Built by Param Factory · Version 1.0.3</p>
       <p class="generated-note">
-        The landing artwork was generated for this project with Azure AI Foundry
-        and reviewed before use.
+        The landing artwork was generated for this project with Azure AI Foundry.
       </p>
     </footer>
     <script type="module" src="/main.ts"></script>

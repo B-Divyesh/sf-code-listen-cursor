@@ -15,7 +15,6 @@ const get = <T extends HTMLElement>(id: string): T => document.getElementById(id
 const sample = get<HTMLTextAreaElement>('code-sample');
 const preview = get<HTMLDivElement>('speech-preview');
 const status = get<HTMLParagraphElement>('demo-status');
-const title = get<HTMLHeadingElement>('observation-title');
 const rate = get<HTMLInputElement>('demo-rate');
 const map: Record<string, string> = {};
 const originalSample = sample.value;
@@ -49,14 +48,12 @@ function updatePreview(): void {
 function listen(): void {
   const code = source();
   if (!code.trim()) {
-    title.textContent = 'Nothing to read';
-    status.textContent = 'Add code, select code, or place the cursor on a non-empty line.';
+    status.textContent = 'Nothing to read. Add code, select code, or place the cursor on a non-empty line.';
     status.dataset.error = 'true';
     return;
   }
   if (!('speechSynthesis' in window)) {
-    title.textContent = 'Speech unavailable';
-    status.textContent = 'This browser does not provide speech. Try the current version of Chrome or Edge.';
+    status.textContent = 'Speech unavailable. Try the current version of Chrome or Edge.';
     status.dataset.error = 'true';
     return;
   }
@@ -65,8 +62,7 @@ function listen(): void {
   const voice = preferredLocalVoice(speechSynthesis.getVoices());
   if (!voice) {
     speechSynthesis.cancel();
-    title.textContent = 'Local voice needed';
-    status.textContent = 'Install or enable a voice marked local on this device, then try again. The spoken preview is still available.';
+    status.textContent = 'Local voice needed. Install or enable a voice marked local on this device, then try again. The spoken preview is still available.';
     status.dataset.error = 'true';
     document.querySelector('.observation')?.classList.remove('is-listening');
     return;
@@ -75,21 +71,18 @@ function listen(): void {
   utterance.rate = Number(rate.value);
   utterance.voice = voice;
   utterance.onstart = () => {
-    title.textContent = 'Listening now';
-    status.textContent = 'Speech is playing through your system voice.';
+    status.textContent = 'Listening now. Speech is playing through your system voice.';
     delete status.dataset.error;
     document.querySelector('.observation')?.classList.add('is-listening');
   };
   utterance.onend = () => {
-    title.textContent = 'Reading complete';
-    status.textContent = 'Move the cursor or select another line to continue.';
+    status.textContent = 'Reading complete. Move the cursor or select another line to continue.';
     document.querySelector('.observation')?.classList.remove('is-listening');
   };
   utterance.onerror = (event) => {
     document.querySelector('.observation')?.classList.remove('is-listening');
     if (event.error === 'canceled' || event.error === 'interrupted') return;
-    title.textContent = 'Speech stopped';
-    status.textContent = 'Check that your device has an English system voice, then try again.';
+    status.textContent = 'Speech stopped. Check that your device has an English system voice, then try again.';
     status.dataset.error = 'true';
   };
   speechSynthesis.cancel();
@@ -99,8 +92,7 @@ function listen(): void {
 get('demo-listen').addEventListener('click', listen);
 get('demo-stop').addEventListener('click', () => {
   speechSynthesis?.cancel();
-  title.textContent = 'Speech stopped';
-  status.textContent = 'Your code is still in place.';
+  status.textContent = 'Speech stopped. Your code is still in place.';
   document.querySelector('.observation')?.classList.remove('is-listening');
 });
 sample.addEventListener('select', updatePreview);
@@ -115,8 +107,9 @@ get<HTMLFormElement>('demo-pronunciation').addEventListener('submit', (event) =>
   map[written] = spoken;
   if (isDemo) localStorage.setItem(demoStorageKey, JSON.stringify(map));
   updatePreview();
-  status.textContent = `${written} will now be spoken as ${spoken}.`;
-  title.textContent = 'Pronunciation recorded';
+  status.textContent = isDemo
+    ? `${written} will now be spoken as ${spoken}.`
+    : `This preview will say ${spoken} for ${written} until you reload.`;
 });
 
 function updateOnlineState(): void {
@@ -138,8 +131,7 @@ if (isDemo) {
     get<HTMLInputElement>('demo-indent').checked = true;
     rate.value = '0.9';
     get<HTMLOutputElement>('demo-rate-value').value = '0.9×';
-    title.textContent = 'Demo reset';
-    status.textContent = 'The original sample code is ready. Nothing was saved outside this demo.';
+    status.textContent = 'Demo reset. The original sample code is ready. Nothing was saved outside this demo.';
     updatePreview();
   });
 }

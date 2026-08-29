@@ -47,11 +47,44 @@ test('@claim:demo-reader reads a selection or current line with chosen pronuncia
   await editor.press('ArrowRight');
   await page.getByLabel('Code word').fill('kubectl');
   await page.getByLabel('Speak as').fill('cube control');
-  await page.getByRole('button', { name: 'Save sample pronunciation' }).click();
+  await page.getByRole('button', { name: 'Preview sample pronunciation' }).click();
   await expect(page.getByLabel('Words that will be spoken')).toContainText('cube control');
   await editor.evaluate((element: HTMLTextAreaElement) => element.setSelectionRange(20, 20));
   await editor.press('ArrowLeft');
   await expect(page.getByLabel('Words that will be spoken')).toContainText('fern optional dot name');
+});
+
+test('@regression:review-2-landing-preview labels temporary changes and keeps demo saves isolated', async ({ page }) => {
+  await page.goto('/#field-station');
+  await expect(page.getByRole('button', { name: 'Preview sample pronunciation' })).toBeVisible();
+  await expect(page.locator('#landing-pronunciation-note')).toHaveText('Preview changes are not saved.');
+  await page.getByLabel('Code word').fill('fern');
+  await page.getByLabel('Speak as').fill('frond');
+  await page.getByRole('button', { name: 'Preview sample pronunciation' }).click();
+  await expect(page.locator('#demo-status')).toContainText('This preview will say frond for fern until you reload.');
+  expect(await page.evaluate(() => localStorage.getItem('demo:code-listen-cursor:pronunciation'))).toBeNull();
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'Preview sample pronunciation' })).toBeVisible();
+  await expect(page.getByLabel('Words that will be spoken')).toContainText('fern');
+  await expect(page.getByLabel('Words that will be spoken')).not.toContainText('frond');
+
+  await page.goto('/demo/');
+  await page.getByLabel('Code word').fill('fern');
+  await page.getByLabel('Speak as').fill('frond');
+  await page.getByRole('button', { name: 'Save sample pronunciation' }).click();
+  await expect(page.locator('#demo-status')).toContainText('fern will now be spoken as frond.');
+  expect(await page.evaluate(() => localStorage.getItem('demo:code-listen-cursor:pronunciation'))).toContain('frond');
+});
+
+test('@regression:review-2-first-screen explains the demo outcome on mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  const action = page.getByRole('link', { name: 'Try it with sample data' });
+  const helper = page.getByText('Opens an editable reader with sample code and spoken output.');
+  await expect(action).toBeVisible();
+  await expect(helper).toBeVisible();
+  const [actionBox, helperBox] = await Promise.all([action.boundingBox(), helper.boundingBox()]);
+  expect(helperBox?.y).toBeGreaterThanOrEqual(actionBox?.y ?? 0);
 });
 
 test('demo route, query entry, keyboard path, and mobile-safe controls work', async ({ page }) => {

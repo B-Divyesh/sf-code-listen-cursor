@@ -1,1 +1,1 @@
-Listen to selected code as spoken structure without sending it off your device.
+Listen to selected code aloud without sending it off your device.

@@ -102,13 +102,30 @@ describe('release-host contract', () => {
     for (const copy of [
       'How the code reader works',
       'Set pronunciations for project words',
-      'Code stays on your device',
-      'Save sample pronunciation'
+      'Code stays on your device'
     ]) expect(landing).toContain(copy);
+    expect(landing).toContain('Preview sample pronunciation');
     expect(demo).toContain('Save sample pronunciation');
     expect(readme).toContain('`npm run build:site` writes the deployment to `dist/site/`.');
     expect(readme).toContain('That folder includes the demo, legal pages, packages, and service worker.');
     expect(readme).not.toContain('It produces the complete static deployment');
+  });
+
+  it('keeps every round-two review repair honest and self-describing @regression:review-2-copy', async () => {
+    const [landing, demo, readme] = await Promise.all([
+      readFile(resolve('site/index.html'), 'utf8'),
+      readFile(resolve('site/demo/index.html'), 'utf8'),
+      readFile(resolve('README.md'), 'utf8')
+    ]);
+    expect(landing).toContain('Preview sample pronunciation');
+    expect(landing).toContain('Preview changes are not saved.');
+    expect(landing).toContain('Opens an editable reader with sample code and spoken output.');
+    expect(landing).toContain('<h3 id="observation-title">Spoken preview</h3>');
+    expect(demo).toContain('<h3 id="observation-title">Spoken preview</h3>');
+    expect(demo).toContain('Save sample pronunciation');
+    expect(readme).toContain('It is for developers with reading fatigue, dyslexia, low vision, or auditory workflows.');
+    expect(readme).not.toContain('It supports reading fatigue, dyslexia, low vision, and auditory coding workflows.');
+    expect(landing).not.toContain('reviewed before use');
   });
 
   it('keeps acceptance promises executable in the sandbox @regression:verifiable-acceptance', async () => {

@@ -149,6 +149,19 @@ footer nav a {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+  align-items: flex-start;
+}
+.demo-action {
+  max-width: 340px;
+}
+.demo-action .button {
+  width: 100%;
+}
+.demo-action p {
+  margin: 8px 0 0;
+  color: #4e584f;
+  font-size: 16px;
+  line-height: 1.35;
 }
 .button {
   min-height: 48px;
@@ -388,6 +401,12 @@ footer nav a {
   font: 700 16px var(--mono);
   text-transform: uppercase;
   letter-spacing: 0.1em;
+}
+.word-pair #landing-pronunciation-note {
+  color: #d8ddcd;
+  font: 16px/1.45 var(--serif);
+  letter-spacing: normal;
+  text-transform: none;
 }
 .word-pair button {
   grid-column: 2;
@@ -629,6 +648,9 @@ textarea:focus-visible {
   }
   .hero-actions {
     display: grid;
+  }
+  .demo-action {
+    max-width: none;
   }
   .hero-figure {
     padding: 8px 8px 42px;

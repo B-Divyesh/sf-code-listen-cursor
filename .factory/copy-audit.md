@@ -2,13 +2,14 @@
 
 Audit date: 2026-08-29
 
-Landing source SHA-256: `f863628bccee5407ae658f4c5d638428d7e0928d32cb161042b033052260caac`
+Landing source SHA-256: `b66261e8ab64b2976fe31e4648da1f4edce4c5c853e4a23c7daaf3b8d2e8a8e5`
 
 Every sentence in `site/index.html` is listed below. Headings, labels, buttons, and navigation were also reviewed. No sentence exceeds 22 words, and none uses a banned marketing word or metaphorical task term.
 
 | Surface | Sentence | Words | Result |
 | --- | --- | ---: | --- |
 | Hero | For developers who read better by ear, it reads a selection or current line as spoken structure. | 16 | pass |
+| Demo action help | Opens an editable reader with sample code and spoken output. | 10 | pass |
 | Fact | Demo code stays in your browser. | 6 | pass |
 | Fact | Works offline after the first visit. | 6 | pass |
 | Fact | Free to download. | 3 | pass |
@@ -16,7 +17,7 @@ Every sentence in `site/index.html` is listed below. Headings, labels, buttons, 
 | Figure | An illustration of branching code structure. | 7 | pass |
 | Preview instruction | Select code below, or place the cursor on a line, then listen. | 11 | pass |
 | Preview instruction | The reader uses only a voice your browser marks as local. | 11 | pass |
-| Preview status | Select code or leave the cursor on a line. | 9 | pass |
+| Preview status | Ready to listen. Select code or leave the cursor on a line. | 12 | pass |
 | Preview output | Your spoken code appears here. | 5 | pass |
 | Preview keyboard instruction | When this preview has more text, focus it and use the Arrow keys or Page Down to read the rest. | 20 | pass |
 | Offline state | The demo still works with a voice installed on your device. | 11 | pass |
@@ -29,7 +30,8 @@ Every sentence in `site/index.html` is listed below. Headings, labels, buttons, 
 | Pronunciation | The pronunciation map stays in extension storage. | 7 | pass |
 | How it works heading | How the code reader works | 5 | pass |
 | Pronunciation heading | Set pronunciations for project words | 5 | pass |
-| Save action | Save sample pronunciation | 3 | pass |
+| Preview action | Preview sample pronunciation | 3 | pass |
+| Preview notice | Preview changes are not saved. | 5 | pass |
 | Privacy heading | Code stays on your device | 5 | pass |
 | Privacy | The reader does not send code to a Code Listen Cursor service. | 11 | pass |
 | Voice | It speaks only through voices your browser marks as local. | 10 | pass |
@@ -38,13 +40,14 @@ Every sentence in `site/index.html` is listed below. Headings, labels, buttons, 
 | Install | Enable developer mode, choose “Load unpacked,” and select the unzipped folder. | 11 | pass |
 | Shortcut | Keyboard shortcuts can be changed in your extension shortcut settings. | 10 | pass |
 | Footer | Reads selected code as spoken structure. | 6 | pass |
-| Artwork | The landing artwork was generated for this project with Azure AI Foundry and reviewed before use. | 16 | pass |
+| Artwork | The landing artwork was generated for this project with Azure AI Foundry. | 12 | pass |
 
 ## First screen check
 
 - Headline: “Listen to code without losing your place” — 8 words.
 - Audience and result: “For developers who read better by ear, it reads a selection or current line as spoken structure.” — 16 words.
 - Primary action: “Try it with sample data.”
+- Action outcome: “Opens an editable reader with sample code and spoken output.”
 - The three facts state demo privacy, offline availability, and price/account requirements.
 
 ## Terminology

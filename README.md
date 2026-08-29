@@ -1,6 +1,6 @@
 # Code Listen Cursor
 
-Code Listen Cursor reads selected code or the current line aloud for developers who work better by listening. It supports reading fatigue, dyslexia, low vision, and auditory coding workflows.
+Code Listen Cursor reads selected code or the current line aloud. It is for developers with reading fatigue, dyslexia, low vision, or auditory workflows.
 
 It includes cursor follow, repeat, punctuation levels, reading rate, indentation controls, local-only speech, and a pronunciation map. Installed-package tests verify the browser and VS Code flows against isolated local data.
 
