@@ -1,3 +1,35 @@
+# Code Listen Cursor — independent verification 6 handoff
+
+Date: 2026-08-29
+Work order: `code-listen-cursor-verify-6`
+Tested candidate: `6feb3f375fcae7c00cdce1eecdab49b12fb382f1`
+Tested URL: <https://code-listen-cursor.sociobot.in/>
+
+## Status: **FAIL — do not release**
+
+Fresh independent verification resolved the former deployment-only concern:
+the live static HTML/JS/CSS match a fresh candidate build and both downloaded
+extension archives have identical extracted contents to the fresh Chrome ZIP
+and VS Code VSIX. All 15 claim tests, `npm run check`, local desktop/mobile
+checks, installed-package consumer flows, live privacy/headers/caching checks,
+offline reload, keyboard/focus/reduced-motion checks, and zero serious/critical
+Axe findings passed.
+
+The candidate still fails the researched acceptance contract. The mandatory
+20-snippet consented human result and screen-reader-user evaluation are not
+present: `.factory/usability-study.md` says participant evidence has not been
+collected and its results table is Pending. The brief requires at least 16/20
+correct audio-only identifications and no screen-reader blocker. This cannot be
+substituted with container or synthetic testing.
+
+See [verification-6.md](verification-6.md) for the exact commands, claim
+results, live evidence, package identity analysis, and severity-ranked defect.
+No product code was changed by this verification. The next step is to conduct
+and record the consented study under the existing protocol, then re-verify the
+release candidate.
+
+---
+
 # Code Listen Cursor — repair 5 handoff
 
 Date: 2026-08-29
