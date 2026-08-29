@@ -15,6 +15,20 @@ test('landing page has its core content and no serious accessibility violations'
   expect(errors).toEqual([]);
 });
 
+test('@regression:landing-privacy-navigation keeps Privacy in the desktop and mobile header', async ({ page }) => {
+  await page.goto('/');
+  const privacy = page.getByRole('navigation', { name: 'Primary navigation' })
+    .getByRole('link', { name: 'Privacy' });
+  await expect(privacy).toBeVisible();
+  await expect(privacy).toHaveAttribute('href', '/privacy/');
+  const bounds = await privacy.boundingBox();
+  expect(bounds?.width).toBeGreaterThanOrEqual(44);
+  expect(bounds?.height).toBeGreaterThanOrEqual(44);
+  await privacy.click();
+  await expect(page).toHaveURL(/\/privacy\/$/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Privacy' })).toBeVisible();
+});
+
 test('@claim:demo-reader reads a selection or current line with chosen pronunciation', async ({ page }) => {
   await page.goto('/#field-station');
   const editor = page.getByLabel('Editable code sample');

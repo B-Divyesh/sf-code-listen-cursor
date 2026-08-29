@@ -591,7 +591,7 @@ textarea:focus-visible {
     gap: 14px;
   }
   .site-header nav a:nth-child(2),
-  .nav-download {
+  .site-header nav .nav-download {
     display: none;
   }
   .hero {

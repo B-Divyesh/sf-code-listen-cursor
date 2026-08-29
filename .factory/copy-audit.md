@@ -2,7 +2,7 @@
 
 Audit date: 2026-08-29
 
-Landing source SHA-256: `777d3e28e209e52093037650e9649689349f1dd6e89ea40bf3b8ae871e56ed82`
+Landing source SHA-256: `c831d4dbfa731214d4b1c63115120ac045114b55f21e36a026adf1244bd44ad3`
 
 Every sentence in `site/index.html` is listed below. Headings, labels, buttons, and navigation were also reviewed. No sentence exceeds 22 words, and none uses a banned marketing word or metaphorical task term.
 
