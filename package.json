@@ -15,8 +15,9 @@
     "test": "vitest run",
     "test:e2e": "npm run build:site && playwright test",
     "test:extension": "node tests/extension-smoke.mjs",
+    "test:installed": "npm run build:site && node tests/installed-package-privacy.mjs",
     "test:package": "node tests/package-smoke.mjs",
-    "check": "tsc --noEmit && npm test && npm run build && npm run test:package && npm run test:extension && npm run test:e2e"
+    "check": "tsc --noEmit && npm test && npm run build && npm run test:package && npm run test:extension && npm run test:installed && npm run test:e2e"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",

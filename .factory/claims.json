@@ -17,7 +17,7 @@
     "id": "local-voice",
     "claim": "The reader prefers a voice marked local by your browser.",
     "where": "reader preview and privacy section",
-    "test": "npm test -- --grep @claim:local-voice",
+    "test": "npm test -- --testNamePattern @claim:local-voice",
     "sandbox": "voice fixture with a network English voice and a local English voice; assert the local voice is selected"
   },
   {
@@ -33,5 +33,12 @@
     "where": "landing facts and install section",
     "test": "npm run test:e2e -- --grep @claim:free-download",
     "sandbox": "fresh unauthenticated browser context downloads the packaged browser extension"
+  },
+  {
+    "id": "installed-package-privacy",
+    "claim": "The installed browser package stores reading settings locally and does not make remote requests while listening.",
+    "where": "privacy page and README",
+    "test": "npm run test:installed",
+    "sandbox": "build the distributable ZIP, install it in a fresh Chromium profile, save a pronunciation through its popup, inspect chrome.storage.local, and record every HTTP(S) request during listening"
   }
 ]

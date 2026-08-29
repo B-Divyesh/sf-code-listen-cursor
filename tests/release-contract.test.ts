@@ -16,12 +16,17 @@ describe('release-host contract', () => {
     expect(config.responseOverrides['404']).toEqual({ rewrite: '/404.html', statusCode: 404 });
   });
 
-  it('keeps a native VS Code command adapter alongside the MV3 adapter @regression:vscode-adapter', async () => {
+  it('keeps a native VS Code settings and command adapter alongside the MV3 adapter @regression:vscode-adapter', async () => {
     const manifest = JSON.parse(await readFile(resolve('vscode-extension/package.json'), 'utf8')) as {
       contributes: { commands: { command: string }[] };
     };
     expect(manifest.contributes.commands.map((command) => command.command)).toEqual(expect.arrayContaining([
-      'codeListenCursor.listen', 'codeListenCursor.repeat', 'codeListenCursor.toggleFollow', 'codeListenCursor.stop'
+      'codeListenCursor.listen', 'codeListenCursor.repeat', 'codeListenCursor.openSettings', 'codeListenCursor.toggleFollow', 'codeListenCursor.stop'
     ]));
+    const source = await readFile(resolve('vscode-extension/extension.ts'), 'utf8');
+    expect(source).toContain("globalState.update('settings'");
+    expect(source).toContain('Personal pronunciation');
+    expect(source).toContain('Punctuation detail');
+    expect(source).toContain('Spaces per indent');
   });
 });

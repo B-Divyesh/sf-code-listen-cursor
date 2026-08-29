@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { codeToSpeech, currentLine, detectLanguage } from '../core/code-to-speech';
 import { mergeSettings } from '../core/settings';
 import { preferredLocalVoice } from '../core/voice';
+import { languageForEditor, readingSettings, storedSettings } from '../vscode-extension/settings';
 
 describe('codeToSpeech', () => {
   it('speaks structure and indentation', () => {
@@ -44,5 +45,26 @@ describe('voice selection', () => {
     const local = { localService: true, lang: 'en-GB', id: 'local' };
     const selected = preferredLocalVoice([{ localService: false, lang: 'en-US', id: 'network' }, local]);
     expect(selected).toBe(local);
+  });
+});
+
+describe('VS Code reading settings', () => {
+  it('@regression:vscode-settings keeps pronunciation and reading controls in local extension state', () => {
+    const settings = readingSettings({
+      punctuation: 'literal',
+      speakIndentation: false,
+      indentSize: 4,
+      rate: 1.2,
+      pitch: 1.1,
+      voiceURI: 'local-voice',
+      pronunciation: { kubectl: 'cube control' }
+    }, 'typescriptreact');
+    expect(settings).toMatchObject({
+      punctuation: 'literal', language: 'typescript', speakIndentation: false,
+      indentSize: 4, rate: 1.2, pitch: 1.1, voiceURI: 'local-voice',
+      pronunciation: expect.objectContaining({ kubectl: 'cube control' })
+    });
+    expect(languageForEditor('shellscript')).toBe('shell');
+    expect(storedSettings({ rate: 99 }).rate).toBe(0.9);
   });
 });

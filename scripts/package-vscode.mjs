@@ -11,6 +11,7 @@ await rm(stage, { recursive: true, force: true });
 await rm(output, { recursive: true, force: true });
 await mkdir(resolve(stage, 'extension'), { recursive: true });
 await cp(resolve('.output/vscode/vscode-extension/extension.js'), resolve(stage, 'extension/extension.js'));
+await cp(resolve('.output/vscode/vscode-extension/settings.js'), resolve(stage, 'extension/settings.js'));
 await cp(resolve('.output/vscode/core'), resolve(stage, 'extension/core'), { recursive: true });
 await cp(resolve('vscode-extension/package.json'), resolve(stage, 'extension/package.json'));
 await writeFile(resolve(stage, '[Content_Types].xml'), '<?xml version="1.0" encoding="utf-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="json" ContentType="application/json"/><Default Extension="js" ContentType="application/javascript"/><Default Extension="xml" ContentType="application/xml"/></Types>');

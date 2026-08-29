@@ -2,7 +2,7 @@
 
 Code Listen Cursor reads selected code or the current line aloud for developers who work better by listening. It supports reading fatigue, dyslexia, low vision, and auditory coding workflows.
 
-It includes cursor follow, repeat, punctuation levels, reading rate, indentation controls, a local-voice preference, and a pronunciation map. The reader does not send source code to a Code Listen Cursor service.
+It includes cursor follow, repeat, punctuation levels, reading rate, indentation controls, a local-voice preference, and a pronunciation map. The packaged browser extension test verifies that its listening flow makes no remote request and stores only reading settings locally.
 
 Live site: <https://code-listen-cursor.sociobot.in>
 
@@ -17,7 +17,7 @@ Open <https://code-listen-cursor.sociobot.in/demo/> or run the site locally and 
 3. Open `chrome://extensions` or `edge://extensions`.
 4. Enable **Developer mode**, choose **Load unpacked**, and select the unzipped directory.
 
-The unpacked browser build is at `dist/extension/chrome-mv3`. `dist/site/downloads/code-listen-cursor-vscode.vsix` is the native VS Code package; install it with **Extensions: Install from VSIX**. The VS Code adapter reads the active selection/current line using a local webview voice and provides the same listen, repeat, follow, and stop commands.
+The unpacked browser build is at `dist/extension/chrome-mv3`. `dist/site/downloads/code-listen-cursor-vscode.vsix` is the native VS Code package; install it with **Extensions: Install from VSIX**. The VS Code adapter reads the active selection/current line and provides listen, repeat, follow, stop, and **Code Listen Cursor: Open Reading Settings** commands. Its settings panel includes language, punctuation, voice, rate, pitch, indentation, and personal pronunciations.
 
 ## Use it
 
@@ -39,6 +39,7 @@ npm run dev:site     # landing site at localhost
 npm test             # unit tests
 npm run build        # extension + ZIP + static site
 npm run test:extension # load the unpacked extension and invoke speech in Chromium
+npm run test:installed # install the packaged ZIP and verify local settings/no remote listening requests
 npm run test:e2e     # desktop and 390 px browser/a11y checks
 npm run check        # typecheck and all gates
 ```
