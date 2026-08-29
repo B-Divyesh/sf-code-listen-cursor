@@ -49,6 +49,8 @@ Commit `2ddf250` was pushed to `origin/main` and `dist/site/` was deployed to th
 - `/downloads/code-listen-cursor-chrome.zip` returned 200, `Content-Disposition: attachment`, and `Cache-Control: public, max-age=86400`.
 - `/sw.js` returned `Cache-Control: no-cache`.
 - Every checked response included the deployed Content-Security-Policy and `frame-ancestors 'none'` response directive.
+- The live browser ZIP SHA-256 exactly matched the local build: `8fda03fcbf23656f693c9a35a1dde32c31f9193f7b9ed86382fd601db999b299`.
+- A hashed production JS asset returned `Cache-Control: public, max-age=31536000, immutable`.
 
 ## Known external evidence gap
 
