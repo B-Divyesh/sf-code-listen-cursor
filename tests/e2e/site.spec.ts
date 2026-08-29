@@ -129,6 +129,48 @@ test('@regression:zoom-reflow keeps every route and navigation inside 195 CSS px
   }
 });
 
+test('@regression:spoken-preview-keyboard-scroll supports overflowing words at 390px and 200% reflow', async ({ page }) => {
+  const longLine = 'const fernSpecimenWithAnUnusuallyLongIdentifier = botanicalNotebook?.observations?.filter((observation) => observation.frondMeasurement >= 3).map((observation) => observation.growthDescription).join("_");';
+  const scenarios = [
+    { path: '/demo/', viewport: { width: 390, height: 844 }, code: longLine },
+    { path: '/', viewport: { width: 195, height: 844 } }
+  ];
+
+  for (const scenario of scenarios) {
+    await page.setViewportSize(scenario.viewport);
+    await page.goto(scenario.path);
+    const editor = page.locator('#code-sample');
+    await expect(editor).toBeVisible();
+    if (scenario.code) await editor.fill(scenario.code);
+    await editor.press('End');
+    await page.getByRole('button', { name: 'Listen to code' }).click();
+
+    const preview = page.getByRole('region', { name: 'Words that will be spoken' });
+    if (scenario.code) await expect(preview).toContainText('fern Specimen With An Unusually Long Identifier');
+    await expect(preview).toHaveAttribute('aria-describedby', 'speech-preview-help');
+    const metrics = await preview.evaluate((element) => ({
+      clientHeight: element.clientHeight,
+      scrollHeight: element.scrollHeight,
+      tabIndex: element.tabIndex
+    }));
+    expect(metrics.scrollHeight, `${scenario.path} must overflow at ${scenario.viewport.width}px`).toBeGreaterThan(metrics.clientHeight);
+    expect(metrics.tabIndex).toBe(0);
+
+    await page.getByRole('button', { name: 'Listen to code' }).focus();
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('button', { name: 'Stop' })).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(preview).toBeFocused();
+    await expect(preview).toHaveCSS('outline-style', 'solid');
+    const scrollTop = await preview.evaluate((element) => element.scrollTop);
+    await page.keyboard.press('PageDown');
+    await expect.poll(() => preview.evaluate((element) => element.scrollTop)).toBeGreaterThan(scrollTop);
+
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations).toEqual([]);
+  }
+});
+
 test('@regression:low-vision-type keeps visible site copy at 16px or larger', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   for (const path of ['/', '/demo/', '/privacy/', '/terms/', '/404.html']) {

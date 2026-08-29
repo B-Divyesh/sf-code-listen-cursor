@@ -13,7 +13,7 @@ const demoStorageKey = 'demo:code-listen-cursor:pronunciation';
 
 const get = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
 const sample = get<HTMLTextAreaElement>('code-sample');
-const preview = get<HTMLOutputElement>('speech-preview');
+const preview = get<HTMLDivElement>('speech-preview');
 const status = get<HTMLParagraphElement>('demo-status');
 const title = get<HTMLHeadingElement>('observation-title');
 const rate = get<HTMLInputElement>('demo-rate');
@@ -43,7 +43,7 @@ function spokenText(): string {
 }
 
 function updatePreview(): void {
-  preview.value = spokenText();
+  preview.textContent = spokenText();
 }
 
 function listen(): void {
@@ -61,7 +61,7 @@ function listen(): void {
     return;
   }
   const text = spokenText();
-  preview.value = text;
+  preview.textContent = text;
   const voice = preferredLocalVoice(speechSynthesis.getVoices());
   if (!voice) {
     speechSynthesis.cancel();

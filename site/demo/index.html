@@ -123,11 +123,18 @@ const describePlant = async (fern) => {
             >
               Select code or leave the cursor on a line.
             </p>
-            <output
+            <div
               id="speech-preview"
               class="speech-preview"
+              role="region"
               aria-label="Words that will be spoken"
-            ></output>
+              aria-describedby="speech-preview-help"
+              tabindex="0"
+            ></div>
+            <p id="speech-preview-help" class="screen-reader-text">
+              When this preview has more text, focus it and use the Arrow keys
+              or Page Down to read the rest.
+            </p>
             <div class="demo-settings">
               <label for="demo-punctuation">Punctuation</label
               ><select id="demo-punctuation">

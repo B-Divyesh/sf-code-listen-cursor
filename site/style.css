@@ -63,6 +63,15 @@ img {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+.screen-reader-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 .site-header {
   max-width: 1280px;
   margin: auto;
@@ -316,6 +325,10 @@ footer nav a {
   background: #17231d;
   color: #fcfaf1;
   font: 16px/1.65 var(--mono);
+}
+.speech-preview:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
 }
 .demo-settings {
   display: grid;

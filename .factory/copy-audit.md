@@ -2,7 +2,7 @@
 
 Audit date: 2026-08-29
 
-Landing source SHA-256: `fd9324de7837e944844f59d9b00aeeb49149dbb7e758e1b05c2b2346571e86b8`
+Landing source SHA-256: `f863628bccee5407ae658f4c5d638428d7e0928d32cb161042b033052260caac`
 
 Every sentence in `site/index.html` is listed below. Headings, labels, buttons, and navigation were also reviewed. No sentence exceeds 22 words, and none uses a banned marketing word or metaphorical task term.
 
@@ -18,6 +18,7 @@ Every sentence in `site/index.html` is listed below. Headings, labels, buttons, 
 | Preview instruction | The reader uses only a voice your browser marks as local. | 11 | pass |
 | Preview status | Select code or leave the cursor on a line. | 9 | pass |
 | Preview output | Your spoken code appears here. | 5 | pass |
+| Preview keyboard instruction | When this preview has more text, focus it and use the Arrow keys or Page Down to read the rest. | 20 | pass |
 | Offline state | The demo still works with a voice installed on your device. | 11 | pass |
 | Offline recovery | If speech is silent, reconnect once or choose a local system voice. | 11 | pass |
 | Selection | Select the exact code you need. | 7 | pass |
