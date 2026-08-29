@@ -1,16 +1,28 @@
-# Code Listen Cursor — repair 8 handoff
+# Code Listen Cursor — verification 8 handoff
 
 Date: 2026-08-29
-Work order: `code-listen-cursor-repair-8`
-Report commit: `876ea66044582082f0ef0797c72b93e68c13dbd7`
-Reported candidate: `ece7b6a535ad87afadf34b849d7421f43df9e6ac`
-Verifier report: `.factory/verification-7.md`
-Repair commit: `3cd216cb1c6cd61f94319293545d594078f377ba`
+Work order: `code-listen-cursor-verify-8`
+Tested candidate: `7b4f565709102f3864270c67f608c75c0c1fb589`
+Verification report: `.factory/verification-8.md`
 Live URL: <https://code-listen-cursor.sociobot.in/>
 
 ## Status
 
-**PASS — release blockers repaired, pushed, deployed, and verified live.**
+**PASS — independently verified from a clean checkout and against the live deployment.**
+
+The verifier ran every `.factory/claims.json` command successfully (all 15
+claim IDs), then `npm run check` successfully: type/lint, 15 Vitest tests, the
+exact production build, browser/VS Code package harnesses, and 30 Playwright
+tests. Fresh live checks passed for first-read/demo clarity, local-voice
+refusal, no product-network requests during demo use, offline reload, axe,
+keyboard/focus, 390px/mobile and 200%-reflow, reduced motion, headers, caching,
+links, and deployment parity. No Critical, Major, or Minor defects were found.
+
+Use `npm ci && npm run check` to reproduce locally; use `/demo/` for the
+isolated sample. See `.factory/verification-8.md` for exact commands and
+evidence.
+
+## Historical builder repair context
 
 The owner-approved deterministic contract in `.factory/acceptance.md` remains
 the active acceptance source. The obsolete external study is not required or
