@@ -9,9 +9,17 @@ const followButton = get<HTMLButtonElement>('follow');
 let settings: ListenSettings = mergeSettings();
 
 async function activeTabMessage(message: CursorCommand): Promise<CursorState> {
+  const requestedTab = Number(new URLSearchParams(location.search).get('tab'));
+  if (Number.isInteger(requestedTab) && requestedTab > 0) {
+    const response = await browser.tabs.sendMessage(requestedTab, message) as CursorState | undefined;
+    if (!response || typeof response.message !== 'string') throw new Error('not-ready');
+    return response;
+  }
   const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
   if (!tab?.id || !tab.url?.startsWith('http')) throw new Error('restricted');
-  return browser.tabs.sendMessage(tab.id, message) as Promise<CursorState>;
+  const response = await browser.tabs.sendMessage(tab.id, message) as CursorState | undefined;
+  if (!response || typeof response.message !== 'string') throw new Error('not-ready');
+  return response;
 }
 
 function display(state: CursorState): void {
@@ -25,12 +33,15 @@ function display(state: CursorState): void {
 async function run(message: CursorCommand): Promise<void> {
   try {
     display(await activeTabMessage(message));
-  } catch {
+  } catch (error) {
+    const restricted = error instanceof Error && error.message === 'restricted';
     display({
       ok: false,
       state: 'error',
       follow: false,
-      message: 'This browser page is protected. Open a code page, then try again.'
+      message: restricted
+        ? 'This browser page is protected. Open a code page, then try again.'
+        : 'The reader did not respond. Reload this code page, then try again.'
     });
   }
 }

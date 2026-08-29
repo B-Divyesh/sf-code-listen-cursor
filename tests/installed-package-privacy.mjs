@@ -1,9 +1,16 @@
-import { createServer } from 'node:http';
-import { mkdtemp, rm } from 'node:fs/promises';
+import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { createServer } from 'node:http';
 import { resolve } from 'node:path';
+import AxeBuilder from '@axe-core/playwright';
 import { chromium } from 'playwright';
 
+const coveredClaims = [
+  '@claim:browser-reader-controls',
+  '@claim:browser-reader-settings',
+  '@claim:installed-package-privacy'
+];
 const packagePath = resolve('dist/site/downloads/code-listen-cursor-chrome.zip');
 const unpacked = await mkdtemp('/tmp/code-listen-cursor-package.');
 const profile = await mkdtemp('/tmp/code-listen-cursor-profile.');
@@ -12,7 +19,7 @@ if (unzip.status !== 0) throw new Error(`Could not unpack browser package: ${unz
 
 const server = createServer((_request, response) => {
   response.setHeader('content-type', 'text/html; charset=utf-8');
-  response.end('<!doctype html><html><body><textarea id="code">const privateSource = kubectl?.config;</textarea></body></html>');
+  response.end('<!doctype html><html><body><label for="code">Code</label><textarea id="code">const privateSource = kubectl?.config;\n  return privateSource;</textarea></body></html>');
 });
 await new Promise((done) => server.listen(0, '127.0.0.1', done));
 const address = server.address();
@@ -34,35 +41,126 @@ try {
   worker ??= await context.waitForEvent('serviceworker', { timeout: 10_000 });
   const extensionId = new URL(worker.url()).host;
 
+  const page = await context.newPage();
+  await page.goto(origin);
+  const editor = page.locator('#code');
+  await editor.focus();
+  await editor.evaluate((element) => element.setSelectionRange(0, 38));
+  await page.waitForTimeout(400);
+
+  const targetTabId = await worker.evaluate(async () => {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    return tab?.id;
+  });
+  assert.equal(typeof targetTabId, 'number');
   const popup = await context.newPage();
-  await popup.goto(`chrome-extension://${extensionId}/popup.html`);
+  await popup.goto(`chrome-extension://${extensionId}/popup.html?tab=${targetTabId}`);
+  const status = popup.locator('#status');
+  await popup.waitForFunction(() => document.querySelector('#status')?.textContent === 'Ready to listen');
+  const waitForStatus = (expected) => popup.waitForFunction(
+    (value) => document.querySelector('#status')?.textContent === value,
+    expected
+  );
+
+  await popup.getByRole('button', { name: /Repeat/ }).press('Enter');
+  await waitForStatus('Nothing to repeat yet. Listen to code first.');
+  assert.match(await status.innerText(), /Nothing to repeat yet/);
+
+  const follow = popup.locator('#follow');
+  await follow.press('Space');
+  await waitForStatus('Cursor follow is on');
+  assert.equal(await follow.getAttribute('aria-pressed'), 'true');
+  assert.equal(await status.innerText(), 'Cursor follow is on');
+  await popup.locator('#stop').click();
+  await waitForStatus('Speech stopped');
+  assert.equal(await status.innerText(), 'Speech stopped');
+  await popup.getByRole('button', { name: /Stop following/ }).click();
+  await waitForStatus('Cursor follow is off');
+  assert.equal(await follow.getAttribute('aria-pressed'), 'false');
+
+  await popup.getByText('Reading settings', { exact: true }).click();
+  await popup.locator('#language').selectOption('typescript');
+  await popup.locator('#punctuation').selectOption('detailed');
+  await popup.locator('#rate').fill('1.2');
+  await popup.locator('#indent').uncheck();
   await popup.getByText('Personal pronunciation', { exact: true }).click();
   await popup.locator('#written').fill('kubectl');
   await popup.locator('#spoken').fill('cube control');
   await popup.getByRole('button', { name: 'Add pronunciation' }).click();
   await popup.waitForFunction(() => document.querySelector('#pronunciation-list')?.textContent?.includes('cube control'));
 
-  const page = await context.newPage();
-  await page.goto(origin);
-  await page.locator('#code').focus();
-  await page.locator('#code').evaluate((element) => element.setSelectionRange(0, element.value.length));
-  const result = await worker.evaluate(async () => {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    return chrome.tabs.sendMessage(tab.id, { type: 'LISTEN' });
+  await popup.getByRole('button', { name: /Listen now/ }).click();
+  await waitForStatus('Listening to code');
+  assert.equal(await status.innerText(), 'Listening to code');
+  await popup.locator('#stop').click();
+  await waitForStatus('Speech stopped');
+  await popup.getByRole('button', { name: /Repeat/ }).click();
+  await waitForStatus('Listening to code');
+  assert.equal(await status.innerText(), 'Listening to code');
+
+  const send = (type) => worker.evaluate(
+    async ({ type, tabId }) => chrome.tabs.sendMessage(tabId, { type }),
+    { type, tabId: targetTabId }
+  );
+
+  let state = await send('GET_STATE');
+  assert.equal(state.ok, true);
+  assert.equal(state.sample, 'const privateSource = kubectl?.config;');
+  assert.equal((await send('STOP')).message, 'Speech stopped');
+  await popup.locator('#stop').click();
+  await waitForStatus('Speech stopped');
+
+  await editor.evaluate((element) => {
+    const secondLine = element.value.indexOf('\n') + 3;
+    element.focus();
+    element.setSelectionRange(secondLine, secondLine);
   });
-  if (!result.ok) throw new Error(`Installed package could not listen: ${JSON.stringify(result)}`);
+  await popup.getByRole('button', { name: /Listen now/ }).click();
+  await waitForStatus('Listening to code');
+  state = await send('GET_STATE');
+  assert.equal(state.sample, '  return privateSource;');
+
+  await popup.getByRole('button', { name: /Follow cursor/ }).click();
+  await editor.evaluate((element) => {
+    element.focus();
+    element.setSelectionRange(3, 3);
+    element.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, key: 'ArrowLeft' }));
+  });
+  await page.waitForTimeout(550);
+  state = await send('GET_STATE');
+  assert.equal(state.follow, true);
+  assert.equal(state.sample, 'const privateSource = kubectl?.config;');
+  assert.equal((await send('TOGGLE_FOLLOW')).follow, false);
+
+  await editor.focus();
+  await page.keyboard.press('Alt+Shift+S');
+  await page.waitForTimeout(150);
+  state = await send('GET_STATE');
+  assert.equal(state.ok, true);
+  assert.equal(state.sample, 'const privateSource = kubectl?.config;');
 
   const stored = await worker.evaluate(() => chrome.storage.local.get(null));
-  if (!stored.settings?.pronunciation || stored.settings.pronunciation.kubectl !== 'cube control') {
-    throw new Error(`Reading settings were not stored locally: ${JSON.stringify(stored)}`);
-  }
-  if (JSON.stringify(stored).includes('privateSource')) {
-    throw new Error('Installed package stored page code instead of only reading preferences.');
-  }
-  if (!httpRequests.every((url) => new URL(url).origin === origin)) {
-    throw new Error(`Installed package made a remote request: ${JSON.stringify(httpRequests)}`);
-  }
-  console.log(`Installed package privacy/storage regression passed (${extensionId}).`);
+  assert.deepEqual(
+    {
+      language: stored.settings?.language,
+      punctuation: stored.settings?.punctuation,
+      rate: stored.settings?.rate,
+      speakIndentation: stored.settings?.speakIndentation,
+      pronunciation: stored.settings?.pronunciation?.kubectl
+    },
+    { language: 'typescript', punctuation: 'detailed', rate: 1.2, speakIndentation: false, pronunciation: 'cube control' }
+  );
+  assert.equal(JSON.stringify(stored).includes('privateSource'), false, 'Installed package stored page code.');
+  assert.equal(httpRequests.every((url) => new URL(url).origin === origin), true, `Remote request: ${JSON.stringify(httpRequests)}`);
+
+  const axe = await new AxeBuilder({ page: popup }).analyze();
+  assert.deepEqual(axe.violations.filter((item) => ['serious', 'critical'].includes(item.impact ?? '')), []);
+  const smallTargets = await popup.locator('button:visible,input:visible,select:visible,summary:visible').evaluateAll((elements) => (
+    elements.map((element) => element.getBoundingClientRect()).filter((box) => box.width < 44 || box.height < 44).length
+  ));
+  assert.equal(smallTargets, 0, 'The installed popup contains a target smaller than 44px.');
+
+  console.log(`${coveredClaims.join(', ')} passed against the installed ZIP (${extensionId}).`);
 } finally {
   await context.close();
   server.close();

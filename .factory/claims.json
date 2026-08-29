@@ -1,29 +1,43 @@
 [
   {
     "id": "demo-sandbox",
-    "claim": "Try it with sample data; nothing is saved.",
-    "where": "landing primary action and demo banner",
+    "claim": "Try it with sample data; demo settings stay separate and Reset demo removes them.",
+    "where": "landing action, demo banner, privacy page, README",
     "test": "npm run test:e2e -- --grep @claim:demo-sandbox",
     "sandbox": "fresh browser context at /demo/; save a sample pronunciation, assert only the demo namespace is used, then reset it"
   },
   {
+    "id": "demo-reader",
+    "claim": "The demo reads a selection or current line and applies a personal pronunciation.",
+    "where": "landing preview, demo route, README",
+    "test": "npm run test:e2e -- --grep @claim:demo-reader",
+    "sandbox": "fresh demo; select an identifier, set its pronunciation, then collapse the selection and verify current-line output"
+  },
+  {
     "id": "no-code-upload",
-    "claim": "Code stays in your browser during the demo.",
-    "where": "landing facts and privacy section",
+    "claim": "Demo code stays in the browser.",
+    "where": "landing facts, privacy page",
     "test": "npm run test:e2e -- --grep @claim:no-code-upload",
     "sandbox": "record every request while editing and listening to sample code; assert every request is same-origin"
   },
   {
+    "id": "structure-aware-speech",
+    "claim": "The reader turns braces, operators, indentation, camel case, and snake case into distinct speech.",
+    "where": "landing how-it-works section, extension descriptions, README",
+    "test": "npm test -- --testNamePattern @claim:structure-aware-speech",
+    "sandbox": "shared reader fixture containing nested indentation, braces, a multi-character operator, camel case, and snake case"
+  },
+  {
     "id": "local-voice",
-    "claim": "The reader prefers a voice marked local by your browser.",
-    "where": "reader preview and privacy section",
+    "claim": "The reader prefers an English voice marked local by the browser.",
+    "where": "reader preview, privacy page, README",
     "test": "npm test -- --testNamePattern @claim:local-voice",
     "sandbox": "voice fixture with a network English voice and a local English voice; assert the local voice is selected"
   },
   {
     "id": "offline-reload",
     "claim": "Works offline after the first visit.",
-    "where": "landing facts",
+    "where": "landing facts and demo offline notice",
     "test": "npm run test:e2e -- --grep @claim:offline-reload",
     "sandbox": "load /demo/, wait for service-worker control, then disable network and reload the demo"
   },
@@ -35,10 +49,52 @@
     "sandbox": "fresh unauthenticated browser context downloads the packaged browser extension"
   },
   {
+    "id": "browser-reader-controls",
+    "claim": "The installed browser extension reads a selection or current line and supports follow, repeat, and stop.",
+    "where": "landing how-it-works section and README",
+    "test": "npm run test:installed",
+    "sandbox": "install the distributable ZIP in a fresh Chromium profile and operate every popup control against a two-line editor"
+  },
+  {
+    "id": "browser-reader-settings",
+    "claim": "The installed browser popup saves language, punctuation, rate, indentation, and personal pronunciation settings.",
+    "where": "browser popup and README",
+    "test": "npm run test:installed",
+    "sandbox": "change each setting through the installed popup and inspect only extension-local storage"
+  },
+  {
     "id": "installed-package-privacy",
-    "claim": "The installed browser package stores reading settings locally and does not make remote requests while listening.",
+    "claim": "The installed browser package stores reading settings locally, does not store source, and makes no remote request while listening.",
     "where": "privacy page and README",
     "test": "npm run test:installed",
-    "sandbox": "build the distributable ZIP, install it in a fresh Chromium profile, save a pronunciation through its popup, inspect chrome.storage.local, and record every HTTP(S) request during listening"
+    "sandbox": "install the distributable ZIP in a fresh Chromium profile, listen to private sample source, inspect extension storage, and record HTTP(S) requests"
+  },
+  {
+    "id": "vscode-reader-controls",
+    "claim": "The packaged VS Code extension reads a selection or current line and supports follow, repeat, stop, and reading settings.",
+    "where": "README and VS Code package description",
+    "test": "npm run test:vscode-installed",
+    "sandbox": "unpack the VSIX into a fresh host harness, activate it, invoke every command, and inspect the speech/settings messages"
+  },
+  {
+    "id": "vscode-package-privacy",
+    "claim": "The packaged VS Code extension keeps reading settings in local extension state and does not store or send source code.",
+    "where": "privacy page and README",
+    "test": "npm run test:vscode-installed",
+    "sandbox": "activate the packaged VSIX in an isolated host harness, save settings, inspect state, and fail any network request"
+  },
+  {
+    "id": "generated-artwork-provenance",
+    "claim": "The landing artwork was generated for this project with Azure AI Foundry.",
+    "where": "landing footer and design record",
+    "test": "npm test -- --testNamePattern @claim:generated-artwork-provenance",
+    "sandbox": "assert the original asset prompt sidecar, generator record, and shipped social derivative exist"
+  },
+  {
+    "id": "mit-license",
+    "claim": "Code Listen Cursor is available under the MIT license.",
+    "where": "README and terms page",
+    "test": "npm test -- --testNamePattern @claim:mit-license",
+    "sandbox": "read the shipped LICENSE and assert the MIT title and complete permission grant"
   }
 ]

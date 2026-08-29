@@ -1,0 +1,22 @@
+[
+  { "id": 1, "language": "javascript", "code": "a !== b", "cues": ["strictly not equals"] },
+  { "id": 2, "language": "javascript", "code": "  run();", "cues": ["indent 1 level", "run open paren close paren"] },
+  { "id": 3, "language": "javascript", "code": "user_name", "cues": ["user name"] },
+  { "id": 4, "language": "javascript", "code": "runTask", "cues": ["run Task"] },
+  { "id": 5, "language": "javascript", "code": "if (ready) {", "cues": ["open paren ready close paren open brace"] },
+  { "id": 6, "language": "typescript", "code": "user?.name", "cues": ["user optional dot name"] },
+  { "id": 7, "language": "typescript", "code": "value => value", "cues": ["arrow function"] },
+  { "id": 8, "language": "javascript", "code": "value ?? fallback", "cues": ["null fallback"] },
+  { "id": 9, "language": "python", "code": "  if ready:", "cues": ["indent 1 level", "colon"] },
+  { "id": 10, "language": "python", "code": "total // 2", "cues": ["floor divided by"] },
+  { "id": 11, "language": "rust", "code": "std::io", "cues": ["path separator"] },
+  { "id": 12, "language": "rust", "code": "fn ready() -> bool", "cues": ["returns bool"] },
+  { "id": 13, "language": "shell", "code": "cat file | sort", "cues": ["pipe sort"] },
+  { "id": 14, "language": "shell", "code": "build && test", "cues": ["and then"] },
+  { "id": 15, "language": "javascript", "code": "items[0]", "cues": ["open bracket 0 close bracket"] },
+  { "id": 16, "language": "javascript", "code": "call(value)", "cues": ["open paren value close paren"] },
+  { "id": 17, "language": "javascript", "code": "count >= 3", "cues": ["greater than or equal to 3"] },
+  { "id": 18, "language": "javascript", "code": "index++", "cues": ["index increment"] },
+  { "id": 19, "language": "javascript", "code": "kubectl", "pronunciation": { "kubectl": "cube control" }, "cues": ["cube control"] },
+  { "id": 20, "language": "javascript", "code": "if (ready) {\n  runTask();\n}", "cues": ["line 1", "line 2, indent 1 level", "line 3", "close brace"] }
+]

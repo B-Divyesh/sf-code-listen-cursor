@@ -25,6 +25,14 @@ test('@claim:no-code-upload keeps the sample interaction on the product origin',
 test('@claim:offline-reload reloads the sample after first visit with no network', async ({ page, context }) => {
   await page.goto('/demo/');
   await page.waitForFunction(() => navigator.serviceWorker?.controller !== null, undefined, { timeout: 15_000 });
+  expect(await page.evaluate(async () => {
+    const registration = await navigator.serviceWorker.ready;
+    await registration.update();
+    return {
+      active: registration.active?.state,
+      caches: await caches.keys()
+    };
+  })).toEqual(expect.objectContaining({ active: 'activated', caches: expect.arrayContaining(['code-listen-cursor-v3']) }));
   await page.reload();
   await context.setOffline(true);
   await page.reload();
@@ -34,8 +42,12 @@ test('@claim:offline-reload reloads the sample after first visit with no network
 
 test('@claim:free-download downloads the browser extension without an account', async ({ page }) => {
   await page.goto('/');
-  const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('link', { name: 'Download Chrome or Edge ZIP' }).click();
-  const download = await downloadPromise;
-  expect(download.suggestedFilename()).toBe('code-listen-cursor-chrome.zip');
+  for (const [name, filename] of [
+    ['Download Chrome or Edge ZIP', 'code-listen-cursor-chrome.zip'],
+    ['Download VS Code extension', 'code-listen-cursor-vscode.vsix']
+  ] as const) {
+    const downloadPromise = page.waitForEvent('download');
+    await page.getByRole('link', { name }).click();
+    expect((await downloadPromise).suggestedFilename()).toBe(filename);
+  }
 });

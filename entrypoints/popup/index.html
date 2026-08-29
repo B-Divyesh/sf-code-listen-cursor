@@ -9,14 +9,23 @@
     <main>
       <header class="mast">
         <img src="/icons/leaf-cursor.svg" width="38" height="38" alt="" />
-        <div><p class="kicker">Field note 01</p><h1>Code Listen Cursor</h1></div>
+        <div>
+          <p class="kicker">Browser extension</p>
+          <h1>Code Listen Cursor</h1>
+        </div>
       </header>
 
-      <p id="status" class="status" role="status" aria-live="polite">Checking this page…</p>
+      <p id="status" class="status" role="status" aria-live="polite">
+        Checking this page…
+      </p>
       <div class="actions" aria-label="Listening controls">
-        <button id="listen" class="primary" type="button">Listen now <kbd>⌥⇧S</kbd></button>
+        <button id="listen" class="primary" type="button">
+          Listen now <kbd>⌥⇧S</kbd>
+        </button>
         <button id="repeat" type="button">Repeat <kbd>⌥⇧R</kbd></button>
-        <button id="follow" type="button" aria-pressed="false">Follow cursor <kbd>⌥⇧F</kbd></button>
+        <button id="follow" type="button" aria-pressed="false">
+          Follow cursor <kbd>⌥⇧F</kbd>
+        </button>
         <button id="stop" type="button">Stop <kbd>⌥⇧X</kbd></button>
       </div>
 
@@ -42,22 +51,41 @@
           </select>
 
           <label for="voice">System voice</label>
-          <select id="voice"><option value="">Automatic local voice</option></select>
+          <select id="voice">
+            <option value="">Automatic local voice</option>
+          </select>
 
-          <label for="rate">Reading rate <output id="rate-value">0.9×</output></label>
-          <input id="rate" type="range" min="0.5" max="1.5" step="0.1" value="0.9" />
+          <label for="rate"
+            >Reading rate <output id="rate-value">0.9×</output></label
+          >
+          <input
+            id="rate"
+            type="range"
+            min="0.5"
+            max="1.5"
+            step="0.1"
+            value="0.9"
+          />
 
-          <label class="check"><input id="indent" type="checkbox" checked /> Speak indentation</label>
+          <label class="check"
+            ><input id="indent" type="checkbox" checked /> Speak
+            indentation</label
+          >
           <label for="indent-size">Spaces per indent</label>
-          <select id="indent-size"><option value="2">2 spaces</option><option value="4">4 spaces</option></select>
+          <select id="indent-size">
+            <option value="2">2 spaces</option>
+            <option value="4">4 spaces</option>
+          </select>
         </div>
       </details>
 
       <details>
         <summary>Personal pronunciation</summary>
         <form id="pronunciation-form" class="pronunciation-form">
-          <label for="written">Code word</label><input id="written" required autocomplete="off" />
-          <label for="spoken">Speak as</label><input id="spoken" required autocomplete="off" />
+          <label for="written">Code word</label
+          ><input id="written" required autocomplete="off" />
+          <label for="spoken">Speak as</label
+          ><input id="spoken" required autocomplete="off" />
           <button type="submit">Add pronunciation</button>
         </form>
         <ul id="pronunciation-list" class="pronunciation-list"></ul>

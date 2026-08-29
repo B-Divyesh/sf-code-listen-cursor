@@ -1,14 +1,17 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { codeToSpeech, currentLine, detectLanguage } from '../core/code-to-speech';
 import { mergeSettings } from '../core/settings';
 import { preferredLocalVoice } from '../core/voice';
 import { languageForEditor, readingSettings, storedSettings } from '../vscode-extension/settings';
 
 describe('codeToSpeech', () => {
-  it('speaks structure and indentation', () => {
-    const result = codeToSpeech('  if (ready) {\n    runTask();\n  }', mergeSettings());
-    expect(result).toContain('line 1, indent 1 level, if open paren ready close paren open brace');
+  it('@claim:structure-aware-speech speaks braces, operators, indentation, camel case, and snake case distinctly', () => {
+    const result = codeToSpeech('  if (user_name !== runTask) {\n    runTask();\n  }', mergeSettings());
+    expect(result).toContain('line 1, indent 1 level, if open paren user name strictly not equals run Task close paren open brace');
     expect(result).toContain('line 2, indent 2 levels, run Task open paren close paren');
+    expect(result).toContain('line 3, indent 1 level, close brace');
   });
 
   it('uses a personal pronunciation map', () => {
@@ -66,5 +69,27 @@ describe('VS Code reading settings', () => {
     });
     expect(languageForEditor('shellscript')).toBe('shell');
     expect(storedSettings({ rate: 99 }).rate).toBe(0.9);
+  });
+});
+
+describe('20-snippet research preflight', () => {
+  it('@research-proxy:20-snippet produces every intended structural cue before participant testing', () => {
+    const fixtures = JSON.parse(readFileSync(resolve('tests/fixtures/comprehension-snippets.json'), 'utf8')) as {
+      id: number;
+      language: 'javascript' | 'typescript' | 'python' | 'rust' | 'shell';
+      code: string;
+      pronunciation?: Record<string, string>;
+      cues: string[];
+    }[];
+    expect(fixtures).toHaveLength(20);
+    expect(new Set(fixtures.map(({ id }) => id)).size).toBe(20);
+    for (const fixture of fixtures) {
+      const spoken = codeToSpeech(fixture.code, mergeSettings({
+        language: fixture.language,
+        punctuation: 'detailed',
+        pronunciation: fixture.pronunciation ?? {}
+      }));
+      for (const cue of fixture.cues) expect(spoken, `snippet ${fixture.id}`).toContain(cue);
+    }
   });
 });

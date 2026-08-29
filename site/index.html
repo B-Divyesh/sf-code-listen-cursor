@@ -3,15 +3,44 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Listen to selected code as intelligible structure. A private, local-first browser extension for developers with reading fatigue, dyslexia, low vision, or auditory workflows." />
+    <meta
+      name="description"
+      content="Listen to selected code as intelligible structure. A private, local-first browser extension for developers with reading fatigue, dyslexia, low vision, or auditory workflows."
+    />
     <meta name="theme-color" content="#F3EFDF" />
     <link rel="canonical" href="https://code-listen-cursor.sociobot.in/" />
-    <meta property="og:title" content="Code Listen Cursor — listen to selected code" />
-    <meta property="og:description" content="A local code reader for developers who work better by listening." />
-    <meta property="og:image" content="https://code-listen-cursor.sociobot.in/hero-field-guide.jpg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://code-listen-cursor.sociobot.in/" />
+    <meta
+      property="og:title"
+      content="Code Listen Cursor — listen to selected code"
+    />
+    <meta
+      property="og:description"
+      content="A local code reader for developers who work better by listening."
+    />
+    <meta
+      property="og:image"
+      content="https://code-listen-cursor.sociobot.in/og-card.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Code Listen Cursor — listen to selected code"
+    />
+    <meta
+      name="twitter:description"
+      content="A local code reader for developers who work better by listening."
+    />
+    <meta
+      name="twitter:image"
+      content="https://code-listen-cursor.sociobot.in/og-card.jpg"
+    />
     <title>Code Listen Cursor — listen to selected code</title>
     <link rel="icon" href="/leaf-cursor.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="stylesheet" href="/demo.css" />
   </head>
   <body>
@@ -24,7 +53,12 @@
       <nav aria-label="Primary navigation">
         <a href="/demo/">Demo</a>
         <a href="#how-it-works">How it works</a>
-        <a class="nav-download" href="/downloads/code-listen-cursor-chrome.zip" download>Download</a>
+        <a
+          class="nav-download"
+          href="/downloads/code-listen-cursor-chrome.zip"
+          download
+          >Download</a
+        >
       </nav>
     </header>
 
@@ -33,53 +67,117 @@
         <div class="hero-copy">
           <p class="eyebrow">Local code reader</p>
           <h1 id="hero-title">Listen to code without losing your place</h1>
-          <p class="lede">For developers who read better by ear, it reads a selection or current line as spoken structure.</p>
+          <p class="lede">
+            For developers who read better by ear, it reads a selection or
+            current line as spoken structure.
+          </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="/demo/">Try it with sample data</a>
-            <a class="button button-secondary" href="#field-station">Preview the reader</a>
+            <a class="button button-primary" href="/demo/"
+              >Try it with sample data</a
+            >
+            <a class="button button-secondary" href="#field-station"
+              >Preview the reader</a
+            >
           </div>
           <ul class="plain-facts">
-            <li>Code stays in your browser.</li>
+            <li>Demo code stays in your browser.</li>
             <li>Works offline after the first visit.</li>
             <li>Free to download. No account.</li>
           </ul>
         </div>
         <figure class="hero-figure">
           <picture>
-            <source type="image/webp" srcset="/hero-field-guide-640.webp 640w, /hero-field-guide.webp 1280w" sizes="(max-width: 900px) calc(100vw - 48px), 58vw" />
-            <img src="/hero-field-guide.jpg" srcset="/hero-field-guide-640.jpg 640w, /hero-field-guide.jpg 1280w" sizes="(max-width: 900px) calc(100vw - 48px), 58vw" width="1280" height="854" fetchpriority="high" decoding="async" alt="An open botanical field notebook where a fern’s branching fronds resemble indented lines of code beside a green reading cursor." />
+            <source
+              type="image/webp"
+              srcset="
+                /hero-field-guide-640.webp  640w,
+                /hero-field-guide.webp     1280w
+              "
+              sizes="(max-width: 900px) calc(100vw - 48px), 58vw"
+            />
+            <img
+              src="/hero-field-guide.jpg"
+              srcset="
+                /hero-field-guide-640.jpg  640w,
+                /hero-field-guide.jpg     1280w
+              "
+              sizes="(max-width: 900px) calc(100vw - 48px), 58vw"
+              width="1280"
+              height="854"
+              fetchpriority="high"
+              decoding="async"
+              alt="An open botanical field notebook where a fern’s branching fronds resemble indented lines of code beside a green reading cursor."
+            />
           </picture>
-          <figcaption><span>Fig. A</span> A field-guide illustration for code structure.</figcaption>
+          <figcaption>
+            <span>Fig. A</span> An illustration of branching code structure.
+          </figcaption>
         </figure>
       </section>
 
-      <section class="field-station" id="field-station" aria-labelledby="station-title">
+      <section
+        class="field-station"
+        id="field-station"
+        aria-labelledby="station-title"
+      >
         <div class="section-intro">
           <p class="eyebrow">Reader preview</p>
           <h2 id="station-title">Listen before you install</h2>
-          <p>Select code below, or place the cursor on a line, then listen. The browser chooses a local voice first.</p>
+          <p>
+            Select code below, or place the cursor on a line, then listen. The
+            browser chooses a local voice first.
+          </p>
         </div>
         <div class="station-layout">
           <div class="specimen-sheet">
             <label for="code-sample">Editable code sample</label>
-            <textarea id="code-sample" spellcheck="false" rows="10">const describePlant = async (fern) => {
+            <textarea id="code-sample" spellcheck="false" rows="10">
+const describePlant = async (fern) => {
   if (fern?.fronds >= 3) {
     return `healthy_${fern.name}`;
   }
   return null;
-};</textarea>
+};</textarea
+            >
             <div class="station-actions">
-              <button class="button button-primary" id="demo-listen" type="button">Listen to code</button>
-              <button class="button button-secondary" id="demo-stop" type="button">Stop</button>
+              <button
+                class="button button-primary"
+                id="demo-listen"
+                type="button"
+              >
+                Listen to code
+              </button>
+              <button
+                class="button button-secondary"
+                id="demo-stop"
+                type="button"
+              >
+                Stop
+              </button>
             </div>
           </div>
-          <aside class="observation" aria-labelledby="observation-title">
+          <section class="observation" aria-labelledby="observation-title">
             <div class="observation-heading">
               <span class="cursor-mark" aria-hidden="true"></span>
-              <div><p class="eyebrow">Spoken observation</p><h3 id="observation-title">Ready to listen</h3></div>
+              <div>
+                <p class="eyebrow">Spoken preview</p>
+                <h3 id="observation-title">Ready to listen</h3>
+              </div>
             </div>
-            <p id="demo-status" class="status-copy" role="status" aria-live="polite">Select code or leave the cursor on a line.</p>
-            <output id="speech-preview" class="speech-preview" aria-label="Words that will be spoken">Your spoken code appears here.</output>
+            <p
+              id="demo-status"
+              class="status-copy"
+              role="status"
+              aria-live="polite"
+            >
+              Select code or leave the cursor on a line.
+            </p>
+            <output
+              id="speech-preview"
+              class="speech-preview"
+              aria-label="Words that will be spoken"
+              >Your spoken code appears here.</output
+            >
             <div class="demo-settings">
               <label for="demo-punctuation">Punctuation</label>
               <select id="demo-punctuation">
@@ -87,9 +185,21 @@
                 <option value="detailed">Detailed</option>
                 <option value="literal">Every symbol</option>
               </select>
-              <label for="demo-rate">Reading rate <output id="demo-rate-value">0.9×</output></label>
-              <input id="demo-rate" type="range" min="0.5" max="1.5" step="0.1" value="0.9" />
-              <label class="checkbox-label"><input id="demo-indent" type="checkbox" checked /> Speak indentation</label>
+              <label for="demo-rate"
+                >Reading rate <output id="demo-rate-value">0.9×</output></label
+              >
+              <input
+                id="demo-rate"
+                type="range"
+                min="0.5"
+                max="1.5"
+                step="0.1"
+                value="0.9"
+              />
+              <label class="checkbox-label"
+                ><input id="demo-indent" type="checkbox" checked /> Speak
+                indentation</label
+              >
             </div>
             <form id="demo-pronunciation" class="word-pair">
               <p>Personal pronunciation</p>
@@ -99,27 +209,84 @@
               <input id="demo-spoken" value="furn" required />
               <button type="submit">Use pronunciation</button>
             </form>
-          </aside>
+          </section>
         </div>
-        <p id="offline-note" class="offline-note" hidden><strong>Offline:</strong> The demo still works with a voice installed on your device. If speech is silent, reconnect once or choose a local system voice.</p>
+        <p id="offline-note" class="offline-note" hidden>
+          <strong>Offline:</strong> The demo still works with a voice installed
+          on your device. If speech is silent, reconnect once or choose a local
+          system voice.
+        </p>
       </section>
 
-      <section class="anatomy" id="how-it-works" aria-labelledby="anatomy-title">
+      <section
+        class="anatomy"
+        id="how-it-works"
+        aria-labelledby="anatomy-title"
+      >
         <div class="section-intro">
-          <p class="eyebrow">Anatomy of a listening cursor</p>
+          <p class="eyebrow">How code reading works</p>
           <h2 id="anatomy-title">Control at the scale of a line</h2>
         </div>
         <ol class="feature-list">
-          <li><span class="feature-number">01</span><div><h3>Selection or current line</h3><p>Select the exact code you need. With no selection, the cursor’s line is the specimen.</p><kbd>Alt + Shift + S</kbd></div></li>
-          <li><span class="feature-number">02</span><div><h3>Structure-aware speech</h3><p>Braces, operators, indentation, camel case, and snake case become language you can distinguish.</p><span class="code-label">!== → strictly not equals</span></div></li>
-          <li><span class="feature-number">03</span><div><h3>Follow and repeat</h3><p>Move through a file hands-free or replay the last observation without losing your position.</p><kbd>Alt + Shift + F / R</kbd></div></li>
-          <li><span class="feature-number">04</span><div><h3>Your own vocabulary</h3><p>Teach project names and abbreviations once. The pronunciation map stays in extension storage.</p><span class="code-label">kubectl → cube control</span></div></li>
+          <li>
+            <span class="feature-number">01</span>
+            <div>
+              <h3>Selection or current line</h3>
+              <p>
+                Select the exact code you need. With no selection, the reader
+                uses the cursor’s line.
+              </p>
+              <kbd>Alt + Shift + S</kbd>
+            </div>
+          </li>
+          <li>
+            <span class="feature-number">02</span>
+            <div>
+              <h3>Structure-aware speech</h3>
+              <p>
+                Braces, operators, indentation, camel case, and snake case
+                become language you can distinguish.
+              </p>
+              <span class="code-label">!== → strictly not equals</span>
+            </div>
+          </li>
+          <li>
+            <span class="feature-number">03</span>
+            <div>
+              <h3>Follow and repeat</h3>
+              <p>
+                Move through a file hands-free or replay the last code without
+                losing your position.
+              </p>
+              <kbd>Alt + Shift + F / R</kbd>
+            </div>
+          </li>
+          <li>
+            <span class="feature-number">04</span>
+            <div>
+              <h3>Your own vocabulary</h3>
+              <p>
+                Teach project names and abbreviations once. The pronunciation
+                map stays in extension storage.
+              </p>
+              <span class="code-label">kubectl → cube control</span>
+            </div>
+          </li>
         </ol>
       </section>
 
       <section class="privacy-band" aria-labelledby="privacy-title">
-        <div class="privacy-seal" aria-hidden="true"><span>code</span><small>local</small></div>
-        <div><p class="eyebrow">Privacy</p><h2 id="privacy-title">Your source stays on this device.</h2><p>The reader does not send code to a Code Listen Cursor service. It asks the browser to speak and prefers voices marked local.</p></div>
+        <div class="privacy-seal" aria-hidden="true">
+          <span>code</span><small>local</small>
+        </div>
+        <div>
+          <p class="eyebrow">Privacy</p>
+          <h2 id="privacy-title">See how each version handles source.</h2>
+          <p>
+            The reader does not send code to a Code Listen Cursor service. It
+            asks the browser to speak and prefers voices marked local.
+          </p>
+        </div>
         <a href="/privacy/">Read the privacy note</a>
       </section>
 
@@ -128,19 +295,52 @@
         <h2 id="install-title">Install the extension</h2>
         <ol>
           <li>Download and unzip the extension.</li>
-          <li>Open <code>chrome://extensions</code> or <code>edge://extensions</code>.</li>
-          <li>Enable developer mode, choose “Load unpacked,” and select the unzipped folder.</li>
+          <li>
+            Open <code>chrome://extensions</code> or
+            <code>edge://extensions</code>.
+          </li>
+          <li>
+            Enable developer mode, choose “Load unpacked,” and select the
+            unzipped folder.
+          </li>
         </ol>
-        <div class="install-actions"><a class="button button-primary" href="/downloads/code-listen-cursor-chrome.zip" download>Download Chrome or Edge ZIP</a><a class="button button-secondary" href="/downloads/code-listen-cursor-vscode.vsix" download>Download VS Code extension</a></div>
-        <p>Keyboard shortcuts can be changed in your extension shortcut settings.</p>
+        <div class="install-actions">
+          <a
+            class="button button-primary"
+            href="/downloads/code-listen-cursor-chrome.zip"
+            download
+            >Download Chrome or Edge ZIP</a
+          ><a
+            class="button button-secondary"
+            href="/downloads/code-listen-cursor-vscode.vsix"
+            download
+            >Download VS Code extension</a
+          >
+        </div>
+        <p>
+          Keyboard shortcuts can be changed in your extension shortcut settings.
+        </p>
       </section>
     </main>
 
     <footer>
-      <div><img src="/leaf-cursor.svg" width="30" height="30" alt="" /><span>Code Listen Cursor</span></div>
-      <p>Local code listening for auditory coding workflows.</p>
-      <nav aria-label="Footer navigation"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-code-listen-cursor">Source</a></nav>
-      <p class="generated-note">Field-guide artwork was generated specifically for this project with Azure AI Foundry and reviewed before use.</p>
+      <div>
+        <img src="/leaf-cursor.svg" width="30" height="30" alt="" /><span
+          >Code Listen Cursor</span
+        >
+      </div>
+      <p class="product-line">Reads selected code as spoken structure.</p>
+      <nav aria-label="Footer navigation">
+        <a href="/privacy/">Privacy</a><a href="/terms/">Terms</a
+        ><a href="https://github.com/B-Divyesh/sf-code-listen-cursor"
+          >Source on GitHub</a
+        >
+      </nav>
+      <p class="build-note">Built by Param Factory · Version 1.0.1</p>
+      <p class="generated-note">
+        The landing artwork was generated for this project with Azure AI Foundry
+        and reviewed before use.
+      </p>
     </footer>
     <script type="module" src="/main.ts"></script>
   </body>

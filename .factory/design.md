@@ -18,6 +18,7 @@ The product is intentionally single-light-mode. Warm paper reduces glare without
 | Deep moss | `#214332` | Hover / active action |
 | Fern | `#6F8B68` | Rules and diagram detail |
 | Rust | `#A2462E` | Warnings and errors, paired with icon/text |
+| Focus clay | `#B55435` | Keyboard focus; 4.25:1 on Paper and 3.31:1 on Carbon |
 | Ochre | `#8B641D` | Offline/not-supported notices |
 | Hairline | `#B9B39E` | Dividers and input outlines |
 
@@ -37,7 +38,7 @@ No font files or third-party font services are loaded. The system pairing makes 
 - Page content: max 1180px, 24px mobile gutters, 48px desktop gutters.
 - Controls are at least 44px high with 8px between targets.
 - Corners are restrained: 2px labels, 8px controls, 16px specimen sheets. The hierarchy comes from paper layering and offset ink shadows, not a grid of interchangeable cards.
-- Rules are 1px; focus uses a 3px Rust outline with 3px offset.
+- Rules are 1px; focus uses a 3px Focus clay outline with 3px offset.
 
 ## Interaction grammar
 
@@ -58,6 +59,7 @@ At 390px, navigation copy collapses to the two essential anchors, the hero becom
 ## Asset plan and provenance
 
 - `site/public/hero-field-guide.webp` plus a 640px responsive derivative and JPEG fallbacks: original generated editorial illustration, used as the explanatory hero specimen. The browser selects the 38 KB mobile WebP or 148 KB desktop WebP; explicit dimensions prevent layout shift. The PNG source is retained under `assets/src/`.
+- `site/public/og-card.jpg` is a purpose-cropped 1200×630 derivative of that original illustration. `site/public/apple-touch-icon.png` is a 180px derivative of the hand-authored product icon.
 - Extension icons and interface glyphs are original hand-authored SVGs based on a leaf vein / text cursor motif. They are MIT-licensed with the repository.
 - No stock imagery, brand marks, or third-party icon library.
 

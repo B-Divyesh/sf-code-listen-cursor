@@ -1,4 +1,4 @@
-const CACHE = 'code-listen-cursor-v2';
+const CACHE = 'code-listen-cursor-v3';
 const SHELL = ['/', '/demo/', '/privacy/', '/terms/', '/hero-field-guide.webp', '/leaf-cursor.svg'];
 
 self.addEventListener('install', (event) => {

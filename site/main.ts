@@ -73,8 +73,8 @@ function listen(): void {
     document.querySelector('.observation')?.classList.add('is-listening');
   };
   utterance.onend = () => {
-    title.textContent = 'Observation complete';
-    status.textContent = 'Move the cursor or select another specimen to continue.';
+    title.textContent = 'Reading complete';
+    status.textContent = 'Move the cursor or select another line to continue.';
     document.querySelector('.observation')?.classList.remove('is-listening');
   };
   utterance.onerror = (event) => {

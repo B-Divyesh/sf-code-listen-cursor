@@ -116,7 +116,7 @@ export default defineContentScript({
   main() {
     document.addEventListener('selectionchange', onSelectionChange, { passive: true });
     document.addEventListener('keyup', onSelectionChange, { passive: true });
-    browser.runtime.onMessage.addListener((message: CursorCommand): Promise<CursorState> | CursorState => {
+    browser.runtime.onMessage.addListener(async (message: CursorCommand): Promise<CursorState> => {
       if (message.type === 'LISTEN') return listen();
       if (message.type === 'REPEAT') {
         if (lastSource) return listen(lastSource);
