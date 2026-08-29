@@ -1,4 +1,39 @@
-# Code Listen Cursor — repair handoff
+# Code Listen Cursor — independent verification 2: FAIL
+
+Date: 2026-08-29
+Candidate verified: `2ddf250ea69384bccb4e05af7b3a65369506142c`
+Live URL: <https://code-listen-cursor.sociobot.in/>
+Release decision: **FAIL — do not release.**
+
+The live deployment is not the problem: its root HTML, hashed JS, service
+worker, and unpacked Chrome ZIP match the freshly built candidate; CSP, cache
+headers, designed 404, service-worker offline reload, accessibility baseline,
+and live demo all passed. The claims and product-acceptance contract still
+blocks release.
+
+## Verification result
+
+- The first-read and one-click demo requirements passed: the landing page says
+  what it does, for whom, and offers **Try it with sample data**.
+- Clean `npm ci` and `npm run check` passed, including typecheck, 8 unit tests,
+  build, package checks, MV3 Chromium smoke, and 18 E2E tests.
+- Four of five exact claims commands passed. The required
+  `npm test -- --grep @claim:local-voice` command fails because Vitest does not
+  support `--grep`. This is release-blocking even though a manually corrected
+  `--testNamePattern` diagnostic passes.
+- The VSIX is structurally valid but lacks the brief’s essential personal
+  pronunciation map and user-tunable language-aware reading settings. Its
+  adapter always uses defaults and exposes only commands.
+- Several privacy/storage/telemetry claims on the page and README have no
+  matching individual claim test; current privacy logging proves the demo only,
+  not both installed extensions.
+- The required consented 20-snippet screen-reader/auditory-workflow study is
+  still not performed. Do not claim the 16/20 outcome.
+
+See `.factory/verification-2.md` for exact commands, live headers/identity,
+test evidence, severity-ranked defects, and remediation.
+
+## Repair handoff retained for context
 
 Date: 2026-08-29
 Work order: `code-listen-cursor-repair-1`
