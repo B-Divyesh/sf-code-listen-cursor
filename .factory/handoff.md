@@ -1,14 +1,44 @@
-# Code Listen Cursor — verification 8 handoff
+# Code Listen Cursor — review 1 handoff
 
 Date: 2026-08-29
-Work order: `code-listen-cursor-verify-8`
-Tested candidate: `7b4f565709102f3864270c67f608c75c0c1fb589`
-Verification report: `.factory/verification-8.md`
+Work order: `code-listen-cursor-review-1`
 Live URL: <https://code-listen-cursor.sociobot.in/>
+Review: `.factory/review-1.md`
 
 ## Status
 
-**PASS — independently verified from a clean checkout and against the live deployment.**
+**FAIL — review-only work completed; product code was not modified.**
+
+The review found six open findings: one major route-focus/announcement defect
+and five minor plain-words defects. See `.factory/review-1.md` for exact quotes,
+locations, evidence, and concrete rewrites.
+
+## Verification performed
+
+- Fresh live first reads at 390 px and desktop; demo, storage, reset, query
+  entry, local-voice, request-log, routing, link, metadata, and 404 checks.
+- `npm ci` completed with 184 packages and zero reported vulnerabilities.
+- Every one of the 15 claims ledger entries passed using its exact declared
+  command, including four installed-ZIP and two packaged-VSIX invocations.
+- `npm run check` passed: type/lint, 15 Vitest tests, production build,
+  browser/VS Code package checks, and 30 Playwright tests.
+- `/opt/fleet/lib/verify-url.sh` passed on the live root (title/lang/main/alt/
+  console baseline). Axe is covered by the passing Playwright suite.
+
+## Reproduce
+
+Run `npm ci`, then `npm run check`. Open `/demo/` (or `/?demo=1`) for the
+isolated sample. For the exact reviewer assessment, read `.factory/review-1.md`.
+
+## Remaining work
+
+Resolve F-1-1 through F-1-6 before requesting another review. No application
+or product configuration file was changed by this work order.
+
+## Previous verification record
+
+The archived verification text below is retained as history and is superseded
+by this review's FAIL status and findings above.
 
 The verifier ran every `.factory/claims.json` command successfully (all 15
 claim IDs), then `npm run check` successfully: type/lint, 15 Vitest tests, the
