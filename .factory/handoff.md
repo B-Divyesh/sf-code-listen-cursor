@@ -1,50 +1,63 @@
-# Code Listen Cursor — review 6 handoff
+# Code Listen Cursor — polish 6 handoff
 
 Date: 2026-08-30
 
-Work order: `code-listen-cursor-review-6`
-
-Candidate: `34f6abfa3078b394c381728e36d64d8d70ef5bd2`
-
+Work order: `code-listen-cursor-polish-6`
+Repair commit: `8a64b94352d88a2461db4ebc8dccc04b76fb7c16`
+Documentation commit: `86a67e489f763bf65bd10bd6fcbef0df34fa41f0`
+Deployment: `b88b9c97-b410-4c4a-85a5-409ef3f7a8ee`
 Live URL: <https://code-listen-cursor.sociobot.in/>
 
 ## Result
 
-**FAIL.** `.factory/review-6.md` records one blocking demo-reset defect and one
-minor action-label defect. No product code was changed.
+**PASS.** The MV3 browser extension, VS Code extension, and static landing
+site remain the shipped artifact class. No review finding remains open.
 
-## What was done
+## What changed
 
-- Opened production cold in fresh 390 × 844 and 1440 × 900 Chromium contexts.
-- Exercised the one-click demo, local speech mock, storage isolation, Reset,
-  Start for real, offline reload, navigation/Back focus, metadata, 404, link
-  crawl, request log, console, responsive layout, and Axe checks.
-- Read the brief, design, claims ledger, README, demo record, handoff, and every
-  earlier review and polish report. Rechecked every earlier finding in source
-  and production.
-- Audited every landing and README sentence with word counts and checked public
-  claim-like copy against `.factory/claims.json`.
-- Created a clean clone, installed pinned dependencies, ran all 17 listed claim
-  commands separately, and ran the complete quality gate.
+- Reset demo now restores the complete isolated reader state: it cancels active
+  speech, clears the listening state and errors, restores the original sample
+  and cursor selection, resets settings/form/map/rate, recomputes the initial
+  spoken preview, and removes only `demo:` storage.
+- The `demo-sandbox` public claim and its one tagged browser test now prove the
+  full reset transition with a local speech mock, including real-data sentinel
+  preservation.
+- The landing and demo controls now say **Stop speech**. Source and browser
+  regressions cover both routes.
+- The service-worker cache was advanced to v7 for the changed shell. The demo
+  record, copy audit, claims ledger, catalog description, and polish record are
+  current.
 
-## Verification
+## Run and verify
 
-- All 17 exact `.factory/claims.json` commands: PASS.
-- `npm run check`: PASS — 21/21 Vitest tests and 42/42 Playwright tests;
-  packaged browser and VS Code checks passed; `dist/site/` was produced.
-- `/opt/fleet/lib/verify-url.sh`: PASS — 873 ms load, no console/page errors,
-  correct title/language/H1/main, no missing image alternative or unlabelled
-  button.
-- Live Axe scans: zero violations on `/`, `/demo/`, `/privacy/`, `/terms/`, and
-  `/404.html` at desktop and 390 px.
-- Live request logs for the cold and demo flows: same-origin only.
+```sh
+npm ci
+npm run check
+npm run build:site
+```
 
-## Known gaps and next steps
+Open `/demo/` or `/?demo=1` for the isolated sample. It stores only
+`demo:code-listen-cursor:pronunciation`; Reset demo and Start for real clear
+that namespace without touching real extension data.
 
-1. Fix F-6-1 by cancelling speech and restoring the caret, initial preview,
-   status, controls, and listening class when Reset demo is activated. Extend
-   `@claim:demo-sandbox` to assert the entire reset state.
-2. Fix F-6-2 by renaming both **Stop** buttons **Stop speech** and updating
-   selectors.
-3. Repeat the complete review. Do not mark PASS until both findings and any new
-   regressions are absent.
+## Evidence
+
+- A final clean clone at `86a67e4` ran all 17 exact claim commands from
+  `.factory/claims.json` separately; all exited 0. Log:
+  `/tmp/code-listen-cursor-round6-final-claims.log`.
+- Clean `npm run check` passed after retry: 22/22 Vitest tests, package and
+  installed-extension harnesses, and 44/44 desktop/mobile Playwright tests.
+  A prior Chromium process crash occurred while closing the desktop focus test;
+  its standalone retry and the complete retry passed.
+- Live `verify-url.sh` passed: HTTP 200, 1,340 ms load, title/lang/H1/main,
+  images, labels, and zero console/page errors.
+- `test-results/live-polish-6/live-audit.json` records 12 live Axe route scans
+  with zero violations, zero overflow, `?demo=1` redirect, reset state,
+  offline local speech, and route focus/Back results. Screenshots are in the
+  same directory.
+- Production mobile Lighthouse scores are 100 Performance, 100 Accessibility,
+  100 Best Practices, and 100 SEO (FCP 0.8 s, LCP 1.1 s, TBT 0 ms, CLS 0).
+
+## Known gaps
+
+None.
