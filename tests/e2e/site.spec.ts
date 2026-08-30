@@ -39,6 +39,25 @@ test('@regression:landing-privacy-navigation keeps Privacy in the desktop and mo
   await expect(page.locator('#route-announcement')).toHaveText('Opened Listen to selected code, symbols, and indentation');
 });
 
+test('@regression:review-5-header-download names and downloads the browser ZIP on every route', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const path of ['/', '/demo/', '/privacy/', '/terms/', '/404.html']) {
+    await page.goto(path);
+    const download = page.getByRole('navigation', { name: 'Primary navigation' })
+      .getByRole('link', { name: 'Download browser ZIP' });
+    await expect(download, `${path} must name the package in the shared header`).toHaveAttribute(
+      'href',
+      '/downloads/code-listen-cursor-chrome.zip'
+    );
+    await expect(download, `${path} must be a direct browser-package download`).toHaveAttribute('download', '');
+    const downloadEvent = page.waitForEvent('download');
+    await download.click();
+    expect((await downloadEvent).suggestedFilename(), `${path} must download the named ZIP`).toBe(
+      'code-listen-cursor-chrome.zip'
+    );
+  }
+});
+
 test('@claim:demo-reader reads a selection and current line aloud with chosen pronunciation', async ({ browser }) => {
   const demoContext = await browser.newContext();
   const page = await demoContext.newPage();

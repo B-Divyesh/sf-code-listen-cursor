@@ -186,6 +186,16 @@ describe('release-host contract', () => {
       .toBe('Landing preview changes are not saved and disappear after reload.');
   });
 
+  it('names the direct browser package in every shared header @regression:review-5-header-download-source', async () => {
+    for (const route of ['site/index.html', 'site/demo/index.html', 'site/privacy/index.html', 'site/terms/index.html', 'site/404.html']) {
+      const html = await readFile(resolve(route), 'utf8');
+      expect(html, `${route} must name its direct header download`).toMatch(/>\s*Download browser ZIP\s*<\/a\s*>/);
+      expect(html, `${route} must target the named browser package`).toContain(
+        'href="/downloads/code-listen-cursor-chrome.zip"'
+      );
+    }
+  });
+
   it('keeps acceptance promises executable in the sandbox @regression:verifiable-acceptance', async () => {
     const factoryFiles = (await readdir(resolve('.factory')))
       .filter((file) => /\.(?:json|md)$/.test(file) && !file.startsWith('verification'))

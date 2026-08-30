@@ -2,7 +2,7 @@
 
 Audit date: 2026-08-30
 
-Landing source SHA-256: `2c3f910ff9e08f9707122f53d52787ddfa5dffa6592d6c58bd12602d9cb33f6f`
+Landing source SHA-256: `2597c6911068a438925e085478edbaf57f55c4d960ebb5df334a62bdba153fa0`
 
 Every visitor-facing sentence in `site/index.html` is listed below. Headings,
 controls, navigation, image text, and footer destinations were also reviewed.
