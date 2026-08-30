@@ -2,7 +2,7 @@
 
 Audit date: 2026-08-30
 
-Landing source SHA-256: `2597c6911068a438925e085478edbaf57f55c4d960ebb5df334a62bdba153fa0`
+Landing source SHA-256: `8414f782b26d8c681beadb14027e9fce67fa05739fed2efc1b1a8ca52164b3cf`
 
 Every visitor-facing sentence in `site/index.html` is listed below. Headings,
 controls, navigation, image text, and footer destinations were also reviewed.
@@ -26,6 +26,7 @@ undefined task metaphor.
 | Preview output | Your spoken code appears here. | 5 | pass |
 | Preview keyboard instruction | When this preview has more text, focus it and use the Arrow keys or Page Down to read the rest. | 20 | pass |
 | Preview notice | Preview changes are not saved. | 5 | pass |
+| Reader control | Stop speech | 2 | pass |
 | Offline state | The demo still works with a voice installed on your device. | 11 | pass |
 | Offline recovery | If speech is silent, reconnect once or choose a local system voice. | 11 | pass |
 | Selection | Select the exact code you need. | 7 | pass |
