@@ -14,6 +14,14 @@ describe('codeToSpeech', () => {
     expect(result).toContain('line 3, indent 1 level, close brace');
   });
 
+  it('@regression:partial-indentation-singular speaks a partial indent as one level', () => {
+    for (const spaces of [1, 2, 3]) {
+      expect(codeToSpeech(`${' '.repeat(spaces)}fern`, mergeSettings({ indentSize: 4 }))).toBe(
+        'indent 1 level, fern'
+      );
+    }
+  });
+
   it('uses a personal pronunciation map', () => {
     const result = codeToSpeech('const kubectl = async () => argv;', mergeSettings({
       punctuation: 'detailed',

@@ -1,1 +1,1 @@
-Listen to selected code with local speech that names symbols and indentation.
+Hear selected code with local speech that names symbols and indentation.

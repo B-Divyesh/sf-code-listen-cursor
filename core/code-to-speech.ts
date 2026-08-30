@@ -51,8 +51,9 @@ function speakLine(line: string, settings: ListenSettings): string {
   const leading = line.match(/^[\t ]*/)?.[0] ?? '';
   const spaces = [...leading].reduce((total, char) => total + (char === '\t' ? settings.indentSize : 1), 0);
   const level = Math.floor(spaces / settings.indentSize);
+  const displayedLevel = level || 1;
   const indent = settings.speakIndentation && spaces > 0
-    ? `indent ${level || 1} ${level === 1 ? 'level' : 'levels'}`
+    ? `indent ${displayedLevel} ${displayedLevel === 1 ? 'level' : 'levels'}`
     : '';
   const source = line.slice(leading.length).trimEnd();
   if (!source) return indent ? `${indent}, blank line` : 'blank line';
