@@ -4,7 +4,8 @@ Date: 2026-08-30
 Work order: `code-listen-cursor-polish-3`
 Base: `98d345c56215c3952439458d821396c0049c3b37`
 Product repair commits: `eeded67e6f0060737620445406a57c4b71d23f73` and
-`882f714016014e4250aef2547dafc166ef6cea92`
+`882f714016014e4250aef2547dafc166ef6cea92` and
+`ba4be74205220ad3349d5aa6ea5d7a85a4f27533`
 
 Live URL: <https://code-listen-cursor.sociobot.in/>
 
@@ -34,7 +35,7 @@ transfer, uses concrete copy, and standardizes all public routes.
   sf-code-listen-cursor --resource-group sociobot --env production
   --no-use-keychain`.
 - `/opt/fleet/lib/verify-url.sh https://code-listen-cursor.sociobot.in/
-  test-results/live-polish-3` passed: HTTP 200, 774 ms load, correct title and
+  test-results/live-polish-3` passed: HTTP 200, 791 ms load, correct title and
   language, one H1, main, no missing image alt, no unlabelled button, and no
   console error.
 - Cold live Chromium checks at 1280 px and 390 px found zero Axe violations
