@@ -1,63 +1,48 @@
-# Code Listen Cursor — polish 6 handoff
+# Code Listen Cursor — verification 13 handoff
 
 Date: 2026-08-30
 
-Work order: `code-listen-cursor-polish-6`
-Repair commit: `8a64b94352d88a2461db4ebc8dccc04b76fb7c16`
-Documentation commit: `86a67e489f763bf65bd10bd6fcbef0df34fa41f0`
-Deployment: `b88b9c97-b410-4c4a-85a5-409ef3f7a8ee`
+Work order: `code-listen-cursor-verify-13`
+
+Candidate: `bfc78b6fd12e83b7a28997fe9d6cd4111a3d33a4`
+
 Live URL: <https://code-listen-cursor.sociobot.in/>
 
 ## Result
 
-**PASS.** The MV3 browser extension, VS Code extension, and static landing
-site remain the shipped artifact class. No review finding remains open.
+**PASS.** The candidate is accepted. No product code was changed. One
+non-blocking low-severity grammar defect is recorded in
+`.factory/verification-13.md`.
 
-## What changed
+## What was verified
 
-- Reset demo now restores the complete isolated reader state: it cancels active
-  speech, clears the listening state and errors, restores the original sample
-  and cursor selection, resets settings/form/map/rate, recomputes the initial
-  spoken preview, and removes only `demo:` storage.
-- The `demo-sandbox` public claim and its one tagged browser test now prove the
-  full reset transition with a local speech mock, including real-data sentinel
-  preservation.
-- The landing and demo controls now say **Stop speech**. Source and browser
-  regressions cover both routes.
-- The service-worker cache was advanced to v7 for the changed shell. The demo
-  record, copy audit, claims ledger, catalog description, and polish record are
-  current.
+- The cold first screen plainly states the job, audience, and first action.
+- One click or keyboard activation opens a realistic isolated demo.
+- All 17 exact claim commands pass after `npm ci`.
+- `npm run check` passes: 22/22 Vitest and 44/44 Playwright tests, exact build,
+  lint/type checks, package checks, installed MV3 ZIP, and packaged VSIX.
+- Independent live normal, boundary, invalid-input, reset, and recovery flows
+  pass at desktop and 390 px.
+- Ten live Axe route scans have zero violations; keyboard, focus, reflow,
+  reduced motion, console, and page-error checks pass.
+- Request capture is same-origin GET-only. Security headers and caching are
+  correct. Service-worker update and offline reload pass.
+- Mobile Lighthouse is 99/100/100/100 with 1.6 s LCP, 0 ms TBT, and 0 CLS.
+- Live site files match the candidate byte for byte. Download archives have
+  identical unpacked payloads; only regenerated ZIP timestamps differ.
 
-## Run and verify
+## Run again
 
 ```sh
 npm ci
 npm run check
-npm run build:site
 ```
 
-Open `/demo/` or `/?demo=1` for the isolated sample. It stores only
-`demo:code-listen-cursor:pronunciation`; Reset demo and Start for real clear
-that namespace without touching real extension data.
+Open <https://code-listen-cursor.sociobot.in/demo/> for the production sandbox.
+Full evidence and exact hashes are in `.factory/verification-13.md`.
 
-## Evidence
+## Known gap
 
-- A final clean clone at `86a67e4` ran all 17 exact claim commands from
-  `.factory/claims.json` separately; all exited 0. Log:
-  `/tmp/code-listen-cursor-round6-final-claims.log`.
-- Clean `npm run check` passed after retry: 22/22 Vitest tests, package and
-  installed-extension harnesses, and 44/44 desktop/mobile Playwright tests.
-  A prior Chromium process crash occurred while closing the desktop focus test;
-  its standalone retry and the complete retry passed.
-- Live `verify-url.sh` passed: HTTP 200, 1,340 ms load, title/lang/H1/main,
-  images, labels, and zero console/page errors.
-- `test-results/live-polish-6/live-audit.json` records 12 live Axe route scans
-  with zero violations, zero overflow, `?demo=1` redirect, reset state,
-  offline local speech, and route focus/Back results. Screenshots are in the
-  same directory.
-- Production mobile Lighthouse scores are 100 Performance, 100 Accessibility,
-  100 Best Practices, and 100 SEO (FCP 0.8 s, LCP 1.1 s, TBT 0 ms, CLS 0).
-
-## Known gaps
-
-None.
+With a partial leading indent smaller than the configured indent width, spoken
+output says “indent 1 levels” instead of “indent 1 level.” This is LOW-1 and
+does not block the verified job or any public claim.
