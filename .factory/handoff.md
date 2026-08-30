@@ -1,63 +1,53 @@
-# Code Listen Cursor — polish 4 handoff
+# Code Listen Cursor — review 5 handoff
 
 Date: 2026-08-30
-Repair commit: 10f6ea8b37210c606fe466f7ce24baa2bd73ed29
-Pushed branch: origin/main
-Deployment: a3cfec3d-9c7a-4944-831f-8257616f3fda
+
+Reviewed commit: `0cc26493d2c29d65e4627353c85c979ff262725c`
+
+Work order: `code-listen-cursor-review-5`
+
 Live URL: <https://code-listen-cursor.sociobot.in/>
 
-Result: PASS. All findings from review rounds 1–4 and all retained polish
-findings have executable and live evidence in .factory/polish-4.md.
+## Result
 
-## What changed
+**FAIL.** `.factory/review-5.md` records one minor finding: the shared header
+action says only “Download” while directly downloading the Chrome/Edge ZIP,
+even though the product also offers a VS Code package. No product code was
+changed.
 
-- Replaced the first-screen headline with the direct job statement: “Listen to
-  selected code, symbols, and indentation.”
-- Kept the one-click ?demo=1 sandbox, banner, Reset demo, and Start for real;
-  its claim now proves that only demo keys are cleared and real keys remain.
-- Added the landing preview’s no-save/reload promise to the claim ledger with
-  its sole tagged browser test.
-- Strengthened the offline claim so the cached reader edits code, produces the
-  expected spoken preview, and calls a local voice after offline reload.
-- Bumped the service-worker cache to v6 so the repaired shell reaches existing
-  visitors.
-- Restored the required footer product one-liner at 390px on every route.
-- Rewrote the two README jargon phrases and updated the catalog description.
+## What was done
+
+- Repeated the cold first read in fresh 390 × 844 and 1440 × 900 Chromium
+  contexts.
+- Audited every landing and README sentence, plus headings and actions.
+- Exercised the one-click demo, local speech, reset, exit, storage isolation,
+  landing-preview ephemerality, same-origin request boundary, and offline
+  reload.
+- Ran every exact command in `.factory/claims.json` separately from a clean
+  clone.
+- Rechecked every finding from reviews and polish rounds 1–4 in live behavior,
+  current source, and the complete regression suite.
+- Crawled public links, inspected metadata and security headers, tested route
+  focus and Back, scanned all public routes with Axe at both widths, and ran
+  the worker URL verifier.
 
 ## Verification
 
-Fresh clone at the repair commit:
+From clean clone `0cc2649`:
 
-1. npm ci --include=dev
-2. Every one of the 17 exact commands listed in .factory/claims.json,
-   including repeated installed-package commands
-3. npm run check
+1. `npm ci --include=dev`
+2. All 17 exact claim commands, including every repeated ZIP/VSIX command
+3. `npm run check`
 
-All passed. The full check includes typecheck, lint, 20/20 Vitest tests,
-production build, package smoke checks, installed ZIP and VSIX harnesses, and
-40/40 Playwright desktop/mobile cases. The build writes dist/site; its
-first-party landing JavaScript is 2.98 kB gzip and CSS is 3.77 kB gzip.
+All passed. The aggregate gate reports 20/20 Vitest tests and 40/40 Playwright
+tests, plus successful builds and installed-package harnesses. The built live
+root matches production by SHA-256. Live Axe scans found zero violations on
+`/`, `/demo/`, `/privacy/`, `/terms/`, and `/404.html` at desktop and phone
+widths. `/opt/fleet/lib/verify-url.sh` passed with a 772 ms load and no console
+or page errors.
 
-After deployment, the live root verifier passed in 643 ms with title, lang,
-one H1, main landmark, image alternatives, and no console/page errors. The
-Playwright Axe live audit has zero violations on /, /demo/, /privacy/, /terms/,
-and /404.html at 1440px and 390px. It also proves focused route headings,
-phone footer visibility, same-origin demo requests, demo key clearing with a
-real-data sentinel preserved, the ?demo=1 redirect, an offline local-speech
-interaction, and HTTP 404 behavior. Evidence is under
-test-results/live-polish-4/ (verify.json, live-audit.json, and mobile
-screenshots).
+## Known gap and next step
 
-Mobile Lighthouse against the live root: Performance 100, Accessibility 100,
-Best Practices 100, SEO 100; FCP 0.8s, LCP 1.1s, CLS 0.
-
-## Run locally
-
-Run npm ci, then npm run check. For the isolated sample, open /demo/ locally
-or use https://code-listen-cursor.sociobot.in/?demo=1.
-
-## Known gaps and next steps
-
-None. The product remains a local-first MV3 browser extension plus static
-landing site; no backend, tracking, external font, or cloud-code path was
-added.
+Change the shared direct-download label to “Download browser ZIP,” or make it a
+“Choose an extension” link to the install section. Add a cross-route regression
+for the action label, target, and filename. Then rerun review 6 from scratch.
