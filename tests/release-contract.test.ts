@@ -165,6 +165,27 @@ describe('release-host contract', () => {
     }
   });
 
+  it('keeps every fourth-round wording and claim-ledger repair in source @regression:review-4-closure', async () => {
+    const [landing, readme, claims, landingStyles, legalStyles] = await Promise.all([
+      readFile(resolve('site/index.html'), 'utf8'),
+      readFile(resolve('README.md'), 'utf8'),
+      readFile(resolve('.factory/claims.json'), 'utf8'),
+      readFile(resolve('site/style.css'), 'utf8'),
+      readFile(resolve('site/legal.css'), 'utf8')
+    ]);
+    expect(landing).toContain('Listen to selected code, symbols, and indentation');
+    expect(readme).toContain('Tests run both packaged extensions with separate local data.');
+    expect(readme).toContain('Both extensions export and import the same versioned JSON pronunciation file.');
+    expect(readme).not.toContain('Installed-package tests verify the browser and VS Code flows');
+    expect(readme).not.toContain('Both settings surfaces export');
+    expect(landingStyles).not.toMatch(/footer\s*>\s*\.product-line\s*\{\s*display:\s*none/i);
+    expect(legalStyles).not.toMatch(/footer\s+\.product-line\s*\{\s*display:\s*none/i);
+    const ledger = JSON.parse(claims) as { id: string; claim: string }[];
+    expect(ledger.find((claim) => claim.id === 'demo-sandbox')?.claim).toContain('Start for real clears demo keys');
+    expect(ledger.find((claim) => claim.id === 'landing-preview-ephemeral')?.claim)
+      .toBe('Landing preview changes are not saved and disappear after reload.');
+  });
+
   it('keeps acceptance promises executable in the sandbox @regression:verifiable-acceptance', async () => {
     const factoryFiles = (await readdir(resolve('.factory')))
       .filter((file) => /\.(?:json|md)$/.test(file) && !file.startsWith('verification'))

@@ -1,1 +1,1 @@
-Hear selected code with named symbols and indentation without sending it off your device.
+Listen to selected code with named symbols and indentation without sending source off your device.

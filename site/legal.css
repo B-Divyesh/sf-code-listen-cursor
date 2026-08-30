@@ -149,9 +149,6 @@ a:focus-visible {
   footer nav {
     flex-wrap: wrap;
   }
-  footer .product-line {
-    display: none;
-  }
 }
 @media (max-width: 320px) {
   header {

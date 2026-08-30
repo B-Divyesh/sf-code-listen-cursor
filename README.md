@@ -2,7 +2,7 @@
 
 Code Listen Cursor reads selected code or the current line aloud. It names symbols and indentation for developers who read better by ear.
 
-It includes cursor follow, repeat, punctuation levels, reading rate, indentation controls, local-only speech, and a pronunciation map. Export that map from one extension and import it in the other. Installed-package tests verify the browser and VS Code flows against isolated local data.
+It includes cursor follow, repeat, punctuation levels, reading rate, indentation controls, local-only speech, and a pronunciation map. Export that map from one extension and import it in the other. Tests run both packaged extensions with separate local data.
 
 Live site: <https://code-listen-cursor.sociobot.in>
 
@@ -17,7 +17,7 @@ Open <https://code-listen-cursor.sociobot.in/demo/> or run the site locally and 
 3. Open `chrome://extensions` or `edge://extensions`.
 4. Enable **Developer mode**, choose **Load unpacked**, and select the unzipped directory.
 
-The unpacked browser build is at `dist/extension/chrome-mv3`. `dist/site/downloads/code-listen-cursor-vscode.vsix` is the native VS Code package; install it with **Extensions: Install from VSIX**. The VS Code extension reads the active selection or current line. It provides listen, repeat, follow, stop, and **Code Listen Cursor: Open Reading Settings** commands. Its settings panel includes language, punctuation, voice, rate, pitch, indentation, and personal pronunciations. Both settings surfaces export and import the same versioned JSON pronunciation file.
+The unpacked browser build is at `dist/extension/chrome-mv3`. `dist/site/downloads/code-listen-cursor-vscode.vsix` is the native VS Code package; install it with **Extensions: Install from VSIX**. The VS Code extension reads the active selection or current line. It provides listen, repeat, follow, stop, and **Code Listen Cursor: Open Reading Settings** commands. Its settings panel includes language, punctuation, voice, rate, pitch, indentation, and personal pronunciations. Both extensions export and import the same versioned JSON pronunciation file.
 
 ## Use the code reader
 

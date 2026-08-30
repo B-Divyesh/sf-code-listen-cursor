@@ -612,9 +612,6 @@ textarea:focus-visible {
     padding-inline: 24px;
     grid-template-columns: 1fr auto;
   }
-  footer > .product-line {
-    display: none;
-  }
 }
 @media (max-width: 560px) {
   body {

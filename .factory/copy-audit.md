@@ -2,7 +2,7 @@
 
 Audit date: 2026-08-30
 
-Landing source SHA-256: `dd2a87482e9b5951b7d20ac200b71bae0887d0437cf84048895dea80316871da`
+Landing source SHA-256: `2c3f910ff9e08f9707122f53d52787ddfa5dffa6592d6c58bd12602d9cb33f6f`
 
 Every visitor-facing sentence in `site/index.html` is listed below. Headings,
 controls, navigation, image text, and footer destinations were also reviewed.
@@ -45,7 +45,7 @@ undefined task metaphor.
 
 ## First screen check
 
-- Headline: “Listen to code without losing your place” — 8 words.
+- Headline: “Listen to selected code, symbols, and indentation” — 7 words.
 - Audience and result: “For developers who read better by ear, it reads a selection or current line and names its symbols and indentation.” — 20 words.
 - Primary action: “Try it with sample data.”
 - Action outcome: “Opens an editable reader with sample code and spoken output.”

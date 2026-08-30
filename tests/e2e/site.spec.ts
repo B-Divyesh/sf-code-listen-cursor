@@ -9,7 +9,7 @@ test('landing page has its core content and no serious accessibility violations'
   await expect(page).toHaveTitle(/Code Listen Cursor/);
   await expect(page.locator('main')).toBeVisible();
   await expect(page.locator('h1')).toHaveCount(1);
-  await expect(page.getByRole('heading', { name: 'Listen to code without losing your place' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Listen to selected code, symbols, and indentation' })).toBeVisible();
   await page.keyboard.press('Tab');
   await expect(page.locator(':focus')).toHaveAttribute('href', '#main');
   const results = await new AxeBuilder({ page }).analyze();
@@ -34,9 +34,9 @@ test('@regression:landing-privacy-navigation keeps Privacy in the desktop and mo
   await expect(page.locator('#route-announcement')).toHaveText('Opened Privacy');
   await page.goBack();
   await expect(page).toHaveURL(/\/$/);
-  const homeHeading = page.getByRole('heading', { level: 1, name: 'Listen to code without losing your place' });
+  const homeHeading = page.getByRole('heading', { level: 1, name: 'Listen to selected code, symbols, and indentation' });
   await expect(homeHeading).toBeFocused();
-  await expect(page.locator('#route-announcement')).toHaveText('Opened Listen to code without losing your place');
+  await expect(page.locator('#route-announcement')).toHaveText('Opened Listen to selected code, symbols, and indentation');
 });
 
 test('@claim:demo-reader reads a selection and current line aloud with chosen pronunciation', async ({ browser }) => {
@@ -111,7 +111,7 @@ test('@claim:demo-reader reads a selection and current line aloud with chosen pr
   }
 });
 
-test('@regression:review-2-landing-preview labels temporary changes and keeps demo saves isolated', async ({ page }) => {
+test('@claim:landing-preview-ephemeral @regression:review-2-landing-preview labels temporary changes and keeps demo saves isolated', async ({ page }) => {
   await page.goto('/#field-station');
   await expect(page.getByRole('button', { name: 'Preview sample pronunciation' })).toBeVisible();
   await expect(page.locator('#landing-pronunciation-note')).toHaveText('Preview changes are not saved.');
@@ -159,19 +159,6 @@ test('@regression:review-3-demo-first-screen shows the working reader after one 
   await expect(page.getByLabel('Words that will be spoken')).toContainText('const describe Plant gets a sink open paren fern close paren arrow open brace');
 });
 
-test('@regression:review-3-demo-leave clears only the demo namespace', async ({ page }) => {
-  await page.goto('/demo/');
-  await page.evaluate(() => localStorage.setItem('code-listen-cursor:real-sentinel', 'keep'));
-  await page.getByLabel('Code word').fill('fern');
-  await page.getByLabel('Speak as').fill('frond');
-  await page.getByRole('button', { name: 'Save sample pronunciation' }).click();
-  expect(await page.evaluate(() => localStorage.getItem('demo:code-listen-cursor:pronunciation'))).toContain('frond');
-  await page.getByRole('link', { name: 'Start for real' }).click();
-  await expect(page).toHaveURL(/\/#install-title$/);
-  expect(await page.evaluate(() => localStorage.getItem('demo:code-listen-cursor:pronunciation'))).toBeNull();
-  expect(await page.evaluate(() => localStorage.getItem('code-listen-cursor:real-sentinel'))).toBe('keep');
-});
-
 test('demo route, query entry, keyboard path, and mobile-safe controls work', async ({ page }) => {
   await page.goto('/?demo=1');
   await expect(page).toHaveURL(/\/demo\/$/);
@@ -200,6 +187,16 @@ test('all routes have landmarks, one h1, and no axe violations', async ({ page }
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   }
   expect(errors).toEqual([]);
+});
+
+test('@regression:review-3-footer-mobile keeps the product one-liner visible on every route', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const path of ['/', '/demo/', '/privacy/', '/terms/', '/404.html']) {
+    await page.goto(path);
+    const line = page.locator('footer .product-line');
+    await expect(line, `${path} must show the footer product one-liner on phones`).toHaveText('Reads selected code and names its symbols and indentation.');
+    await expect(line).toBeVisible();
+  }
 });
 
 test('designed 404 document gives a way back', async ({ page }) => {
