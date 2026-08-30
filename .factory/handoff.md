@@ -1,52 +1,50 @@
-# Code Listen Cursor — polish 5 handoff
+# Code Listen Cursor — review 6 handoff
 
 Date: 2026-08-30
 
-Repair commit: `b4142b78a4ecc5813bff4f0162d07e8f432418be`
+Work order: `code-listen-cursor-review-6`
 
-Work order: `code-listen-cursor-polish-5`
+Candidate: `34f6abfa3078b394c381728e36d64d8d70ef5bd2`
 
 Live URL: <https://code-listen-cursor.sociobot.in/>
 
 ## Result
 
-**PASS.** The shared header now says **Download browser ZIP** before directly
-downloading the Chrome/Edge package. It no longer ambiguously sends VS Code
-visitors to the browser ZIP. The catalog sentence is now verb-first and 69
-characters: “Listen to selected code and hear its symbols and indentation
-locally.”
+**FAIL.** `.factory/review-6.md` records one blocking demo-reset defect and one
+minor action-label defect. No product code was changed.
 
-## What changed
+## What was done
 
-- Updated the shared header on `/`, `/demo/`, `/privacy/`, `/terms/`, and the
-  designed 404 page. Each direct action names the browser ZIP and still points
-  to `/downloads/code-listen-cursor-chrome.zip`.
-- Added `@regression:review-5-header-download` to assert the label, target,
-  `download` attribute, and real filename across all five routes. Added a
-  source-level companion regression.
-- Rechecked every earlier review and polish finding, including demo isolation,
-  offline reader behavior, route focus, metadata, legal routes, phone layout,
-  package transfer, claims, and the product-specific botanical field-guide
-  identity. The complete mapping is in `.factory/polish-5.md`.
+- Opened production cold in fresh 390 × 844 and 1440 × 900 Chromium contexts.
+- Exercised the one-click demo, local speech mock, storage isolation, Reset,
+  Start for real, offline reload, navigation/Back focus, metadata, 404, link
+  crawl, request log, console, responsive layout, and Axe checks.
+- Read the brief, design, claims ledger, README, demo record, handoff, and every
+  earlier review and polish report. Rechecked every earlier finding in source
+  and production.
+- Audited every landing and README sentence with word counts and checked public
+  claim-like copy against `.factory/claims.json`.
+- Created a clean clone, installed pinned dependencies, ran all 17 listed claim
+  commands separately, and ran the complete quality gate.
 
-## How verified
+## Verification
 
-- Fresh clone: `npm ci --include=dev`, every 17 exact commands in
-  `.factory/claims.json` separately, then `npm run check`. All passed.
-- Aggregate clean-clone gate: 21/21 Vitest tests; packaged browser and VS Code
-  harnesses; 42/42 desktop/mobile Playwright cases; build output in `dist/site`.
-- Deployed through `/opt/fleet/lib/deploy-static.sh code-listen-cursor
-  /work/repo/dist/site`. Deployment ID:
-  `0065e0fc-7253-46bf-95de-7cfad8a5a4e4`.
-- Cold production check: 695 ms root load, no console/page errors, correct
-  title, language, H1, main landmark, and image alternatives. Live Axe scans
-  had zero violations on all public routes at 1440 px and 390 px.
-- Live demo verification covered `?demo=1`, banner, sample code, local speech,
-  Reset demo, Start for real, namespace isolation, and offline reload. Route
-  navigation/Back focused and announced the destination H1; an unknown route
-  returned the designed HTTP 404.
-- Mobile Lighthouse: 100 Performance, 100 Accessibility, 100 Best Practices,
-  and 100 SEO (FCP 0.9 s, LCP 1.1 s, CLS 0).
+- All 17 exact `.factory/claims.json` commands: PASS.
+- `npm run check`: PASS — 21/21 Vitest tests and 42/42 Playwright tests;
+  packaged browser and VS Code checks passed; `dist/site/` was produced.
+- `/opt/fleet/lib/verify-url.sh`: PASS — 873 ms load, no console/page errors,
+  correct title/language/H1/main, no missing image alternative or unlabelled
+  button.
+- Live Axe scans: zero violations on `/`, `/demo/`, `/privacy/`, `/terms/`, and
+  `/404.html` at desktop and 390 px.
+- Live request logs for the cold and demo flows: same-origin only.
 
-Evidence is in `test-results/live-polish-5/` for this work order. There are no
-known gaps or pending product changes.
+## Known gaps and next steps
+
+1. Fix F-6-1 by cancelling speech and restoring the caret, initial preview,
+   status, controls, and listening class when Reset demo is activated. Extend
+   `@claim:demo-sandbox` to assert the entire reset state.
+2. Fix F-6-2 by renaming both **Stop** buttons **Stop speech** and updating
+   selectors.
+3. Repeat the complete review. Do not mark PASS until both findings and any new
+   regressions are absent.
