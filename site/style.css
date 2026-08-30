@@ -229,10 +229,6 @@ footer nav a {
   left: 16px;
   font: 16px var(--mono);
 }
-.hero-figure figcaption span {
-  color: var(--rust);
-  font-weight: 700;
-}
 .field-station {
   padding: 88px max(48px, calc((100vw - 1184px) / 2));
   background: var(--carbon);
@@ -307,6 +303,7 @@ footer nav a {
   gap: 14px;
   align-items: center;
 }
+.observation-heading h2,
 .observation-heading h3 {
   margin: 0;
   font-size: 24px;

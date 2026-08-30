@@ -121,11 +121,48 @@ describe('release-host contract', () => {
     expect(landing).toContain('Preview changes are not saved.');
     expect(landing).toContain('Opens an editable reader with sample code and spoken output.');
     expect(landing).toContain('<h3 id="observation-title">Spoken preview</h3>');
-    expect(demo).toContain('<h3 id="observation-title">Spoken preview</h3>');
+    expect(demo).toContain('<h2 id="observation-title">Spoken preview</h2>');
     expect(demo).toContain('Save sample pronunciation');
-    expect(readme).toContain('It is for developers with reading fatigue, dyslexia, low vision, or auditory workflows.');
+    expect(readme).toContain('It names symbols and indentation for developers who read better by ear.');
     expect(readme).not.toContain('It supports reading fatigue, dyslexia, low vision, and auditory coding workflows.');
     expect(landing).not.toContain('reviewed before use');
+  });
+
+  it('closes every third-round finding in the shipped product @regression:review-3-closure', async () => {
+    const [landing, demo, readme, popup, popupMain, vscode] = await Promise.all([
+      readFile(resolve('site/index.html'), 'utf8'),
+      readFile(resolve('site/demo/index.html'), 'utf8'),
+      readFile(resolve('README.md'), 'utf8'),
+      readFile(resolve('entrypoints/popup/index.html'), 'utf8'),
+      readFile(resolve('entrypoints/popup/main.ts'), 'utf8'),
+      readFile(resolve('vscode-extension/extension.ts'), 'utf8')
+    ]);
+    expect(landing).toContain('current line and names its symbols and indentation.');
+    expect(landing).toContain('<h3>Hear symbols and indentation</h3>');
+    expect(landing).toContain('Export the map,\n                then import it in the other extension.');
+    expect(landing).not.toContain('Fig. A');
+    expect(landing).not.toContain('spoken structure');
+    expect(demo).toContain('id="start-for-real" href="/#install-title"');
+    expect(demo).toContain('<h1 id="demo-title">Try the code reader</h1>');
+    expect(readme).toContain('## Use the code reader');
+    expect(readme).toContain('versioned JSON pronunciation file');
+    for (const source of [popup, vscode]) {
+      expect(source).toContain('Export pronunciations');
+      expect(source).toContain('Import pronunciation');
+      expect(source).toContain('Apply imported pronunciations');
+    }
+    for (const source of [popupMain, vscode]) {
+      expect(source).toContain('code-listen-cursor-pronunciations');
+    }
+    const routes = ['site/index.html', 'site/demo/index.html', 'site/privacy/index.html', 'site/terms/index.html', 'site/404.html'];
+    for (const route of routes) {
+      const html = await readFile(resolve(route), 'utf8');
+      for (const link of ['/demo/', '/#how-it-works', '/privacy/', '/downloads/code-listen-cursor-chrome.zip']) {
+        expect(html, `${route} missing shared header destination ${link}`).toContain(`href="${link}"`);
+      }
+      expect(html).toContain('Reads selected code and names its symbols and indentation.');
+      expect(html).toContain('Source on GitHub');
+    }
   });
 
   it('keeps acceptance promises executable in the sandbox @regression:verifiable-acceptance', async () => {

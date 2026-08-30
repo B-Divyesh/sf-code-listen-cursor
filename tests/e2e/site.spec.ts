@@ -39,19 +39,76 @@ test('@regression:landing-privacy-navigation keeps Privacy in the desktop and mo
   await expect(page.locator('#route-announcement')).toHaveText('Opened Listen to code without losing your place');
 });
 
-test('@claim:demo-reader reads a selection or current line with chosen pronunciation', async ({ page }) => {
-  await page.goto('/#field-station');
-  const editor = page.getByLabel('Editable code sample');
-  await editor.fill('const kubectl = fern?.name;');
-  await editor.evaluate((element: HTMLTextAreaElement) => element.setSelectionRange(6, 13));
-  await editor.press('ArrowRight');
-  await page.getByLabel('Code word').fill('kubectl');
-  await page.getByLabel('Speak as').fill('cube control');
-  await page.getByRole('button', { name: 'Preview sample pronunciation' }).click();
-  await expect(page.getByLabel('Words that will be spoken')).toContainText('cube control');
-  await editor.evaluate((element: HTMLTextAreaElement) => element.setSelectionRange(20, 20));
-  await editor.press('ArrowLeft');
-  await expect(page.getByLabel('Words that will be spoken')).toContainText('fern optional dot name');
+test('@claim:demo-reader reads a selection and current line aloud with chosen pronunciation', async ({ browser }) => {
+  const demoContext = await browser.newContext();
+  const page = await demoContext.newPage();
+  await page.addInitScript(() => {
+    const constructed: string[] = [];
+    const spoken: string[] = [];
+    class MockUtterance {
+      text: string;
+      voice: SpeechSynthesisVoice | null = null;
+      rate = 1;
+      onstart: (() => void) | null = null;
+      onend: (() => void) | null = null;
+      onerror: ((event: SpeechSynthesisErrorEvent) => void) | null = null;
+      constructor(text: string) {
+        this.text = text;
+        constructed.push(text);
+      }
+    }
+    const localVoice = {
+      default: true,
+      lang: 'en-US',
+      localService: true,
+      name: 'Local test voice',
+      voiceURI: 'local-test'
+    } as SpeechSynthesisVoice;
+    Object.defineProperty(window, 'SpeechSynthesisUtterance', { configurable: true, value: MockUtterance });
+    Object.defineProperty(window, 'speechSynthesis', {
+      configurable: true,
+      value: {
+        cancel() {},
+        getVoices: () => [localVoice],
+        speak(utterance: MockUtterance) {
+          spoken.push(utterance.text);
+          utterance.onstart?.();
+        },
+        addEventListener() {}
+      }
+    });
+    Object.defineProperty(window, '__demoSpeech', { value: { constructed, spoken } });
+  });
+  try {
+    await page.goto('/demo/');
+    const editor = page.getByLabel('Editable sample code');
+    await editor.fill('const kubectl = fern?.name;\nreturn leaf;');
+    await page.getByLabel('Code word').fill('kubectl');
+    await page.getByLabel('Speak as').fill('cube control');
+    await page.getByRole('button', { name: 'Save sample pronunciation' }).click();
+
+    await editor.evaluate((element: HTMLTextAreaElement) => {
+      element.setSelectionRange(6, 13);
+      element.dispatchEvent(new Event('select', { bubbles: true }));
+    });
+    await page.getByRole('button', { name: 'Listen to code' }).click();
+    await expect(page.locator('#demo-status')).toHaveText('Listening now. Speech is playing through your system voice.');
+    await expect(page.getByLabel('Words that will be spoken')).toContainText('cube control');
+    expect(await page.evaluate(() => (window as typeof window & { __demoSpeech: { constructed: string[]; spoken: string[] } }).__demoSpeech))
+      .toEqual({ constructed: ['cube control'], spoken: ['cube control'] });
+
+    await editor.evaluate((element: HTMLTextAreaElement) => {
+      const cursor = element.value.indexOf('return');
+      element.setSelectionRange(cursor, cursor);
+      element.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, key: 'ArrowLeft' }));
+    });
+    await page.getByRole('button', { name: 'Listen to code' }).click();
+    await expect(page.getByLabel('Words that will be spoken')).toContainText('return leaf');
+    expect(await page.evaluate(() => (window as typeof window & { __demoSpeech: { constructed: string[]; spoken: string[] } }).__demoSpeech))
+      .toEqual({ constructed: ['cube control', 'return leaf'], spoken: ['cube control', 'return leaf'] });
+  } finally {
+    await demoContext.close();
+  }
 });
 
 test('@regression:review-2-landing-preview labels temporary changes and keeps demo saves isolated', async ({ page }) => {
@@ -87,13 +144,41 @@ test('@regression:review-2-first-screen explains the demo outcome on mobile', as
   expect(helperBox?.y).toBeGreaterThanOrEqual(actionBox?.y ?? 0);
 });
 
+test('@regression:review-3-demo-first-screen shows the working reader after one click on mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Try it with sample data' }).click();
+  await expect(page).toHaveURL(/\/demo\/$/);
+  for (const target of [
+    page.getByText('Demo — sample data, nothing is saved'),
+    page.getByRole('heading', { level: 1, name: 'Try the code reader' }),
+    page.getByLabel('Editable sample code'),
+    page.getByRole('button', { name: 'Listen to code' }),
+    page.getByLabel('Words that will be spoken')
+  ]) await expect(target).toBeInViewport();
+  await expect(page.getByLabel('Words that will be spoken')).toContainText('const describe Plant gets a sink open paren fern close paren arrow open brace');
+});
+
+test('@regression:review-3-demo-leave clears only the demo namespace', async ({ page }) => {
+  await page.goto('/demo/');
+  await page.evaluate(() => localStorage.setItem('code-listen-cursor:real-sentinel', 'keep'));
+  await page.getByLabel('Code word').fill('fern');
+  await page.getByLabel('Speak as').fill('frond');
+  await page.getByRole('button', { name: 'Save sample pronunciation' }).click();
+  expect(await page.evaluate(() => localStorage.getItem('demo:code-listen-cursor:pronunciation'))).toContain('frond');
+  await page.getByRole('link', { name: 'Start for real' }).click();
+  await expect(page).toHaveURL(/\/#install-title$/);
+  expect(await page.evaluate(() => localStorage.getItem('demo:code-listen-cursor:pronunciation'))).toBeNull();
+  expect(await page.evaluate(() => localStorage.getItem('code-listen-cursor:real-sentinel'))).toBe('keep');
+});
+
 test('demo route, query entry, keyboard path, and mobile-safe controls work', async ({ page }) => {
   await page.goto('/?demo=1');
   await expect(page).toHaveURL(/\/demo\/$/);
-  const demoHeading = page.getByRole('heading', { name: 'Listen to sample code' });
+  const demoHeading = page.getByRole('heading', { name: 'Try the code reader' });
   await expect(demoHeading).toBeVisible();
   await expect(demoHeading).toBeFocused();
-  await expect(page.locator('#route-announcement')).toHaveText('Opened Listen to sample code');
+  await expect(page.locator('#route-announcement')).toHaveText('Opened Try the code reader');
   await page.getByLabel('Editable sample code').focus();
   await page.keyboard.press('Control+A');
   await page.keyboard.type('const leaf = 1;');

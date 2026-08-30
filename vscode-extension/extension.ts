@@ -50,6 +50,8 @@ function webviewHtml(nonce: string): string {
     .voice-note{margin:.35rem 0 0}
     li{margin:.35rem 0}
     li button{margin-left:.5rem}
+    .transfer{display:grid;gap:.6rem;margin-top:1rem}
+    .transfer p{margin:0;padding:.6rem;border-left:3px solid #315b43;background:#e6e0c9}
     @media(max-width:390px){.row{grid-template-columns:1fr}}
   </style>
 </head>
@@ -84,12 +86,19 @@ function webviewHtml(nonce: string): string {
         <button type="submit">Add pronunciation</button>
       </form>
       <ul id="pronunciation-list" aria-label="Personal pronunciations"></ul>
+      <div class="transfer">
+        <button type="button" id="export-pronunciations">Export pronunciations</button>
+        <label>Import pronunciation file<input id="import-pronunciations" type="file" accept="application/json,.json"></label>
+        <p id="import-preview" role="status" aria-live="polite">Choose a pronunciation file to preview its entries.</p>
+        <button type="button" id="apply-pronunciations" disabled>Apply imported pronunciations</button>
+      </div>
     </fieldset>
   </main>
   <script nonce="${nonce}">
     const vscode=acquireVsCodeApi();
     const $=id=>document.getElementById(id);
     let settings={punctuation:'essential',language:'auto',speakIndentation:true,indentSize:2,rate:.9,pitch:1,voiceURI:'',pronunciation:{}};
+    let pendingPronunciations=null;
     const status=$('status');
     function setStatus(value){status.textContent=value}
     function render(){
@@ -149,6 +158,52 @@ function webviewHtml(nonce: string): string {
       render();
       save()
     });
+    function parsePronunciationFile(value){
+      if(!value||typeof value!=='object'||Array.isArray(value))return null;
+      if(value.format!=='code-listen-cursor-pronunciations'||value.version!==1||!value.pronunciations||typeof value.pronunciations!=='object'||Array.isArray(value.pronunciations))return null;
+      const entries=Object.entries(value.pronunciations);
+      if(entries.some(([written,spoken])=>!written.trim()||typeof spoken!=='string'||!spoken.trim()))return null;
+      return Object.fromEntries(entries)
+    }
+    function previewImportedPronunciations(value){
+      const imported=parsePronunciationFile(value);
+      const preview=$('import-preview');
+      const apply=$('apply-pronunciations');
+      if(!imported){
+        pendingPronunciations=null;
+        apply.disabled=true;
+        preview.textContent='That file is not a Code Listen Cursor pronunciation file. Choose a version 1 export.';
+        return
+      }
+      pendingPronunciations=imported;
+      apply.disabled=false;
+      const examples=Object.entries(imported).slice(0,3).map(([written,spoken])=>written+' → '+spoken).join('; ');
+      preview.textContent='Preview: '+Object.keys(imported).length+' entries will replace your current '+Object.keys(settings.pronunciation).length+' entries. '+examples
+    }
+    $('export-pronunciations').onclick=()=>{
+      const entries=Object.fromEntries(Object.entries(settings.pronunciation).filter(([written,spoken])=>written.trim()&&spoken.trim()).sort(([left],[right])=>left.localeCompare(right)));
+      const file=new Blob([JSON.stringify({format:'code-listen-cursor-pronunciations',version:1,pronunciations:entries},null,2)],{type:'application/json'});
+      const url=URL.createObjectURL(file);
+      const link=document.createElement('a');
+      link.href=url;
+      link.download='code-listen-cursor-pronunciations.json';
+      link.click();
+      setTimeout(()=>URL.revokeObjectURL(url),0)
+    };
+    $('import-pronunciations').addEventListener('change',async event=>{
+      const file=event.currentTarget.files&&event.currentTarget.files[0];
+      if(!file)return;
+      try{previewImportedPronunciations(JSON.parse(await file.text()))}catch{previewImportedPronunciations(null)}
+    });
+    $('apply-pronunciations').onclick=()=>{
+      if(!pendingPronunciations)return;
+      settings.pronunciation=pendingPronunciations;
+      pendingPronunciations=null;
+      $('apply-pronunciations').disabled=true;
+      $('import-preview').textContent='Imported pronunciations saved on this device.';
+      render();
+      save()
+    };
     $('listen').onclick=()=>vscode.postMessage({type:'listen'});
     $('stop').onclick=()=>vscode.postMessage({type:'stop'});
     window.addEventListener('message',({data})=>{

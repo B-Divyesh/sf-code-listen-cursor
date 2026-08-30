@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { codeToSpeech, currentLine, detectLanguage } from '../core/code-to-speech';
-import { mergeSettings } from '../core/settings';
+import { mergeSettings, parsePronunciationExport, pronunciationExport } from '../core/settings';
 import { preferredLocalVoice } from '../core/voice';
 import { languageForEditor, readingSettings, storedSettings } from '../vscode-extension/settings';
 
@@ -17,7 +17,7 @@ describe('codeToSpeech', () => {
   it('uses a personal pronunciation map', () => {
     const result = codeToSpeech('const kubectl = async () => argv;', mergeSettings({
       punctuation: 'detailed',
-      pronunciation: { kubectl: 'cube control' }
+      pronunciation: { ...mergeSettings().pronunciation, kubectl: 'cube control' }
     }));
     expect(result).toContain('cube control');
     expect(result).toContain('a sink');
@@ -74,6 +74,21 @@ describe('VS Code reading settings', () => {
   });
 });
 
+describe('portable pronunciation files', () => {
+  it('uses a versioned, code-free format and rejects malformed imports', () => {
+    const exported = pronunciationExport({ kubectl: 'cube control', fern: 'frond' });
+    expect(exported).toEqual({
+      format: 'code-listen-cursor-pronunciations',
+      version: 1,
+      pronunciations: { fern: 'frond', kubectl: 'cube control' }
+    });
+    expect(parsePronunciationExport(exported)).toEqual(exported.pronunciations);
+    expect(parsePronunciationExport({ format: 'code-listen-cursor-pronunciations', version: 2, pronunciations: {} })).toBeNull();
+    expect(parsePronunciationExport({ format: 'code-listen-cursor-pronunciations', version: 1, pronunciations: { fern: '' } })).toBeNull();
+    expect(mergeSettings({ pronunciation: { fern: 'frond' } }).pronunciation).toEqual({ fern: 'frond' });
+  });
+});
+
 describe('shipped structural-cue fixtures', () => {
   it('@claim:structure-aware-speech produces every expected spoken symbol and indentation cue', () => {
     const fixtures = JSON.parse(readFileSync(resolve('tests/fixtures/structural-cues.json'), 'utf8')) as {
@@ -89,7 +104,7 @@ describe('shipped structural-cue fixtures', () => {
       const spoken = codeToSpeech(fixture.code, mergeSettings({
         language: fixture.language,
         punctuation: 'detailed',
-        pronunciation: fixture.pronunciation ?? {}
+        ...(fixture.pronunciation ? { pronunciation: { ...mergeSettings().pronunciation, ...fixture.pronunciation } } : {})
       }));
       for (const cue of fixture.cues) expect(spoken, `snippet ${fixture.id}`).toContain(cue);
     }

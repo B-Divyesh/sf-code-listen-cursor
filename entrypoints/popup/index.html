@@ -93,6 +93,18 @@
         </form>
         <ul id="pronunciation-list" class="pronunciation-list"></ul>
       </details>
+      <details>
+        <summary>Move pronunciations</summary>
+        <div class="transfer-controls">
+          <button id="export-pronunciations" type="button">Export pronunciations</button>
+          <label for="import-pronunciations">Import pronunciation file</label>
+          <input id="import-pronunciations" type="file" accept="application/json,.json" />
+          <p id="import-preview" class="transfer-status" role="status" aria-live="polite">
+            Choose a pronunciation file to preview its entries.
+          </p>
+          <button id="apply-pronunciations" type="button" disabled>Apply imported pronunciations</button>
+        </div>
+      </details>
       <p class="privacy">Your code and preferences stay on this device.</p>
     </main>
     <script type="module" src="./main.ts"></script>

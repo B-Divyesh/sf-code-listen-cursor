@@ -1,14 +1,14 @@
 # Code Listen Cursor
 
-Code Listen Cursor reads selected code or the current line aloud. It is for developers with reading fatigue, dyslexia, low vision, or auditory workflows.
+Code Listen Cursor reads selected code or the current line aloud. It names symbols and indentation for developers who read better by ear.
 
-It includes cursor follow, repeat, punctuation levels, reading rate, indentation controls, local-only speech, and a pronunciation map. Installed-package tests verify the browser and VS Code flows against isolated local data.
+It includes cursor follow, repeat, punctuation levels, reading rate, indentation controls, local-only speech, and a pronunciation map. Export that map from one extension and import it in the other. Installed-package tests verify the browser and VS Code flows against isolated local data.
 
 Live site: <https://code-listen-cursor.sociobot.in>
 
 ## Try the demo
 
-Open <https://code-listen-cursor.sociobot.in/demo/> or run the site locally and open `/demo/`. The demo has sample code, a persistent sandbox banner, and reset controls. It stores only a demo-prefixed pronunciation setting; see [.factory/demo.md](.factory/demo.md).
+Open <https://code-listen-cursor.sociobot.in/demo/> or run the site locally and open `/demo/`. The demo has sample code, a persistent sandbox banner, and reset controls. It stores only a demo-prefixed pronunciation setting. Start for real clears the demo setting; see [.factory/demo.md](.factory/demo.md).
 
 ## Install the packaged extensions
 
@@ -17,13 +17,14 @@ Open <https://code-listen-cursor.sociobot.in/demo/> or run the site locally and 
 3. Open `chrome://extensions` or `edge://extensions`.
 4. Enable **Developer mode**, choose **Load unpacked**, and select the unzipped directory.
 
-The unpacked browser build is at `dist/extension/chrome-mv3`. `dist/site/downloads/code-listen-cursor-vscode.vsix` is the native VS Code package; install it with **Extensions: Install from VSIX**. The VS Code extension reads the active selection or current line. It provides listen, repeat, follow, stop, and **Code Listen Cursor: Open Reading Settings** commands. Its settings panel includes language, punctuation, voice, rate, pitch, indentation, and personal pronunciations.
+The unpacked browser build is at `dist/extension/chrome-mv3`. `dist/site/downloads/code-listen-cursor-vscode.vsix` is the native VS Code package; install it with **Extensions: Install from VSIX**. The VS Code extension reads the active selection or current line. It provides listen, repeat, follow, stop, and **Code Listen Cursor: Open Reading Settings** commands. Its settings panel includes language, punctuation, voice, rate, pitch, indentation, and personal pronunciations. Both settings surfaces export and import the same versioned JSON pronunciation file.
 
-## Use it
+## Use the code reader
 
 - Select code on any HTTP(S) page and press `Alt+Shift+S`. With no selection, the current text line is read.
 - Press `Alt+Shift+F` to follow the cursor, `Alt+Shift+R` to repeat, or `Alt+Shift+X` to stop.
 - Open the extension popup to tune punctuation, indentation, voice, rate, and pronunciations.
+- Export pronunciations, then import the file in the other extension. The file contains word pairs, never code.
 
 Browser extension shortcuts are configurable. If a shortcut overlaps with assistive technology, change it at `chrome://extensions/shortcuts` or `edge://extensions/shortcuts`.
 

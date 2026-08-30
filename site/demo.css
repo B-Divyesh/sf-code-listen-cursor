@@ -63,7 +63,7 @@
 .demo-intro {
   max-width: 1184px;
   margin: auto;
-  padding: 52px 48px 34px;
+  padding: 32px 48px 18px;
 }
 .demo-intro h1 {
   margin: 0;
@@ -74,23 +74,83 @@
 }
 .demo-intro p:last-child {
   max-width: 620px;
-  font-size: 18px;
+  margin: 10px 0 0;
+  font-size: 17px;
 }
 .demo-station {
-  padding-top: 52px;
+  padding-top: 28px;
+  padding-bottom: 72px;
+}
+.demo-page .specimen-sheet textarea {
+  min-height: 138px;
+}
+.demo-page .observation {
+  padding: 22px;
 }
 @media (max-width: 560px) {
   .demo-banner {
     margin: 0;
     padding: 12px 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     align-items: stretch;
-    flex-direction: column;
+    gap: 8px;
+  }
+  .demo-banner strong,
+  .demo-banner span {
+    grid-column: 1/-1;
   }
   .demo-banner span {
     margin: 0;
   }
+  .demo-banner button,
+  .demo-banner a {
+    width: 100%;
+  }
   .demo-intro {
-    padding: 40px 20px 24px;
+    padding: 12px 20px 4px;
+  }
+  .demo-intro h1 {
+    font-size: 38px;
+  }
+  .demo-station {
+    padding-top: 8px;
+    padding-bottom: 40px;
+  }
+  .demo-page .specimen-sheet {
+    padding: 8px;
+  }
+  .demo-page .specimen-sheet textarea {
+    min-height: 0;
+    height: 104px;
+    padding: 8px;
+    line-height: 1.5;
+  }
+  .demo-page .station-actions {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .demo-page .station-actions .button {
+    min-height: 44px;
+    padding: 6px 4px;
+  }
+  .demo-page .observation {
+    padding: 12px;
+  }
+  .demo-page .observation-heading h2 {
+    font-size: 22px;
+  }
+  .demo-page .status-copy {
+    min-height: 0;
+    margin: 10px 0;
+    line-height: 1.35;
+  }
+  .demo-page .speech-preview {
+    min-height: 76px;
+    max-height: 100px;
+    padding: 6px;
+    line-height: 1.35;
   }
   .install-actions {
     display: grid;

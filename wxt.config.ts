@@ -5,7 +5,7 @@ export default defineConfig({
   outDir: '.output',
   manifest: {
     name: 'Code Listen Cursor',
-    description: 'Read selected code or the current line with structure-aware, local speech.',
+    description: 'Read selected code or the current line with named symbols, indentation, and local speech.',
     version: '1.0.3',
     permissions: ['storage', 'activeTab', 'contextMenus'],
     commands: {

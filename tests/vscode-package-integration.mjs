@@ -94,7 +94,7 @@ try {
   assert.deepEqual(saved.get('settings'), {
     language: 'rust', punctuation: 'literal', speakIndentation: false,
     indentSize: 4, rate: 1.2, pitch: 1.1, voiceURI: 'local-test',
-    pronunciation: { async: 'a sink', argv: 'arg vee', href: 'H ref', kubectl: 'cube control' }
+    pronunciation: { kubectl: 'cube control' }
   });
   assert.equal(JSON.stringify([...saved]).includes('privateSource'), false);
 
@@ -119,6 +119,59 @@ try {
 
   const browser = await chromium.launch({ headless: true });
   try {
+    const transfer = await browser.newPage();
+    await transfer.addInitScript(() => {
+      window.__posted = [];
+      window.acquireVsCodeApi = () => ({ postMessage(message) { window.__posted.push(message); } });
+      Object.defineProperty(window, 'speechSynthesis', {
+        configurable: true,
+        value: { addEventListener() {}, cancel() {}, getVoices: () => [], speak() {} }
+      });
+    });
+    const transferUrl = `data:text/html;base64,${Buffer.from(fakeVscode.__state.html).toString('base64')}`;
+    await transfer.goto(transferUrl);
+    await transfer.evaluate(() => {
+      window.dispatchEvent(new MessageEvent('message', {
+        data: {
+          type: 'settings',
+          settings: {
+            punctuation: 'essential', language: 'auto', speakIndentation: true,
+            indentSize: 2, rate: 0.9, pitch: 1, voiceURI: '',
+            pronunciation: { kubectl: 'cube control' }
+          }
+        }
+      }));
+    });
+    const exportDownload = transfer.waitForEvent('download');
+    await transfer.getByRole('button', { name: 'Export pronunciations' }).click();
+    const exportStream = await (await exportDownload).createReadStream();
+    const exportChunks = [];
+    for await (const chunk of exportStream) exportChunks.push(chunk);
+    const exportedPronunciations = JSON.parse(Buffer.concat(exportChunks).toString('utf8'));
+    assert.deepEqual(exportedPronunciations, {
+      format: 'code-listen-cursor-pronunciations',
+      version: 1,
+      pronunciations: { kubectl: 'cube control' }
+    });
+    assert.equal(JSON.stringify(exportedPronunciations).includes('privateSource'), false, 'VS Code export contains editor source.');
+    await transfer.locator('#import-pronunciations').setInputFiles({
+      name: 'from-browser.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from(JSON.stringify({
+        format: 'code-listen-cursor-pronunciations',
+        version: 1,
+        pronunciations: { fern: 'frond', kubectl: 'cube controller' }
+      }))
+    });
+    await transfer.waitForFunction(() => document.querySelector('#import-preview')?.textContent?.includes('will replace'));
+    assert.equal(await transfer.locator('#apply-pronunciations').isEnabled(), true, 'VS Code import must require explicit apply.');
+    await transfer.getByRole('button', { name: 'Apply imported pronunciations' }).click();
+    await transfer.waitForFunction(() => window.__posted.some((message) => message.type === 'save-settings'));
+    const importedSettings = await transfer.evaluate(() => window.__posted.findLast((message) => message.type === 'save-settings')?.settings);
+    assert.deepEqual(importedSettings.pronunciation, { fern: 'frond', kubectl: 'cube controller' });
+    assert.match(await transfer.locator('#import-preview').innerText(), /Imported pronunciations saved on this device/);
+    await transfer.close();
+
     const exerciseVoicePolicy = async (voices) => {
       const page = await browser.newPage();
       await page.addInitScript((availableVoices) => {

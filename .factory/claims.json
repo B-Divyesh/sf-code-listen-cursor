@@ -63,6 +63,13 @@
     "sandbox": "change each setting through the installed popup and inspect only extension-local storage"
   },
   {
+    "id": "portable-pronunciations",
+    "claim": "Both extensions export and import the same versioned JSON pronunciation file without source code.",
+    "where": "landing pronunciation section, browser popup, VS Code settings, README",
+    "test": "npm run test:installed && npm run test:vscode-installed",
+    "sandbox": "fresh packaged browser and VS Code harnesses export a map, preview a valid version 1 file, apply it locally, and assert the file contains word pairs but no editor source"
+  },
+  {
     "id": "browser-shortcut-configuration",
     "claim": "Browser extension shortcuts are configurable in the browser's extension shortcut settings.",
     "where": "landing installation note and README",

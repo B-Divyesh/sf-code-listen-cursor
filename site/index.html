@@ -53,7 +53,7 @@
       </a>
       <nav aria-label="Primary navigation">
         <a href="/demo/">Demo</a>
-        <a class="nav-optional" href="#how-it-works">How it works</a>
+        <a class="nav-optional" href="/#how-it-works">How it works</a>
         <a href="/privacy/">Privacy</a>
         <a
           class="nav-download"
@@ -71,7 +71,7 @@
           <h1 id="hero-title">Listen to code without losing your place</h1>
           <p class="lede">
             For developers who read better by ear, it reads a selection or
-            current line as spoken structure.
+            current line and names its symbols and indentation.
           </p>
           <div class="hero-actions">
             <div class="demo-action">
@@ -114,9 +114,7 @@
               alt="An open botanical field notebook where a fern’s branching fronds resemble indented lines of code beside a green reading cursor."
             />
           </picture>
-          <figcaption>
-            <span>Fig. A</span> An illustration of branching code structure.
-          </figcaption>
+          <figcaption>An illustration of branching code structure.</figcaption>
         </figure>
       </section>
 
@@ -256,7 +254,7 @@ const describePlant = async (fern) => {
           <li>
             <span class="feature-number">02</span>
             <div>
-              <h3>Structure-aware speech</h3>
+              <h3>Hear symbols and indentation</h3>
               <p>
                 Braces, operators, indentation, camel case, and snake case
                 become explicit spoken labels.
@@ -280,8 +278,8 @@ const describePlant = async (fern) => {
             <div>
               <h3>Set pronunciations for project words</h3>
               <p>
-                Teach project names and abbreviations once. The pronunciation
-                map stays in extension storage.
+                Teach project names and abbreviations once. Export the map,
+                then import it in the other extension.
               </p>
               <span class="code-label">kubectl → cube control</span>
             </div>
@@ -334,6 +332,9 @@ const describePlant = async (fern) => {
         <p>
           Keyboard shortcuts can be changed in your extension shortcut settings.
         </p>
+        <p class="generated-note">
+          The landing artwork was generated for this project with Azure AI Foundry.
+        </p>
       </section>
     </main>
 
@@ -343,7 +344,7 @@ const describePlant = async (fern) => {
           >Code Listen Cursor</span
         >
       </div>
-      <p class="product-line">Reads selected code as spoken structure.</p>
+      <p class="product-line">Reads selected code and names its symbols and indentation.</p>
       <nav aria-label="Footer navigation">
         <a href="/privacy/">Privacy</a><a href="/terms/">Terms</a
         ><a href="https://github.com/B-Divyesh/sf-code-listen-cursor"
@@ -351,9 +352,6 @@ const describePlant = async (fern) => {
         >
       </nav>
       <p class="build-note">Built by Param Factory · Version 1.0.3</p>
-      <p class="generated-note">
-        The landing artwork was generated for this project with Azure AI Foundry.
-      </p>
     </footer>
     <script type="module" src="/main.ts"></script>
     <script type="module" src="/route-focus.ts"></script>

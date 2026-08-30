@@ -1,12 +1,18 @@
 import { browser } from 'wxt/browser';
 import type { CursorCommand, CursorState } from '../../core/messages';
-import { mergeSettings, type ListenSettings } from '../../core/settings';
+import {
+  mergeSettings,
+  parsePronunciationExport,
+  pronunciationExport,
+  type ListenSettings
+} from '../../core/settings';
 import './style.css';
 
 const get = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
 const status = get<HTMLParagraphElement>('status');
 const followButton = get<HTMLButtonElement>('follow');
 let settings: ListenSettings = mergeSettings();
+let pendingPronunciations: Record<string, string> | null = null;
 
 async function activeTabMessage(message: CursorCommand): Promise<CursorState> {
   const requestedTab = Number(new URLSearchParams(location.search).get('tab'));
@@ -77,6 +83,22 @@ function renderPronunciation(): void {
   }));
 }
 
+function previewImportedPronunciations(value: unknown): void {
+  const imported = parsePronunciationExport(value);
+  const preview = get<HTMLParagraphElement>('import-preview');
+  const apply = get<HTMLButtonElement>('apply-pronunciations');
+  if (!imported) {
+    pendingPronunciations = null;
+    apply.disabled = true;
+    preview.textContent = 'That file is not a Code Listen Cursor pronunciation file. Choose a version 1 export.';
+    return;
+  }
+  pendingPronunciations = imported;
+  apply.disabled = false;
+  const examples = Object.entries(imported).slice(0, 3).map(([written, spoken]) => `${written} → ${spoken}`).join('; ');
+  preview.textContent = `Preview: ${Object.keys(imported).length} entries will replace your current ${Object.keys(settings.pronunciation).length} entries. ${examples}`;
+}
+
 function loadVoices(): void {
   const select = get<HTMLSelectElement>('voice');
   const voices = speechSynthesis.getVoices().filter((voice) => voice.localService);
@@ -118,6 +140,36 @@ get<HTMLFormElement>('pronunciation-form').addEventListener('submit', (event) =>
   settings.pronunciation[written] = spoken;
   void browser.storage.local.set({ settings });
   form.reset();
+  renderPronunciation();
+});
+
+get<HTMLButtonElement>('export-pronunciations').addEventListener('click', () => {
+  const file = new Blob([JSON.stringify(pronunciationExport(settings.pronunciation), null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(file);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'code-listen-cursor-pronunciations.json';
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+});
+
+get<HTMLInputElement>('import-pronunciations').addEventListener('change', async (event) => {
+  const file = (event.currentTarget as HTMLInputElement).files?.[0];
+  if (!file) return;
+  try {
+    previewImportedPronunciations(JSON.parse(await file.text()));
+  } catch {
+    previewImportedPronunciations(null);
+  }
+});
+
+get<HTMLButtonElement>('apply-pronunciations').addEventListener('click', () => {
+  if (!pendingPronunciations) return;
+  settings.pronunciation = pendingPronunciations;
+  pendingPronunciations = null;
+  get<HTMLButtonElement>('apply-pronunciations').disabled = true;
+  get<HTMLParagraphElement>('import-preview').textContent = 'Imported pronunciations saved on this device.';
+  void browser.storage.local.set({ settings });
   renderPronunciation();
 });
 

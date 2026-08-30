@@ -88,7 +88,7 @@ test('@claim:offline-reload reloads the sample after first visit with no network
   await page.reload();
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Listen to sample code' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Try the code reader' })).toBeVisible();
   await context.setOffline(false);
 });
 

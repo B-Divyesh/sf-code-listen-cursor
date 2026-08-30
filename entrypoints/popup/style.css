@@ -176,6 +176,24 @@ summary {
   padding: 6px 8px;
   font-size: 16px;
 }
+.transfer-controls {
+  display: grid;
+  gap: 8px;
+}
+.transfer-controls input[type="file"] {
+  min-height: 44px;
+  padding: 7px;
+  border: 1px solid #726f60;
+  border-radius: 6px;
+  background: #fcfaf1;
+}
+.transfer-status {
+  min-height: 46px;
+  margin: 0;
+  padding: 9px 10px;
+  border-left: 3px solid #6f8b68;
+  background: #e6e0c9;
+}
 .privacy {
   margin: 16px 0 0;
   color: #4e584f;

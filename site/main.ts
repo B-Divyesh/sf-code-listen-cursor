@@ -16,12 +16,21 @@ const sample = get<HTMLTextAreaElement>('code-sample');
 const preview = get<HTMLDivElement>('speech-preview');
 const status = get<HTMLParagraphElement>('demo-status');
 const rate = get<HTMLInputElement>('demo-rate');
-const map: Record<string, string> = {};
+const demoBasePronunciation = mergeSettings().pronunciation;
+const map: Record<string, string> = { ...demoBasePronunciation };
+const demoPronunciation: Record<string, string> = {};
 const originalSample = sample.value;
+
+function clearDemoStorage(): void {
+  for (const key of Object.keys(localStorage)) {
+    if (key.startsWith('demo:')) localStorage.removeItem(key);
+  }
+}
 
 if (isDemo) {
   try {
-    Object.assign(map, JSON.parse(localStorage.getItem(demoStorageKey) ?? '{}') as Record<string, string>);
+    Object.assign(demoPronunciation, JSON.parse(localStorage.getItem(demoStorageKey) ?? '{}') as Record<string, string>);
+    Object.assign(map, demoPronunciation);
   } catch {
     localStorage.removeItem(demoStorageKey);
   }
@@ -105,7 +114,10 @@ get<HTMLFormElement>('demo-pronunciation').addEventListener('submit', (event) =>
   const spoken = get<HTMLInputElement>('demo-spoken').value.trim();
   if (!written || !spoken) return;
   map[written] = spoken;
-  if (isDemo) localStorage.setItem(demoStorageKey, JSON.stringify(map));
+  if (isDemo) {
+    demoPronunciation[written] = spoken;
+    localStorage.setItem(demoStorageKey, JSON.stringify(demoPronunciation));
+  }
   updatePreview();
   status.textContent = isDemo
     ? `${written} will now be spoken as ${spoken}.`
@@ -124,7 +136,9 @@ if (isDemo) {
   get<HTMLButtonElement>('reset-demo').addEventListener('click', () => {
     sample.value = originalSample;
     for (const key of Object.keys(map)) delete map[key];
-    localStorage.removeItem(demoStorageKey);
+    Object.assign(map, demoBasePronunciation);
+    for (const key of Object.keys(demoPronunciation)) delete demoPronunciation[key];
+    clearDemoStorage();
     get<HTMLInputElement>('demo-written').value = 'fern';
     get<HTMLInputElement>('demo-spoken').value = 'furn';
     get<HTMLSelectElement>('demo-punctuation').value = 'essential';
@@ -133,6 +147,9 @@ if (isDemo) {
     get<HTMLOutputElement>('demo-rate-value').value = '0.9×';
     status.textContent = 'Demo reset. The original sample code is ready. Nothing was saved outside this demo.';
     updatePreview();
+  });
+  get<HTMLAnchorElement>('start-for-real').addEventListener('click', () => {
+    clearDemoStorage();
   });
 }
 

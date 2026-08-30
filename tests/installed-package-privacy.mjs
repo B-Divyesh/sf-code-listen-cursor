@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { resolve } from 'node:path';
 import AxeBuilder from '@axe-core/playwright';
@@ -9,6 +9,7 @@ import { chromium } from 'playwright';
 const coveredClaims = [
   '@claim:browser-reader-controls',
   '@claim:browser-reader-settings',
+  '@claim:portable-pronunciations',
   '@claim:browser-shortcut-configuration',
   '@claim:installed-package-privacy'
 ];
@@ -89,6 +90,32 @@ try {
   await popup.locator('#spoken').fill('cube control');
   await popup.getByRole('button', { name: 'Add pronunciation' }).click();
   await popup.waitForFunction(() => document.querySelector('#pronunciation-list')?.textContent?.includes('cube control'));
+
+  await popup.getByText('Move pronunciations', { exact: true }).click();
+  const exportPath = resolve(unpacked, 'pronunciations.json');
+  const exportDownload = popup.waitForEvent('download');
+  await popup.getByRole('button', { name: 'Export pronunciations' }).click();
+  await (await exportDownload).saveAs(exportPath);
+  const exportedPronunciations = JSON.parse(await readFile(exportPath, 'utf8'));
+  assert.equal(exportedPronunciations.format, 'code-listen-cursor-pronunciations');
+  assert.equal(exportedPronunciations.version, 1);
+  assert.equal(exportedPronunciations.pronunciations.kubectl, 'cube control');
+  assert.equal(JSON.stringify(exportedPronunciations).includes('privateSource'), false, 'Exported pronunciation file contains page code.');
+
+  await popup.locator('#import-pronunciations').setInputFiles({
+    name: 'from-vscode.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify({
+      format: 'code-listen-cursor-pronunciations',
+      version: 1,
+      pronunciations: { kubectl: 'cube controller', fern: 'frond' }
+    }))
+  });
+  await popup.waitForFunction(() => document.querySelector('#import-preview')?.textContent?.includes('will replace'));
+  assert.equal(await popup.locator('#apply-pronunciations').isEnabled(), true, 'A valid import must require an explicit apply action.');
+  await popup.getByRole('button', { name: 'Apply imported pronunciations' }).click();
+  await popup.waitForFunction(() => document.querySelector('#pronunciation-list')?.textContent?.includes('cube controller'));
+  assert.match(await popup.locator('#import-preview').innerText(), /Imported pronunciations saved on this device/);
 
   await popup.getByRole('button', { name: /Listen now/ }).click();
   await waitForStatus('No local speech voice is available. Install or enable a local system voice, then try again.');
@@ -181,7 +208,7 @@ try {
       speakIndentation: stored.settings?.speakIndentation,
       pronunciation: stored.settings?.pronunciation?.kubectl
     },
-    { language: 'typescript', punctuation: 'detailed', rate: 1.2, speakIndentation: false, pronunciation: 'cube control' }
+    { language: 'typescript', punctuation: 'detailed', rate: 1.2, speakIndentation: false, pronunciation: 'cube controller' }
   );
   assert.equal(JSON.stringify(stored).includes('privateSource'), false, 'Installed package stored page code.');
   assert.equal(httpRequests.every((url) => new URL(url).origin === origin), true, `Remote request: ${JSON.stringify(httpRequests)}`);

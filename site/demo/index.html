@@ -40,7 +40,7 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="stylesheet" href="/demo.css" />
   </head>
-  <body>
+  <body class="demo-page">
     <a class="skip-link" href="#main">Skip to main content</a>
     <p id="route-announcement" class="route-announcement" aria-live="polite" aria-atomic="true"></p>
     <header class="site-header">
@@ -50,45 +50,32 @@
         ></a
       >
       <nav aria-label="Primary navigation">
-        <a href="/">Home</a><a href="/privacy/">Privacy</a>
+        <a href="/demo/" aria-current="page">Demo</a>
+        <a class="nav-optional" href="/#how-it-works">How it works</a>
+        <a href="/privacy/">Privacy</a>
+        <a class="nav-download" href="/downloads/code-listen-cursor-chrome.zip" download>Download</a>
       </nav>
     </header>
     <aside class="demo-banner" aria-label="Demo controls">
       <strong>Demo — sample data, nothing is saved</strong
       ><span>Use the sample code freely.</span
       ><button id="reset-demo" type="button">Reset demo</button
-      ><a href="/">Start for real</a>
+      ><a id="start-for-real" href="/#install-title">Start for real</a>
     </aside>
     <main id="main">
       <section class="demo-intro" aria-labelledby="demo-title">
-        <p class="eyebrow">Sample workspace</p>
-        <h1 id="demo-title">Listen to sample code</h1>
-        <p>
-          Choose a line or selection. The preview shows the words the reader
-          will speak.
-        </p>
+        <h1 id="demo-title">Try the code reader</h1>
       </section>
       <section
         class="field-station demo-station"
-        aria-labelledby="station-title"
+        aria-label="Sample code reader"
       >
-        <div class="section-intro">
-          <p class="eyebrow">Sample code</p>
-          <h2 id="station-title">Try the code reader</h2>
-          <p>
-            This sample stays separate from your real browser extension
-            settings.
-          </p>
-        </div>
         <div class="station-layout">
           <div class="specimen-sheet">
             <label for="code-sample">Editable sample code</label
-            ><textarea id="code-sample" spellcheck="false" rows="10">
+            ><textarea id="code-sample" spellcheck="false" rows="4">
 const describePlant = async (fern) => {
-  if (fern?.fronds >= 3) {
-    return `healthy_${fern.name}`;
-  }
-  return null;
+  return fern?.fronds >= 3 ? `healthy_${fern.name}` : null;
 };</textarea
             >
             <div class="station-actions">
@@ -112,7 +99,7 @@ const describePlant = async (fern) => {
               <span class="cursor-mark" aria-hidden="true"></span>
               <div>
                 <p class="eyebrow">Spoken preview</p>
-                <h3 id="observation-title">Spoken preview</h3>
+                <h2 id="observation-title">Spoken preview</h2>
               </div>
             </div>
             <p
@@ -181,9 +168,10 @@ const describePlant = async (fern) => {
           >Code Listen Cursor</span
         >
       </div>
-      <p class="product-line">Sample code is not saved.</p>
+      <p class="product-line">Reads selected code and names its symbols and indentation.</p>
       <nav aria-label="Footer navigation">
-        <a href="/privacy/">Privacy</a><a href="/terms/">Terms</a>
+        <a href="/privacy/">Privacy</a><a href="/terms/">Terms</a
+        ><a href="https://github.com/B-Divyesh/sf-code-listen-cursor">Source on GitHub</a>
       </nav>
       <p class="build-note">Built by Param Factory · Version 1.0.3</p>
     </footer>

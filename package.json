@@ -3,7 +3,7 @@
   "version": "1.0.3",
   "private": true,
   "type": "module",
-  "description": "Hear selected code as structure-aware speech without sending source off-device.",
+  "description": "Hear selected code with named symbols and indentation without sending source off-device.",
   "scripts": {
     "dev": "wxt",
     "dev:site": "vite --config vite.site.config.ts",
