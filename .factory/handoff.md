@@ -1,57 +1,62 @@
-# Code Listen Cursor — review 3 handoff
+# Code Listen Cursor — polish 3 handoff
 
 Date: 2026-08-30
-
-Work order: `code-listen-cursor-review-3`
-
-Candidate reviewed: `8c1273d0c65c45b4831a112bfed9539754c40ebf`
+Work order: `code-listen-cursor-polish-3`
+Base: `98d345c56215c3952439458d821396c0049c3b37`
+Product repair commits: `eeded67e6f0060737620445406a57c4b71d23f73` and
+`882f714016014e4250aef2547dafc166ef6cea92`
 
 Live URL: <https://code-listen-cursor.sociobot.in/>
 
-Result: **FAIL**
+## Result
 
-The independent adversarial review is in
-[`.factory/review-3.md`](review-3.md). No product code was changed.
+All findings from `.factory/review-1.md`, `.factory/review-2.md`, and
+`.factory/review-3.md` are closed. The complete finding-to-evidence map is in
+[`.factory/polish-3.md`](polish-3.md).
 
-## What was done
+The repair keeps the botanical field-notebook visual system. It makes the
+mobile demo show a working reader in its first viewport, proves real demo
+speech, clears isolated data on exit, adds cross-extension pronunciation-file
+transfer, uses concrete copy, and standardizes all public routes.
 
-- Opened the live site cold in fresh 390 × 844 and 1440 × 900 Chromium
-  contexts and recorded the first-screen content before scrolling.
-- Exercised the one-click demo, sample output, pronunciation save, Reset demo,
-  Start for real, local storage namespaces, offline behavior, request log, and
-  route focus/Back behavior.
-- Read the brief, design, claims ledger, both earlier reviews, both polish
-  reports, the previous handoff, landing source, README, and relevant tests.
-- Ran every exact `.factory/claims.json` command separately from a clean clone.
-- Ran `npm run check` from that clone: 17/17 Vitest tests and 36/36 Playwright
-  tests passed with all package and build gates.
-- Crawled every discovered live link, checked 404 behavior and metadata, ran
-  the live URL verifier, and ran Axe on all five public documents at desktop
-  and 390 px. No Axe or console error was found.
+## Verification evidence
 
-## Known gaps
+- A fresh clone installed with `npm ci --include=dev` without vulnerabilities.
+  Every exact command listed in `.factory/claims.json` passed, including four
+  separate installed-ZIP runs, two packaged-VSIX runs, and the combined
+  portable-pronunciations command.
+- `npm run check` passed: lint and typecheck; 19/19 Vitest tests; production
+  build; browser and VS Code package smoke tests; installed ZIP/VSIX tests;
+  and 40/40 Playwright desktop/mobile tests.
+- The built site has 2.98 KB gzip main JavaScript plus 0.65 KB route-focus
+  JavaScript, and 3.79 KB gzip main CSS.
+- Production was deployed with `swa deploy dist/site --app-name
+  sf-code-listen-cursor --resource-group sociobot --env production
+  --no-use-keychain`.
+- `/opt/fleet/lib/verify-url.sh https://code-listen-cursor.sociobot.in/
+  test-results/live-polish-3` passed: HTTP 200, 774 ms load, correct title and
+  language, one H1, main, no missing image alt, no unlabelled button, and no
+  console error.
+- Cold live Chromium checks at 1280 px and 390 px found zero Axe violations
+  on `/`, `/demo/`, `/privacy/`, `/terms/`, and `/404.html`. Route focus/Back,
+  `?demo=1`, local mocked speech, demo cleanup, same-origin requests, and
+  mobile first-viewport geometry were rechecked. See
+  `test-results/live-polish-3/live-audit.json` and
+  `test-results/live-polish-3/route-focus-live.json`.
+- `https://code-listen-cursor.sociobot.in/does-not-exist` returns HTTP 404 with
+  the designed not-found document and security headers.
 
-Eight findings remain. Two are blocking:
-
-1. The mobile demo's precomputed spoken result is about 603 px below the first
-   viewport, so the first post-click screen does not show the product result.
-2. The `demo-reader` claim test opens the landing preview and never verifies an
-   audible utterance, leaving the listed demo claim untested.
-
-The other findings cover demo cleanup on **Start for real**, pronunciation-map
-import/export, landing jargon, a decorative figure label, one vague README
-heading, and inconsistent header/footer destinations.
-
-## Reproduce
+## Run locally
 
 ```sh
 npm ci --include=dev
-# Run each exact command in .factory/claims.json
 npm run check
+# Run each exact test command recorded in .factory/claims.json
 ```
 
-For the first-viewport failure, open `/demo/` at 390 × 844 without scrolling.
-The editor begins around 793 px, its controls around 1,115 px, and the spoken
-result around 1,447 px. For the lifecycle failure, save a demo pronunciation,
-activate **Start for real**, and inspect local storage on `/`; the `demo:` key
-remains.
+Build output is `dist/site`; the browser ZIP and VS Code VSIX are in
+`dist/site/downloads/`.
+
+## Known gaps
+
+None.
