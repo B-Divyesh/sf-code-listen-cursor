@@ -292,7 +292,7 @@ test('@regression:spoken-preview-keyboard-scroll supports overflowing words at 3
 
     await page.getByRole('button', { name: 'Listen to code' }).focus();
     await page.keyboard.press('Tab');
-    await expect(page.getByRole('button', { name: 'Stop' })).toBeFocused();
+    await expect(page.getByRole('button', { name: 'Stop speech' })).toBeFocused();
     await page.keyboard.press('Tab');
     await expect(preview).toBeFocused();
     await expect(preview).toHaveCSS('outline-style', 'solid');
@@ -302,6 +302,14 @@ test('@regression:spoken-preview-keyboard-scroll supports overflowing words at 3
 
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations).toEqual([]);
+  }
+});
+
+test('@regression:review-6-stop-speech names the reader action on landing and demo', async ({ page }) => {
+  for (const path of ['/', '/demo/']) {
+    await page.goto(path);
+    await expect(page.getByRole('button', { name: 'Stop speech' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Stop', exact: true })).toHaveCount(0);
   }
 });
 

@@ -196,6 +196,13 @@ describe('release-host contract', () => {
     }
   });
 
+  it('names the reader stop action on landing and demo @regression:review-6-stop-speech-source', async () => {
+    for (const route of ['site/index.html', 'site/demo/index.html']) {
+      const html = await readFile(resolve(route), 'utf8');
+      expect(html, `${route} must name what the stop action stops`).toMatch(/id="demo-stop"[\s\S]*?>\s*Stop speech\s*<\/button>/);
+    }
+  });
+
   it('keeps acceptance promises executable in the sandbox @regression:verifiable-acceptance', async () => {
     const factoryFiles = (await readdir(resolve('.factory')))
       .filter((file) => /\.(?:json|md)$/.test(file) && !file.startsWith('verification'))

@@ -20,6 +20,9 @@ const demoBasePronunciation = mergeSettings().pronunciation;
 const map: Record<string, string> = { ...demoBasePronunciation };
 const demoPronunciation: Record<string, string> = {};
 const originalSample = sample.value;
+const originalSelectionStart = sample.selectionStart;
+const originalSelectionEnd = sample.selectionEnd;
+const observation = document.querySelector<HTMLElement>('.observation');
 
 function clearDemoStorage(): void {
   for (const key of Object.keys(localStorage)) {
@@ -54,6 +57,11 @@ function updatePreview(): void {
   preview.textContent = spokenText();
 }
 
+function stopSpeech(): void {
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  observation?.classList.remove('is-listening');
+}
+
 function listen(): void {
   const code = source();
   if (!code.trim()) {
@@ -70,10 +78,9 @@ function listen(): void {
   preview.textContent = text;
   const voice = preferredLocalVoice(speechSynthesis.getVoices());
   if (!voice) {
-    speechSynthesis.cancel();
+    stopSpeech();
     status.textContent = 'Local voice needed. Install or enable a voice marked local on this device, then try again. The spoken preview is still available.';
     status.dataset.error = 'true';
-    document.querySelector('.observation')?.classList.remove('is-listening');
     return;
   }
   const utterance = new SpeechSynthesisUtterance(text);
@@ -82,27 +89,26 @@ function listen(): void {
   utterance.onstart = () => {
     status.textContent = 'Listening now. Speech is playing through your system voice.';
     delete status.dataset.error;
-    document.querySelector('.observation')?.classList.add('is-listening');
+    observation?.classList.add('is-listening');
   };
   utterance.onend = () => {
     status.textContent = 'Reading complete. Move the cursor or select another line to continue.';
-    document.querySelector('.observation')?.classList.remove('is-listening');
+    observation?.classList.remove('is-listening');
   };
   utterance.onerror = (event) => {
-    document.querySelector('.observation')?.classList.remove('is-listening');
+    observation?.classList.remove('is-listening');
     if (event.error === 'canceled' || event.error === 'interrupted') return;
     status.textContent = 'Speech stopped. Check that your device has an English system voice, then try again.';
     status.dataset.error = 'true';
   };
-  speechSynthesis.cancel();
+  stopSpeech();
   speechSynthesis.speak(utterance);
 }
 
 get('demo-listen').addEventListener('click', listen);
 get('demo-stop').addEventListener('click', () => {
-  speechSynthesis?.cancel();
+  stopSpeech();
   status.textContent = 'Speech stopped. Your code is still in place.';
-  document.querySelector('.observation')?.classList.remove('is-listening');
 });
 sample.addEventListener('select', updatePreview);
 sample.addEventListener('keyup', updatePreview);
@@ -134,7 +140,9 @@ updatePreview();
 
 if (isDemo) {
   get<HTMLButtonElement>('reset-demo').addEventListener('click', () => {
+    stopSpeech();
     sample.value = originalSample;
+    sample.setSelectionRange(originalSelectionStart, originalSelectionEnd);
     for (const key of Object.keys(map)) delete map[key];
     Object.assign(map, demoBasePronunciation);
     for (const key of Object.keys(demoPronunciation)) delete demoPronunciation[key];
@@ -145,8 +153,9 @@ if (isDemo) {
     get<HTMLInputElement>('demo-indent').checked = true;
     rate.value = '0.9';
     get<HTMLOutputElement>('demo-rate-value').value = '0.9×';
-    status.textContent = 'Demo reset. The original sample code is ready. Nothing was saved outside this demo.';
     updatePreview();
+    delete status.dataset.error;
+    status.textContent = 'Demo reset. The original sample code is ready. Nothing was saved outside this demo.';
   });
   get<HTMLAnchorElement>('start-for-real').addEventListener('click', () => {
     clearDemoStorage();

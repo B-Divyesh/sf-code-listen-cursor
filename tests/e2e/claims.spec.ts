@@ -1,7 +1,42 @@
 import { expect, test } from 'playwright/test';
 
-test('@claim:demo-sandbox starts isolated sample data, reset removes its namespace, and Start for real preserves real data', async ({ page }) => {
+test('@claim:demo-sandbox restores the complete isolated reader state and Start for real preserves real data', async ({ page }) => {
+  await page.addInitScript(() => {
+    const speech = { cancelCalls: 0, spoken: [] as string[] };
+    class MockUtterance {
+      text: string;
+      voice: SpeechSynthesisVoice | null = null;
+      rate = 1;
+      onstart: (() => void) | null = null;
+
+      constructor(text: string) {
+        this.text = text;
+      }
+    }
+    const localVoice = {
+      default: true,
+      lang: 'en-US',
+      localService: true,
+      name: 'Demo reset local voice',
+      voiceURI: 'demo-reset-local'
+    } as SpeechSynthesisVoice;
+    Object.defineProperty(window, 'SpeechSynthesisUtterance', { configurable: true, value: MockUtterance });
+    Object.defineProperty(window, 'speechSynthesis', {
+      configurable: true,
+      value: {
+        cancel() { speech.cancelCalls += 1; },
+        getVoices: () => [localVoice],
+        speak(utterance: MockUtterance) {
+          speech.spoken.push(utterance.text);
+          utterance.onstart?.();
+        },
+        addEventListener() {}
+      }
+    });
+    Object.defineProperty(window, '__demoResetSpeech', { value: speech });
+  });
   await page.goto('/demo/');
+  const originalCode = await page.getByLabel('Editable sample code').inputValue();
   await page.evaluate(() => localStorage.setItem('code-listen-cursor:real-sentinel', 'keep'));
   await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
   await page.getByLabel('Code word').fill('fern');
@@ -9,7 +44,39 @@ test('@claim:demo-sandbox starts isolated sample data, reset removes its namespa
   await page.getByRole('button', { name: 'Save sample pronunciation' }).click();
   await expect(page.getByLabel('Words that will be spoken')).toContainText('frond');
   expect(await page.evaluate(() => localStorage.getItem('demo:code-listen-cursor:pronunciation'))).toContain('frond');
+
+  const editor = page.getByLabel('Editable sample code');
+  await editor.fill('const kubectl = fern?.name;');
+  await editor.evaluate((element: HTMLTextAreaElement) => {
+    element.setSelectionRange(6, 13);
+    element.dispatchEvent(new Event('select', { bubbles: true }));
+  });
+  await page.getByLabel('Punctuation').selectOption('literal');
+  await page.getByLabel('Speak indentation').uncheck();
+  await page.getByLabel(/Reading rate/).fill('1.5');
+  await page.getByRole('button', { name: 'Listen to code' }).click();
+  await expect(page.locator('#demo-status')).toHaveText('Listening now. Speech is playing through your system voice.');
+  await expect(page.locator('.observation')).toHaveClass(/is-listening/);
+  const cancelCallsBeforeReset = await page.evaluate(() => (window as typeof window & {
+    __demoResetSpeech: { cancelCalls: number };
+  }).__demoResetSpeech.cancelCalls);
+
   await page.getByRole('button', { name: 'Reset demo' }).click();
+  await expect(editor).toHaveValue(originalCode);
+  await expect(page.getByLabel('Words that will be spoken')).toHaveText('const describe Plant gets a sink open paren fern close paren arrow open brace');
+  await expect(page.locator('#demo-status')).toHaveText('Demo reset. The original sample code is ready. Nothing was saved outside this demo.');
+  await expect(page.locator('#demo-status')).not.toHaveAttribute('data-error');
+  await expect(page.locator('.observation')).not.toHaveClass(/is-listening/);
+  await expect(page.getByLabel('Punctuation')).toHaveValue('essential');
+  await expect(page.getByLabel('Speak indentation')).toBeChecked();
+  await expect(page.getByLabel(/Reading rate/)).toHaveValue('0.9');
+  await expect(page.getByLabel('Code word')).toHaveValue('fern');
+  await expect(page.getByLabel('Speak as')).toHaveValue('furn');
+  await expect.poll(() => page.evaluate(() => ({
+    selectionStart: document.querySelector<HTMLTextAreaElement>('#code-sample')?.selectionStart,
+    selectionEnd: document.querySelector<HTMLTextAreaElement>('#code-sample')?.selectionEnd,
+    cancelCalls: (window as typeof window & { __demoResetSpeech: { cancelCalls: number } }).__demoResetSpeech.cancelCalls
+  }))).toEqual({ selectionStart: 0, selectionEnd: 0, cancelCalls: cancelCallsBeforeReset + 1 });
   expect(await page.evaluate(() => localStorage.getItem('demo:code-listen-cursor:pronunciation'))).toBeNull();
   expect(await page.evaluate(() => Object.keys(localStorage).filter((key) => key.startsWith('demo:')))).toEqual([]);
   expect(await page.evaluate(() => localStorage.getItem('code-listen-cursor:real-sentinel'))).toBe('keep');
@@ -117,7 +184,7 @@ test('@claim:offline-reload reloads the working reader after first visit with no
     await page.goto('/demo/');
     await page.waitForFunction(() => navigator.serviceWorker?.controller !== null, undefined, { timeout: 15_000 });
     await page.evaluate(async () => {
-      const stale = await caches.open('code-listen-cursor-v5');
+      const stale = await caches.open('code-listen-cursor-v6');
       await stale.put('/stale-shell', new Response('stale'));
       const registrations = await navigator.serviceWorker.getRegistrations();
       await Promise.all(registrations.map((registration) => registration.unregister()));
@@ -131,7 +198,7 @@ test('@claim:offline-reload reloads the working reader after first visit with no
         active: registration.active?.state,
         caches: await caches.keys()
       };
-    })).toEqual({ active: 'activated', caches: ['code-listen-cursor-v6'] });
+    })).toEqual({ active: 'activated', caches: ['code-listen-cursor-v7'] });
     await page.reload();
     await offlineContext.setOffline(true);
     await page.reload();

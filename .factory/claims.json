@@ -1,10 +1,10 @@
 [
   {
     "id": "demo-sandbox",
-    "claim": "Try it with sample data; demo settings stay separate, Reset demo removes them, and Start for real clears demo keys without changing real keys.",
+    "claim": "Try it with sample data; demo settings stay separate, Reset demo restores the sample reader and removes them, and Start for real clears demo keys without changing real keys.",
     "where": "landing action, demo banner, privacy page, README",
     "test": "npm run test:e2e -- --grep @claim:demo-sandbox",
-    "sandbox": "fresh browser context at /demo/; save a sample pronunciation, assert only the demo namespace is used, reset it, then verify Start for real clears demo keys while preserving a real-data sentinel"
+    "sandbox": "fresh browser context at /demo/ with a local speech mock; change code, selection, settings, and a saved pronunciation; Reset demo must cancel speech and restore the original reader, then Start for real must clear demo keys while preserving a real-data sentinel"
   },
   {
     "id": "demo-reader",
