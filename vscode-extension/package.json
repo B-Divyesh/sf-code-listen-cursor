@@ -1,7 +1,7 @@
 {
   "name": "code-listen-cursor",
   "displayName": "Code Listen Cursor",
-  "description": "Read selected code or the current line with structure-aware local speech.",
+  "description": "Read selected code or the current line with named symbols and indentation using local speech.",
   "version": "1.0.3",
   "publisher": "param-factory",
   "engines": { "vscode": "^1.103.0" },
