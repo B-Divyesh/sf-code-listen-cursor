@@ -1,35 +1,35 @@
-# Code Listen Cursor — verification 13 handoff
+# Code Listen Cursor — review 7 handoff
 
 Date: 2026-08-30
-
-Work order: `code-listen-cursor-verify-13`
-
-Candidate: `bfc78b6fd12e83b7a28997fe9d6cd4111a3d33a4`
-
-Live URL: <https://code-listen-cursor.sociobot.in/>
+Work order: `code-listen-cursor-review-7`
+Reviewed commit: `0800b73995e8f079434862535cf8d4333d75f297`
 
 ## Result
 
-**PASS.** The candidate is accepted. No product code was changed. One
-non-blocking low-severity grammar defect is recorded in
-`.factory/verification-13.md`.
+**FAIL:** no product code was changed, but review 7 found one remaining minor
+defect, documented in `.factory/review-7.md` as F-7-1.
 
 ## What was verified
 
-- The cold first screen plainly states the job, audience, and first action.
-- One click or keyboard activation opens a realistic isolated demo.
-- All 17 exact claim commands pass after `npm ci`.
-- `npm run check` passes: 22/22 Vitest and 44/44 Playwright tests, exact build,
-  lint/type checks, package checks, installed MV3 ZIP, and packaged VSIX.
-- Independent live normal, boundary, invalid-input, reset, and recovery flows
-  pass at desktop and 390 px.
-- Ten live Axe route scans have zero violations; keyboard, focus, reflow,
-  reduced motion, console, and page-error checks pass.
-- Request capture is same-origin GET-only. Security headers and caching are
-  correct. Service-worker update and offline reload pass.
-- Mobile Lighthouse is 99/100/100/100 with 1.6 s LCP, 0 ms TBT, and 0 CLS.
-- Live site files match the candidate byte for byte. Download archives have
-  identical unpacked payloads; only regenerated ZIP timestamps differ.
+- Fresh live mobile and desktop first reads clearly identify job, audience, and
+  the demo action.
+- The live demo is one-click, shows working sample input/output above the phone
+  fold, uses only `demo:` storage, resets completely, and preserves real data
+  on exit. Its request log was same-origin only.
+- A fresh clone installed dependencies successfully. All 17 exact claim
+  commands and `npm run check` passed (22/22 Vitest; 44/44 Playwright).
+- Live Axe checks on root, demo, privacy, terms, and 404 passed at desktop and
+  390 px. Metadata, links, route focus/Back, CSP, downloads, and the designed
+  404 were checked.
+- All earlier review findings were rechecked. Only the pre-recorded LOW-1
+  spoken-indent grammar issue remains.
+
+## Known gap / next step
+
+For partial indentation below the configured indent width, output says
+“indent 1 levels.” Update `core/code-to-speech.ts` so the fallback displayed
+level controls pluralization too, add a unit regression, then rerun `npm run
+check` and review the live demo.
 
 ## Run again
 
@@ -39,10 +39,3 @@ npm run check
 ```
 
 Open <https://code-listen-cursor.sociobot.in/demo/> for the production sandbox.
-Full evidence and exact hashes are in `.factory/verification-13.md`.
-
-## Known gap
-
-With a partial leading indent smaller than the configured indent width, spoken
-output says “indent 1 levels” instead of “indent 1 level.” This is LOW-1 and
-does not block the verified job or any public claim.
