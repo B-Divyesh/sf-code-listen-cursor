@@ -1,68 +1,50 @@
-# Code Listen Cursor — polish 7 handoff
+# Code Listen Cursor — independent verification 14 handoff
 
-Date: 2026-08-30
-Work order: `code-listen-cursor-polish-7`
-Repair commit: `4bcca298570da225fe66e116d59a4950d9779667`
+Date: 2026-09-02
+
+Work order: `code-listen-cursor-verify-14`
+
+Candidate commit: `8b13718e3375c5680df7eaa86cd83e06b5195366`
+
 Live URL: <https://code-listen-cursor.sociobot.in/>
 
 ## Result
 
-**PASS.** F-7-1 is fixed. Partial indentation below the configured indent
-width now says `indent 1 level`, not `indent 1 levels`. The regression covers
-one, two, and three leading spaces with an indent width of four.
+**PASS.** The candidate meets the researched brief and factory acceptance
+contract. No critical, high, medium, or low defects were found. Product code was
+not modified during verification.
 
-## What changed
+## Fresh evidence
 
-- `core/code-to-speech.ts` calculates `displayedLevel` once and uses it for
-  both the number and singular/plural wording.
-- `tests/code-to-speech.test.ts` adds
-  `@regression:partial-indentation-singular`.
-- `.factory/catalog-description.txt` now starts with the verb “Hear” and is
-  72 characters long.
-- `.factory/polish-7.md` maps all cumulative review findings to current
-  implementation and evidence.
+- All 17 exact `.factory/claims.json` entries passed after a clean `npm ci`,
+  including every separately listed installed-ZIP and VSIX invocation.
+- `npm run check` passed: type/lint checks, 23/23 Vitest tests, exact production
+  build, package checks, installed browser/VS Code exercises, and 44/44 desktop
+  and 390 px Playwright tests.
+- The cold live first screen plainly states the job, audience, and one-click
+  **Try it with sample data** action. The demo immediately shows the working
+  reader and its isolated-data banner.
+- Independent live normal, boundary, invalid-input, recovery, local-voice,
+  keyboard, reduced-motion, 195 px reflow, reset, and offline-reload flows
+  passed. The production service worker activated cache
+  `code-listen-cursor-v7`.
+- Ten live Axe scans returned zero violations. The factory URL checker passed
+  in 658 ms with no console/page errors on the real routes.
+- Live activity stayed on the product origin and used GET only. Security and
+  cache headers are present; source was neither stored nor sent.
+- Lighthouse mobile scored 100/100/100/100. LCP was 1.1 s, TBT 50 ms, CLS 0,
+  and total transfer 50 KiB.
+- Nineteen served files matched the candidate byte for byte. The unpacked live
+  browser ZIP (15 entries) and VSIX (9 entries) had zero payload mismatches.
 
-## Verification
+Full evidence and claim-by-claim results are in
+[`verification-14.md`](verification-14.md).
 
-Fresh local clone: `/tmp/code-listen-cursor-round7.bNI9ls` at the repair
-commit.
+## Applicability notes
 
-- `npm ci --include=dev` installed 184 packages with zero reported
-  vulnerabilities.
-- Every one of the 17 exact commands in `.factory/claims.json` passed from the
-  clean clone, including each repeated installed-ZIP and VSIX command.
-- `npm run check` passed: lint/typecheck, 23/23 Vitest tests, production build,
-  package checks, installed browser and VS Code harnesses, and 44/44 Playwright
-  desktop/mobile tests (`test-results/.last-run.json` reports `passed`).
-- Production build outputs `dist/site/`; landing JavaScript is 3.02 kB gzip and
-  CSS is 3.77 kB gzip.
-- `/opt/fleet/lib/verify-url.sh` passed cold against the live root in 836 ms:
-  title, `lang`, one H1, main landmark, image alternatives, labels, and console
-  state all passed. Evidence: `test-results/live-polish-7/verify.json`.
-- Live Axe scans found zero violations on `/`, `/demo/`, `/privacy/`, `/terms/`,
-  and `/404.html` at 1440 px and 390 px. The same audit found no horizontal
-  overflow or console/page errors; an unknown route returned HTTP 404.
-- Live demo recheck covered query entry, first-screen mobile content, same-origin
-  requests, complete reset, route focus/Back, offline reload plus local speech,
-  and the repaired partial indent. It returned `indent 1 level, fern`.
-  Screenshots: `test-results/live-polish-7/live-demo-partial-indent-mobile.png`
-  and `test-results/live-polish-7/live-demo-reset-and-partial-indent-mobile.png`.
-- Mobile Lighthouse on the live root: Performance 100, Accessibility 100, Best
-  Practices 100, SEO 100; FCP 0.8 s, LCP 1.1 s, CLS 0. Evidence:
-  `test-results/live-polish-7/lighthouse-mobile.json`.
-
-## Deployment
-
-Built `dist/site/` was deployed to the existing `sf-code-listen-cursor` static
-app with the Static Web Apps CLI. The deploy returned
-`https://purple-dune-08f27c610.7.azurestaticapps.net`; the production custom
-domain above was then cold-checked successfully. No DNS, billing, or unrelated
-service resource was changed.
-
-## Known gaps / next steps
-
-None. The product remains local-first by design; no AI or remote source-code
-feature was added because it would contradict the brief's privacy boundary.
+This product is a static site plus local browser and VS Code extensions. It has
+no server-side endpoint, account, payment, AI, or sign-in path, so API 429,
+backend concurrency/persistence, health identity, and Entra checks do not apply.
 
 ## Run again
 
